@@ -1,11 +1,15 @@
 (function () {
   "use strict";
 
-  // ---------- Loader sequence ----------
-  let currentLang = localStorage.getItem ? null : null; // avoid storage per artifact constraints; use in-memory only
+  // ---------- Language / currency state ----------
   let langCode = 'en';
+  let currentCurrency = 'USD';
 
-  // ---------- Search state (trip type / class / passengers / dates) ----------
+  function dict() {
+    return I18N[langCode] || I18N.en;
+  }
+
+  // ---------- Search state (trip type / class / passengers) ----------
   const searchState = {
     tripType: 'round',   // 'round' | 'oneway'
     cabinClass: 0,       // 0 = Economy, 1 = Business (Travelpayouts trip_class)
@@ -14,434 +18,393 @@
     infants: 0,
   };
 
-  // ---------- i18n ----------
-  const langMenu = document.getElementById('langMenu');
-  const langSelect = document.getElementById('langSelect');
-  const langBtn = document.getElementById('langBtn');
-  const langFlag = document.getElementById('langFlag');
-  const langLabel = document.getElementById('langLabel');
+  // ---------- Hero cursor spotlight + trail ----------
+  const heroEl = document.querySelector('.hero');
+  const heroSpotlight = document.querySelector('.hero-spotlight');
+  const heroTrailLayer = document.querySelector('.hero-trail-layer');
+  if (heroEl && heroSpotlight && heroTrailLayer) {
+    let lastTrailAt = 0;
+    heroEl.addEventListener('pointermove', (e) => {
+      if (e.pointerType === 'touch') return;
+      const rect = heroEl.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      heroSpotlight.style.setProperty('--sx', x + 'px');
+      heroSpotlight.style.setProperty('--sy', y + 'px');
+      heroEl.classList.add('glow-active');
 
-  function renderLangMenu() {
-    langMenu.innerHTML = '';
-    Object.keys(I18N).forEach(code => {
-      const d = I18N[code];
-      const btn = document.createElement('button');
-      btn.className = 'lang-option' + (code === langCode ? ' active' : '');
-      btn.setAttribute('role', 'menuitem');
-      btn.innerHTML = `<span class="flag">${d.flag}</span><span>${d.name}</span><span class="native">${code.toUpperCase()}</span>`;
-      btn.addEventListener('click', () => setLang(code));
-      langMenu.appendChild(btn);
-    });
-  }
-
-  function applyI18n() {
-    const d = I18N[langCode];
-    document.documentElement.lang = langCode;
-    langFlag.textContent = d.flag;
-    langLabel.textContent = langCode.toUpperCase();
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      const key = el.getAttribute('data-i18n');
-      if (d[key] !== undefined) el.textContent = d[key];
-    });
-    document.querySelectorAll('[data-i18n-html]').forEach(el => {
-      const key = el.getAttribute('data-i18n-html');
-      if (key === 'tagline') el.innerHTML = d.tagline_html;
-    });
-    document.getElementById('inputFrom').placeholder = d.placeholder;
-    document.getElementById('inputTo').placeholder = d.placeholder;
-    renderQuickRoutes();
-    renderProofStrip();
-    renderLangMenu();
-    updatePaxLabel();
-    updatePaxNoteVisibility();
-  }
-
-  function setLang(code) {
-    langCode = code;
-    applyI18n();
-    langSelect.classList.remove('open');
-    langBtn.setAttribute('aria-expanded', 'false');
-  }
-
-  langBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const open = langSelect.classList.toggle('open');
-    langBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
-  });
-  document.addEventListener('click', () => {
-    langSelect.classList.remove('open');
-    langBtn.setAttribute('aria-expanded', 'false');
-  });
-  langMenu.addEventListener('click', e => e.stopPropagation());
-
-  // ---------- Quick routes chips ----------
-  function renderQuickRoutes() {
-    const wrap = document.getElementById('quickRoutes');
-    wrap.innerHTML = '';
-    const d = I18N[langCode];
-    const label = document.createElement('span');
-    label.className = 'chip-label';
-    label.textContent = d.quick_label || 'Trending';
-    wrap.appendChild(label);
-    const picks = ["JFK", "LHR", "NRT", "DXB", "SIN", "CDG"];
-    picks.forEach(code => {
-      const a = AIRPORTS.find(x => x.code === code);
-      if (!a) return;
-      const chip = document.createElement('button');
-      chip.className = 'chip';
-      chip.type = 'button';
-      chip.innerHTML = `<span class="flag">${a.flag}</span><span>${a.city}</span>`;
-      chip.addEventListener('click', () => {
-        document.getElementById('inputTo').value = `${a.city}`;
-        document.getElementById('toFlag').textContent = a.flag;
-        document.getElementById('fieldTo').dataset.code = a.code;
-      });
-      wrap.appendChild(chip);
-    });
-  }
-
-  // ---------- Proof strip ----------
-  function renderProofStrip() {
-    const d = I18N[langCode];
-    const strip = document.getElementById('proofStrip');
-    strip.innerHTML = `
-      <div class="proof-item"><div class="proof-num">${d.stat1n}</div><div class="proof-label">${d.stat1l}</div></div>
-      <div class="proof-sep"></div>
-      <div class="proof-item"><div class="proof-num">${d.stat2n}</div><div class="proof-label">${d.stat2l}</div></div>
-      <div class="proof-sep"></div>
-      <div class="proof-item"><div class="proof-num">${d.stat3n}</div><div class="proof-label">${d.stat3l}</div></div>
-    `;
-  }
-
-  // ---------- Search autocomplete ----------
-  function setupField(inputId, suggestId, flagId, fieldId, codeId) {
-    const input = document.getElementById(inputId);
-    const suggest = document.getElementById(suggestId);
-    const flagEl = document.getElementById(flagId);
-    const fieldEl = document.getElementById(fieldId);
-    const codeEl = codeId ? document.getElementById(codeId) : null;
-    let activeIndex = -1;
-    let currentList = [];
-
-    function renderList(list, query) {
-      currentList = list;
-      activeIndex = -1;
-      suggest.innerHTML = '';
-      if (list.length === 0) {
-        const empty = document.createElement('div');
-        empty.className = 'suggest-empty';
-        empty.textContent = I18N[langCode].no_results;
-        suggest.appendChild(empty);
-        return;
-      }
-      const label = document.createElement('div');
-      label.className = 'suggest-group-label';
-      label.textContent = query ? I18N[langCode].popular : I18N[langCode].quick_label;
-      suggest.appendChild(label);
-
-      list.forEach((a, i) => {
-        const item = document.createElement('button');
-        item.type = 'button';
-        item.className = 'suggest-item';
-        item.innerHTML = `
-          <span class="flag">${a.flag}</span>
-          <span class="place-info">
-            <div class="city">${a.city}</div>
-            <div class="country">${a.country}</div>
-          </span>
-          <span class="code">${a.code}</span>
-        `;
-        item.addEventListener('click', () => selectAirport(a));
-        item.addEventListener('mouseenter', () => {
-          activeIndex = i;
-          updateHighlight();
+      const now = Date.now();
+      if (now - lastTrailAt > 45) {
+        lastTrailAt = now;
+        const dot = document.createElement('span');
+        dot.className = 'trail-dot';
+        const size = 5 + Math.random() * 7;
+        dot.style.width = size + 'px';
+        dot.style.height = size + 'px';
+        dot.style.left = x + 'px';
+        dot.style.top = y + 'px';
+        heroTrailLayer.appendChild(dot);
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => { dot.classList.add('fade'); });
         });
-        suggest.appendChild(item);
-      });
-    }
+        setTimeout(() => { dot.remove(); }, 700);
 
-    function updateHighlight() {
-      [...suggest.querySelectorAll('.suggest-item')].forEach((el, i) => {
-        el.classList.toggle('hl', i === activeIndex);
-      });
-    }
-
-    function selectAirport(a) {
-      input.value = a.city;
-      flagEl.textContent = a.flag;
-      fieldEl.dataset.code = a.code;
-      if (codeEl) codeEl.textContent = a.code;
-      closeSuggest();
-    }
-
-    function openSuggest() {
-      suggest.classList.add('open');
-      fieldEl.classList.add('focused');
-    }
-    function closeSuggest() {
-      suggest.classList.remove('open');
-      fieldEl.classList.remove('focused');
-    }
-
-    function search(query) {
-      const q = query.trim().toLowerCase();
-      if (q.length === 0) {
-        return AIRPORTS.filter(a => a.popular).slice(0, 6);
-      }
-      return AIRPORTS.filter(a =>
-        a.city.toLowerCase().includes(q) ||
-        a.country.toLowerCase().includes(q) ||
-        a.code.toLowerCase().includes(q)
-      ).slice(0, 8);
-    }
-
-    input.addEventListener('focus', () => {
-      renderList(search(input.value), input.value.trim());
-      openSuggest();
-    });
-    input.addEventListener('input', () => {
-      renderList(search(input.value), input.value.trim());
-      openSuggest();
-    });
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        activeIndex = Math.min(activeIndex + 1, currentList.length - 1);
-        updateHighlight();
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        activeIndex = Math.max(activeIndex - 1, 0);
-        updateHighlight();
-      } else if (e.key === 'Enter') {
-        if (activeIndex >= 0 && currentList[activeIndex]) selectAirport(currentList[activeIndex]);
-      } else if (e.key === 'Escape') {
-        closeSuggest();
+        while (heroTrailLayer.children.length > 24) {
+          heroTrailLayer.removeChild(heroTrailLayer.firstChild);
+        }
       }
     });
-    document.addEventListener('click', (e) => {
-      if (!fieldEl.contains(e.target)) closeSuggest();
+    heroEl.addEventListener('pointerleave', () => {
+      heroEl.classList.remove('glow-active');
     });
-    fieldEl.addEventListener('click', (e) => e.stopPropagation());
   }
 
-  setupField('inputFrom', 'suggestFrom', 'fromFlag', 'fieldFrom', 'fromCode');
-  setupField('inputTo', 'suggestTo', 'toFlag', 'fieldTo', null);
+  // ---------- Mobile nav ----------
+  const menuToggle = document.getElementById('menuToggle');
+  const mainNav = document.getElementById('mainNav');
+  if (menuToggle && mainNav) {
+    menuToggle.addEventListener('click', () => {
+      const open = mainNav.classList.toggle('open');
+      menuToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  }
 
-  // pre-select origin
-  document.getElementById('fieldFrom').dataset.code = 'IST';
+  // ---------- Currency / language dropdown ----------
+  const langTrigger = document.getElementById('langTrigger');
+  const langDropdown = document.getElementById('langDropdown');
+  const langLabelEl = document.getElementById('langLabel');
 
-  // ---------- Swap button ----------
-  document.getElementById('swapBtn').addEventListener('click', () => {
-    const fromInput = document.getElementById('inputFrom');
-    const toInput = document.getElementById('inputTo');
-    const fromFlag = document.getElementById('fromFlag');
-    const toFlag = document.getElementById('toFlag');
-    const fieldFrom = document.getElementById('fieldFrom');
-    const fieldTo = document.getElementById('fieldTo');
+  langTrigger.addEventListener('click', () => {
+    const open = langDropdown.classList.toggle('open');
+    langTrigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  document.addEventListener('click', (e) => {
+    if (!langDropdown.contains(e.target) && e.target !== langTrigger && !langTrigger.contains(e.target)) {
+      langDropdown.classList.remove('open');
+      langTrigger.setAttribute('aria-expanded', 'false');
+    }
+  });
 
-    const tmpVal = fromInput.value; fromInput.value = toInput.value; toInput.value = tmpVal;
-    const tmpFlag = fromFlag.textContent; fromFlag.textContent = toFlag.textContent || '✈️'; toFlag.textContent = tmpFlag;
-    const tmpCode = fieldFrom.dataset.code; fieldFrom.dataset.code = fieldTo.dataset.code || ''; fieldTo.dataset.code = tmpCode || '';
-    document.getElementById('fromCode').textContent = fieldFrom.dataset.code || '';
+  langDropdown.querySelectorAll('.lang-opt[data-currency]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      langDropdown.querySelectorAll('.lang-opt[data-currency]').forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentCurrency = btn.dataset.currency;
+      langLabelEl.textContent = currentCurrency + ' · ' + langCode.toUpperCase();
+    });
+  });
+
+  function applyLanguage(code) {
+    langCode = code;
+    const d = dict();
+    document.documentElement.lang = langCode;
+    document.documentElement.dir = (langCode === 'ar') ? 'rtl' : 'ltr';
+
+    document.querySelectorAll('[data-i18n]').forEach((el) => {
+      const key = el.getAttribute('data-i18n');
+      if (d[key] != null) el.textContent = d[key];
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach((el) => {
+      const key = el.getAttribute('data-i18n-html');
+      if (d[key] != null) el.innerHTML = d[key];
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      if (d[key] != null) el.placeholder = d[key];
+    });
+
+    langLabelEl.textContent = currentCurrency + ' · ' + langCode.toUpperCase();
+    refreshPaxTrigger();
+    renderDestinations(true);
+  }
+
+  langDropdown.querySelectorAll('.lang-opt[data-lang]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      langDropdown.querySelectorAll('.lang-opt[data-lang]').forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      applyLanguage(btn.dataset.lang.toLowerCase());
+      langDropdown.classList.remove('open');
+      langTrigger.setAttribute('aria-expanded', 'false');
+    });
   });
 
   // ---------- Trip type toggle ----------
-  const tripTypeEl = document.getElementById('tripType');
-  const searchCardEl = document.querySelector('.search-card');
-  const fieldReturnEl = document.getElementById('fieldReturn');
-  const inputDepartEl = document.getElementById('inputDepart');
-  const inputReturnEl = document.getElementById('inputReturn');
-
-  function setTripType(value) {
-    searchState.tripType = value;
-    [...tripTypeEl.querySelectorAll('.trip-type-opt')].forEach(btn => {
-      const active = btn.dataset.value === value;
-      btn.classList.toggle('active', active);
-      btn.setAttribute('aria-checked', active ? 'true' : 'false');
+  const tripOptions = document.querySelectorAll('.trip-option');
+  const returnField = document.getElementById('returnField');
+  tripOptions.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      tripOptions.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      searchState.tripType = btn.dataset.trip === 'one' ? 'oneway' : 'round';
+      returnField.classList.toggle('collapsed', searchState.tripType === 'oneway');
     });
-    searchCardEl.classList.toggle('oneway', value === 'oneway');
-  }
-
-  tripTypeEl.addEventListener('click', (e) => {
-    const btn = e.target.closest('.trip-type-opt');
-    if (!btn) return;
-    setTripType(btn.dataset.value);
   });
 
-  // ---------- Default dates ----------
-  function isoDate(d) {
-    return d.toISOString().slice(0, 10);
+  // ---------- Swap from/to ----------
+  const fromInput = document.getElementById('fromInput');
+  const toInput = document.getElementById('toInput');
+  const swapBtn = document.getElementById('swapBtn');
+  swapBtn.addEventListener('click', () => {
+    const tmpVal = fromInput.value;
+    fromInput.value = toInput.value;
+    toInput.value = tmpVal;
+
+    const tmpCode = fromInput.dataset.code || '';
+    fromInput.dataset.code = toInput.dataset.code || '';
+    toInput.dataset.code = tmpCode;
+
+    swapBtn.classList.add('spin');
+    setTimeout(() => { swapBtn.classList.remove('spin'); }, 250);
+  });
+
+  // ---------- Airport autocomplete (shared AIRPORTS dataset) ----------
+  function pinIcon() {
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
   }
-  (function initDates() {
-    const today = new Date();
-    const depart = new Date(today);
-    depart.setDate(depart.getDate() + 14);
-    const ret = new Date(depart);
-    ret.setDate(ret.getDate() + 7);
 
-    const minDepart = isoDate(today);
-    inputDepartEl.min = minDepart;
-    inputReturnEl.min = minDepart;
-    inputDepartEl.value = isoDate(depart);
-    inputReturnEl.value = isoDate(ret);
-  })();
+  function searchAirports(query) {
+    const q = query.trim().toLowerCase();
+    if (!q) return AIRPORTS.filter((a) => a.popular).slice(0, 6);
+    return AIRPORTS.filter((a) =>
+      a.city.toLowerCase().includes(q) ||
+      a.country.toLowerCase().includes(q) ||
+      a.code.toLowerCase().includes(q)
+    ).slice(0, 8);
+  }
 
-  // keep return date from falling before depart date
-  inputDepartEl.addEventListener('change', () => {
-    if (inputDepartEl.value) {
-      inputReturnEl.min = inputDepartEl.value;
-      if (inputReturnEl.value && inputReturnEl.value < inputDepartEl.value) {
-        inputReturnEl.value = inputDepartEl.value;
+  function setupAutocomplete(input, listEl) {
+    function renderMatches(list) {
+      listEl.innerHTML = '';
+      if (!list.length) {
+        listEl.classList.remove('open');
+        return;
       }
-    }
-  });
-
-  // ---------- Generic pill-select popover (class / passengers) ----------
-  function setupPillSelect(wrapEl, btnEl) {
-    function open() {
-      wrapEl.classList.add('open');
-      btnEl.setAttribute('aria-expanded', 'true');
-    }
-    function close() {
-      wrapEl.classList.remove('open');
-      btnEl.setAttribute('aria-expanded', 'false');
-    }
-    function toggle(e) {
-      e.stopPropagation();
-      const willOpen = !wrapEl.classList.contains('open');
-      // close any other open pill-selects first
-      document.querySelectorAll('.pill-select.open').forEach(el => {
-        if (el !== wrapEl) el.classList.remove('open');
+      list.forEach((a) => {
+        const item = document.createElement('div');
+        item.className = 'autocomplete-item';
+        item.innerHTML = pinIcon() +
+          '<span class="flag">' + a.flag + '</span>' +
+          '<span class="city">' + a.city + ', ' + a.country + '</span>' +
+          '<span class="code">' + a.code + '</span>';
+        item.addEventListener('click', () => {
+          input.value = a.city;
+          input.dataset.code = a.code;
+          listEl.classList.remove('open');
+        });
+        listEl.appendChild(item);
       });
-      if (willOpen) open(); else close();
+      listEl.classList.add('open');
     }
-    btnEl.addEventListener('click', toggle);
-    wrapEl.addEventListener('click', e => e.stopPropagation());
-    document.addEventListener('click', close);
-    return { open, close };
+
+    input.addEventListener('focus', () => {
+      renderMatches(searchAirports(input.value));
+    });
+    input.addEventListener('input', () => {
+      input.dataset.code = '';
+      renderMatches(searchAirports(input.value));
+    });
+    document.addEventListener('click', (e) => {
+      if (!listEl.contains(e.target) && e.target !== input) {
+        listEl.classList.remove('open');
+      }
+    });
+  }
+  setupAutocomplete(fromInput, document.getElementById('fromList'));
+  setupAutocomplete(toInput, document.getElementById('toList'));
+
+  // Default "from" city, matching the pre-redesign experience
+  const defaultFrom = AIRPORTS.find((a) => a.code === 'IST');
+  if (defaultFrom && !fromInput.value) {
+    fromInput.value = defaultFrom.city;
+    fromInput.dataset.code = defaultFrom.code;
   }
 
-  // ---------- Class select ----------
-  const classSelectEl = document.getElementById('classSelect');
-  const classBtnEl = document.getElementById('classBtn');
-  const classMenuEl = document.getElementById('classMenu');
-  const classLabelEl = document.getElementById('classLabel');
-  setupPillSelect(classSelectEl, classBtnEl);
+  // ---------- Passengers & class dropdown ----------
+  const passengerTrigger = document.getElementById('passengerTrigger');
+  const passengerDropdown = document.getElementById('passengerDropdown');
 
-  classMenuEl.addEventListener('click', (e) => {
-    const opt = e.target.closest('.pill-option');
-    if (!opt) return;
-    searchState.cabinClass = parseInt(opt.dataset.value, 10);
-    [...classMenuEl.querySelectorAll('.pill-option')].forEach(o => o.classList.toggle('active', o === opt));
-    classLabelEl.textContent = opt.querySelector('span').textContent;
-    classSelectEl.classList.remove('open');
+  passengerTrigger.addEventListener('click', () => {
+    const open = passengerDropdown.classList.toggle('open');
+    passengerTrigger.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
-
-  // ---------- Passenger select ----------
-  const paxSelectEl = document.getElementById('paxSelect');
-  const paxBtnEl = document.getElementById('paxBtn');
-  const paxLabelEl = document.getElementById('paxLabel');
-  const paxNoteEl = document.getElementById('paxNote');
-  setupPillSelect(paxSelectEl, paxBtnEl);
-
-  const adultsCountEl = document.getElementById('adultsCount');
-  const childrenCountEl = document.getElementById('childrenCount');
-  const infantsCountEl = document.getElementById('infantsCount');
-  const adultsMinusEl = document.getElementById('adultsMinus');
-  const adultsPlusEl = document.getElementById('adultsPlus');
-  const childrenMinusEl = document.getElementById('childrenMinus');
-  const childrenPlusEl = document.getElementById('childrenPlus');
-  const infantsMinusEl = document.getElementById('infantsMinus');
-  const infantsPlusEl = document.getElementById('infantsPlus');
+  document.addEventListener('click', (e) => {
+    if (!passengerDropdown.contains(e.target) && e.target !== passengerTrigger) {
+      passengerDropdown.classList.remove('open');
+      passengerTrigger.setAttribute('aria-expanded', 'false');
+    }
+  });
 
   const MAX_SEATED = 9; // Travelpayouts: adults + children <= 9
   const MAX_ADULTS = MAX_SEATED;
   const MAX_CHILDREN = MAX_SEATED - 1;
   const MAX_INFANTS = MAX_SEATED;
 
-  function updatePaxLabel() {
-    const total = searchState.adults + searchState.children + searchState.infants;
-    const d = I18N[langCode];
-    const word = total === 1 ? (d.passenger || 'passenger') : (d.passengers || 'passengers');
-    paxLabelEl.textContent = `${total} ${word}`;
+  function currentClassKey() {
+    const active = document.querySelector('.class-opt.active');
+    return active ? active.dataset.class.toLowerCase() : 'economy';
   }
 
-  function updatePaxNoteVisibility() {
-    paxNoteEl.classList.toggle('show', searchState.infants >= searchState.adults && searchState.infants > 0);
+  function refreshPaxTrigger() {
+    const d = dict();
+    const total = searchState.adults + searchState.children + searchState.infants;
+    let label;
+    if (searchState.children === 0 && searchState.infants === 0) {
+      label = searchState.adults + ' ' + (searchState.adults === 1 ? d.unit_adult : d.unit_adults);
+    } else {
+      label = total + ' ' + (total === 1 ? d.unit_passenger : d.unit_passengers);
+    }
+    const classLabel = d['class_' + currentClassKey()] || currentClassKey();
+    passengerTrigger.textContent = label + ', ' + classLabel;
   }
 
   function syncPaxUI() {
-    adultsCountEl.textContent = searchState.adults;
-    childrenCountEl.textContent = searchState.children;
-    infantsCountEl.textContent = searchState.infants;
+    document.getElementById('adultsCount').textContent = searchState.adults;
+    document.getElementById('childrenCount').textContent = searchState.children;
+    document.getElementById('infantsCount').textContent = searchState.infants;
 
-    adultsMinusEl.disabled = searchState.adults <= 1;
-    adultsPlusEl.disabled = searchState.adults >= MAX_ADULTS || (searchState.adults + searchState.children) >= MAX_SEATED;
+    document.querySelector('.stepper button[data-target="adults"][data-op="dec"]').disabled = searchState.adults <= 1;
+    document.querySelector('.stepper button[data-target="adults"][data-op="inc"]').disabled =
+      searchState.adults >= MAX_ADULTS || (searchState.adults + searchState.children) >= MAX_SEATED;
 
-    childrenMinusEl.disabled = searchState.children <= 0;
-    childrenPlusEl.disabled = searchState.children >= MAX_CHILDREN || (searchState.adults + searchState.children) >= MAX_SEATED;
+    document.querySelector('.stepper button[data-target="children"][data-op="dec"]').disabled = searchState.children <= 0;
+    document.querySelector('.stepper button[data-target="children"][data-op="inc"]').disabled =
+      searchState.children >= MAX_CHILDREN || (searchState.adults + searchState.children) >= MAX_SEATED;
 
-    infantsMinusEl.disabled = searchState.infants <= 0;
+    document.querySelector('.stepper button[data-target="infants"][data-op="dec"]').disabled = searchState.infants <= 0;
     // infants cannot exceed adults (Travelpayouts rule: infants travel on an adult's lap)
-    infantsPlusEl.disabled = searchState.infants >= searchState.adults || searchState.infants >= MAX_INFANTS;
+    document.querySelector('.stepper button[data-target="infants"][data-op="inc"]').disabled =
+      searchState.infants >= searchState.adults || searchState.infants >= MAX_INFANTS;
 
-    updatePaxLabel();
-    updatePaxNoteVisibility();
+    refreshPaxTrigger();
   }
 
-  adultsMinusEl.addEventListener('click', () => {
-    if (searchState.adults > 1) {
-      searchState.adults--;
-      // infants can never exceed adults
-      if (searchState.infants > searchState.adults) searchState.infants = searchState.adults;
+  document.querySelectorAll('.stepper button').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.target;
+      const op = btn.dataset.op;
+      if (op === 'inc') {
+        if (key === 'adults') {
+          if (searchState.adults < MAX_ADULTS && (searchState.adults + searchState.children) < MAX_SEATED) searchState.adults++;
+        } else if (key === 'children') {
+          if (searchState.children < MAX_CHILDREN && (searchState.adults + searchState.children) < MAX_SEATED) searchState.children++;
+        } else if (key === 'infants') {
+          if (searchState.infants < searchState.adults && searchState.infants < MAX_INFANTS) searchState.infants++;
+        }
+      } else {
+        if (key === 'adults' && searchState.adults > 1) {
+          searchState.adults--;
+          if (searchState.infants > searchState.adults) searchState.infants = searchState.adults;
+        } else if (key === 'children' && searchState.children > 0) {
+          searchState.children--;
+        } else if (key === 'infants' && searchState.infants > 0) {
+          searchState.infants--;
+        }
+      }
       syncPaxUI();
-    }
+    });
   });
-  adultsPlusEl.addEventListener('click', () => {
-    if (searchState.adults < MAX_ADULTS && (searchState.adults + searchState.children) < MAX_SEATED) {
-      searchState.adults++;
-      syncPaxUI();
-    }
+
+  document.querySelectorAll('.class-opt').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.class-opt').forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      // Travelpayouts trip_class only distinguishes Economy(0) / Business(1);
+      // Premium fares search as Economy, First fares search as Business.
+      const cls = btn.dataset.class;
+      searchState.cabinClass = (cls === 'Business' || cls === 'First') ? 1 : 0;
+      refreshPaxTrigger();
+    });
   });
-  childrenMinusEl.addEventListener('click', () => {
-    if (searchState.children > 0) {
-      searchState.children--;
-      syncPaxUI();
-    }
-  });
-  childrenPlusEl.addEventListener('click', () => {
-    if (searchState.children < MAX_CHILDREN && (searchState.adults + searchState.children) < MAX_SEATED) {
-      searchState.children++;
-      syncPaxUI();
-    }
-  });
-  infantsMinusEl.addEventListener('click', () => {
-    if (searchState.infants > 0) {
-      searchState.infants--;
-      syncPaxUI();
-    }
-  });
-  infantsPlusEl.addEventListener('click', () => {
-    if (searchState.infants < searchState.adults && searchState.infants < MAX_INFANTS) {
-      searchState.infants++;
-      syncPaxUI();
-    }
+
+  const passengerDoneBtn = document.getElementById('passengerDone');
+  passengerDoneBtn.addEventListener('click', () => {
+    passengerDropdown.classList.remove('open');
+    passengerTrigger.setAttribute('aria-expanded', 'false');
   });
 
   syncPaxUI();
 
+  // ---------- Dates ----------
+  const departDateEl = document.getElementById('departDate');
+  const returnDateEl = document.getElementById('returnDate');
+  const todayStr = new Date().toISOString().slice(0, 10);
+  departDateEl.min = todayStr;
+  returnDateEl.min = todayStr;
+  departDateEl.addEventListener('change', () => {
+    if (departDateEl.value) {
+      returnDateEl.min = departDateEl.value;
+      if (returnDateEl.value && returnDateEl.value < departDateEl.value) {
+        returnDateEl.value = departDateEl.value;
+      }
+    }
+  });
+
+  // ---------- Popular destinations grid ----------
+  const DESTINATIONS = [
+    { code: 'CDG', price: 210 },
+    { code: 'DXB', price: 340 },
+    { code: 'NRT', price: 520 },
+    { code: 'BCN', price: 180 },
+    { code: 'BKK', price: 410 },
+    { code: 'FCO', price: 195 },
+  ];
+  const destinationGrid = document.getElementById('destinationGrid');
+  function renderDestinations(instant) {
+    const d = dict();
+    destinationGrid.innerHTML = '';
+    DESTINATIONS.forEach((dest) => {
+      const a = AIRPORTS.find((x) => x.code === dest.code);
+      const city = a ? a.city : dest.code;
+      const card = document.createElement('article');
+      card.className = 'destination-card' + (instant ? ' in' : '');
+      card.innerHTML =
+        '<div class="card-visual"><span class="code">' + dest.code + '</span>' +
+        '<div class="route-dots"><span class="d"></span><span class="line"></span><span class="d"></span></div></div>' +
+        '<div class="card-body"><h3>' + city + '</h3><p class="price">' + d.price_from + ' <strong>$' + dest.price + '</strong></p></div>';
+      card.addEventListener('click', () => {
+        toInput.value = city;
+        toInput.dataset.code = dest.code;
+      });
+      destinationGrid.appendChild(card);
+    });
+  }
+  renderDestinations();
+
+  // ---------- Scroll reveal ----------
+  const revealTargets = document.querySelectorAll('.destination-card, .feature');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    revealTargets.forEach((el) => io.observe(el));
+  } else {
+    revealTargets.forEach((el) => el.classList.add('in'));
+  }
+
+  // ---------- Toast ----------
+  const toastEl = document.getElementById('toast');
+  let toastTimer = null;
+  function showToast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { toastEl.classList.remove('show'); }, 3200);
+  }
+
   // ---------- Search submit: build Travelpayouts deeplink & redirect ----------
   function buildSearchUrl() {
-    const fieldFrom = document.getElementById('fieldFrom');
-    const fieldTo = document.getElementById('fieldTo');
-    const fromCode = (fieldFrom.dataset.code || '').toUpperCase();
-    const toCode = (fieldTo.dataset.code || '').toUpperCase();
-
+    const fromCode = (fromInput.dataset.code || '').toUpperCase();
+    const toCode = (toInput.dataset.code || '').toUpperCase();
     if (!fromCode || !toCode) return null;
 
-    const departDate = inputDepartEl.value;
+    const departDate = departDateEl.value;
     if (!departDate) return null;
-    const returnDate = searchState.tripType === 'round' ? inputReturnEl.value : '';
+    const returnDate = searchState.tripType === 'round' ? returnDateEl.value : '';
     if (searchState.tripType === 'round' && !returnDate) return null;
 
     const cfg = window.FLY_TM_CONFIG || { searchHost: 'https://flights.flytm.xyz', searchPath: '/flights/' };
@@ -457,6 +420,7 @@
     params.set('children', String(searchState.children));
     params.set('infants', String(searchState.infants));
     params.set('trip_class', String(searchState.cabinClass));
+    params.set('currency', currentCurrency.toLowerCase());
     params.set('locale', langCode);
     // auto-trigger the search the instant the destination page loads
     params.set('autosearch', 'true');
@@ -464,39 +428,28 @@
     return `${base}?${params.toString()}`;
   }
 
-  document.getElementById('searchSubmit').addEventListener('click', () => {
-    const btn = document.getElementById('searchSubmit');
-    btn.style.filter = 'brightness(1.25)';
-    setTimeout(() => { btn.style.filter = ''; }, 220);
+  const searchForm = document.getElementById('searchForm');
+  const searchBtn = document.getElementById('searchBtn');
+  searchForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const d = dict();
 
-    const d = I18N[langCode];
-    const fieldFrom = document.getElementById('fieldFrom');
-    const fieldTo = document.getElementById('fieldTo');
-
-    if (!fieldFrom.dataset.code || !fieldTo.dataset.code) {
-      alert(d.pick_cities_alert || 'Please choose both a departure and a destination city');
+    if (!fromInput.dataset.code || !toInput.dataset.code) {
+      showToast(d.toast_missing_fields);
       return;
     }
-    if (!inputDepartEl.value || (searchState.tripType === 'round' && !inputReturnEl.value)) {
-      alert(d.pick_dates_alert || 'Please choose your travel dates');
+    if (!departDateEl.value || (searchState.tripType === 'round' && !returnDateEl.value)) {
+      showToast(d.toast_missing_dates || d.toast_missing_fields);
       return;
     }
 
     const url = buildSearchUrl();
     if (!url) return;
-    window.location.href = url;
+
+    searchBtn.classList.add('loading');
+    setTimeout(() => {
+      window.location.href = url;
+    }, 380);
   });
-
-  // ---------- Init ----------
-  applyI18n();
-
-  // Fade out scroll cue once the user actually scrolls
-  const scrollCueEl = document.querySelector('.scroll-cue');
-  if (scrollCueEl) {
-    window.addEventListener('scroll', () => {
-      scrollCueEl.style.opacity = window.scrollY > 60 ? '0' : '';
-      scrollCueEl.style.pointerEvents = window.scrollY > 60 ? 'none' : '';
-    }, { passive: true });
-  }
 
 })();
