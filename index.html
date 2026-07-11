@@ -1385,6 +1385,17 @@
         padding: 16px;
         border-radius: 16px;
       }
+
+      /* Language/currency dropdown — center on mobile so it never clips off screen */
+      .lang-dropdown {
+        position: fixed;
+        top: 72px;
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+        width: calc(100vw - 32px);
+        max-width: 360px;
+      }
     }
   </style>
 </head>
