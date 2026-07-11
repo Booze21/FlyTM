@@ -1,6 +1,8 @@
 (function () {
   "use strict";
 
+  function init() {
+
   // ---------- Language / currency state ----------
   let langCode = 'en';
   let currentCurrency = 'USD';
@@ -466,5 +468,13 @@
       window.location.href = url;
     }, 380);
   });
+
+  } // end init()
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 
 })();
