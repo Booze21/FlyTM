@@ -413,4 +413,7 @@ const LOADER_LABELS = {
   tr: ["Yörünge ayarlanıyor", "Gövde parlatılıyor", "Rotalar çiziliyor"],
   de: ["Umlaufbahn wird kalibriert", "Rumpf wird poliert", "Flugrouten werden geplant"],
   es: ["Calibrando la órbita", "Puliendo el fuselaje", "Trazando rutas"],
+  ru: ["Калибровка орбиты", "Полируем фюзеляж", "Прокладываем маршруты"],
+  fr: ["Calibrage de l'orbite", "Polissage du fuselage", "Calcul des routes"],
+  ar: ["ضبط المسار", "تلميع الهيكل", "رسم مسارات الرحلات"],
 };

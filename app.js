@@ -9,6 +9,16 @@
     return I18N[langCode] || I18N.en;
   }
 
+  // ---------- Currency symbol map ----------
+  const CURRENCY_SYMBOLS = {
+    USD: '$', EUR: '€', GBP: '£', TRY: '₺',
+    AED: 'د.إ', JPY: '¥', KZT: '₸',
+  };
+
+  function currencySymbol() {
+    return CURRENCY_SYMBOLS[currentCurrency] || currentCurrency;
+  }
+
   // ---------- Search state (trip type / class / passengers) ----------
   const searchState = {
     tripType: 'round',   // 'round' | 'oneway'
@@ -91,6 +101,11 @@
       btn.classList.add('active');
       currentCurrency = btn.dataset.currency;
       langLabelEl.textContent = currentCurrency + ' · ' + langCode.toUpperCase();
+      // Re-render destination cards so prices show the correct currency symbol
+      renderDestinations(true);
+      // Close dropdown after currency selection (matches UX of language selection)
+      langDropdown.classList.remove('open');
+      langTrigger.setAttribute('aria-expanded', 'false');
     });
   });
 
@@ -360,7 +375,7 @@
       card.innerHTML =
         '<div class="card-visual"><span class="code">' + dest.code + '</span>' +
         '<div class="route-dots"><span class="d"></span><span class="line"></span><span class="d"></span></div></div>' +
-        '<div class="card-body"><h3>' + city + '</h3><p class="price">' + d.price_from + ' <strong>$' + dest.price + '</strong></p></div>';
+        '<div class="card-body"><h3>' + city + '</h3><p class="price">' + d.price_from + ' <strong>' + currencySymbol() + dest.price + '</strong></p></div>';
       card.addEventListener('click', () => {
         toInput.value = city;
         toInput.dataset.code = dest.code;
