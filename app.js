@@ -424,7 +424,7 @@
     const returnDate = searchState.tripType === 'round' ? returnDateEl.value : '';
     if (searchState.tripType === 'round' && !returnDate) return null;
 
-    const cfg = window.FLY_TM_CONFIG || { searchHost: 'https://flights.flytm.xyz', searchPath: '/flights/' };
+    const cfg = window.FLY_TM_CONFIG || { searchHost: 'https://flights.TMbilet.com', searchPath: '/flights/' };
     const base = cfg.searchHost.replace(/\/$/, '') + cfg.searchPath;
 
     const params = new URLSearchParams();
