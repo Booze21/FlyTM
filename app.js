@@ -439,6 +439,14 @@
 
   const searchForm = document.getElementById('searchForm');
   const searchBtn = document.getElementById('searchBtn');
+
+  // Ensure the button click always triggers the submit handler regardless of
+  // any stacking/event-propagation side-effects introduced by design changes.
+  searchBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    searchForm.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+  });
+
   searchForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const d = dict();
