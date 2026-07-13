@@ -1724,6 +1724,52 @@
   <script data-cfasync="false" src="airports.js"></script>
   <script data-cfasync="false" src="app.js"></script>
 
+  <script>
+    // 1. Clear FROM field default value (Istanbul) on page load
+    // 2. Disable autocomplete dropdown suggestions when field is empty (no typed input)
+    document.addEventListener('DOMContentLoaded', function () {
+
+      // --- Fix 1: Clear the FROM input if it was pre-filled (e.g. Istanbul) ---
+      var fromInput = document.getElementById('fromInput');
+      if (fromInput) {
+        fromInput.value = '';
+        // Also clear any hidden IATA code stored in data attributes
+        fromInput.removeAttribute('data-iata');
+        fromInput.removeAttribute('data-code');
+      }
+
+      // --- Fix 2: Prevent autocomplete list from opening when field is empty ---
+      // We intercept the focus event on both FROM and TO inputs and close the
+      // dropdown if the user hasn't typed anything yet.
+      function suppressEmptyDropdown(inputEl, listEl) {
+        if (!inputEl || !listEl) return;
+
+        // On focus: if field is empty, make sure list stays hidden
+        inputEl.addEventListener('focus', function () {
+          if (inputEl.value.trim() === '') {
+            listEl.classList.remove('open');
+          }
+        });
+
+        // On input: only allow list to open when user has actually typed
+        inputEl.addEventListener('input', function () {
+          if (inputEl.value.trim() === '') {
+            listEl.classList.remove('open');
+          }
+        });
+      }
+
+      suppressEmptyDropdown(
+        document.getElementById('fromInput'),
+        document.getElementById('fromList')
+      );
+      suppressEmptyDropdown(
+        document.getElementById('toInput'),
+        document.getElementById('toList')
+      );
+    });
+  </script>
+
   <!-- ═══════════════════════════════════════════════════════════
        SCROLL INDICATOR — zero dependencies, self-contained IIFE.
 
