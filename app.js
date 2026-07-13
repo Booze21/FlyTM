@@ -23,7 +23,7 @@
 
   // ---------- Search state (trip type / class / passengers) ----------
   const searchState = {
-    tripType: 'round',   // 'round' | 'oneway'
+    tripType: 'oneway',   // 'round' | 'oneway'
     cabinClass: 0,       // 0 = Economy, 1 = Business (Travelpayouts trip_class)
     adults: 1,
     children: 0,
@@ -424,7 +424,7 @@
     const returnDate = searchState.tripType === 'round' ? returnDateEl.value : '';
     if (searchState.tripType === 'round' && !returnDate) return null;
 
-    const cfg = window.FLY_TM_CONFIG || { searchHost: 'https://avia.TMbilet.com', searchPath: '/flights/' };
+    const cfg = window.TMBILET_CONFIG || { searchHost: 'https://flights.TMbilet.com', searchPath: '/flights/' };
     const base = cfg.searchHost.replace(/\/$/, '') + cfg.searchPath;
 
     const params = new URLSearchParams();

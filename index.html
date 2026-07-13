@@ -12,14 +12,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
     rel="stylesheet">
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" sizes="32x32" href="/tmbilet-logo.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="/tmbilet-logo.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="/tmbilet-logo.png">
-  <link rel="apple-touch-icon" href="/tmbilet-logo.png">
 
-  <!-- Optional theme color -->
-  <meta name="theme-color" content="#16a34a">
   <style>
     :root {
       --white: #FFFFFF;
@@ -1484,9 +1477,8 @@
 
         <form class="search-widget" id="searchForm">
           <div class="trip-toggle" role="group" aria-label="Trip type">
-            <button type="button" class="trip-option active" data-trip="round" data-i18n="trip_round">Round
-              trip</button>
-            <button type="button" class="trip-option" data-trip="one" data-i18n="trip_one">One way</button>
+            <button type="button" class="trip-option active" data-trip="one" data-i18n="trip_one">One way</button>
+            <button type="button" class="trip-option" data-trip="round" data-i18n="trip_round">Round trip</button>
           </div>
 
           <div class="search-fields">
@@ -1519,7 +1511,7 @@
               <input type="date" id="departDate">
             </div>
 
-            <div class="field field-date field-return" id="returnField">
+            <div class="field field-date field-return collapsed" id="returnField">
               <label for="returnDate" data-i18n="label_return">Return</label>
               <input type="date" id="returnDate">
             </div>
@@ -1723,7 +1715,7 @@
   <div class="toast" id="toast"></div>
 
   <script data-cfasync="false">
-    window.FLY_TM_CONFIG = {
+    window.TMBILET_CONFIG = {
       searchHost: 'https://avia.TMbilet.com',
       searchPath: '/'
     };
