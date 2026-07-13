@@ -342,19 +342,11 @@
   syncPaxUI();
 
   // ---------- Dates ----------
+  // departDate / returnDate are <input type="hidden"> managed by the custom calendar picker.
+  // We must NOT set .min on them (ignored for hidden inputs) or listen for 'change'
+  // (hidden inputs don't fire it). The picker writes ISO dates (YYYY-MM-DD) directly.
   const departDateEl = document.getElementById('departDate');
   const returnDateEl = document.getElementById('returnDate');
-  const todayStr = new Date().toISOString().slice(0, 10);
-  departDateEl.min = todayStr;
-  returnDateEl.min = todayStr;
-  departDateEl.addEventListener('change', () => {
-    if (departDateEl.value) {
-      returnDateEl.min = departDateEl.value;
-      if (returnDateEl.value && returnDateEl.value < departDateEl.value) {
-        returnDateEl.value = departDateEl.value;
-      }
-    }
-  });
 
   // ---------- Popular destinations grid ----------
   const DESTINATIONS = [
@@ -455,7 +447,16 @@
       showToast(d.toast_missing_fields);
       return;
     }
-    if (!departDateEl.value || (searchState.tripType === 'round' && !returnDateEl.value)) {
+
+    // departDate is a hidden input written by the custom calendar picker.
+    // If it's empty the user saw the calendar but never clicked a day.
+    const departDisplay = document.getElementById('departDisplay');
+    const returnDisplay = document.getElementById('returnDisplay');
+    const departMissing = !departDateEl.value || (departDisplay && departDisplay.classList.contains('placeholder'));
+    const returnMissing = searchState.tripType === 'round' &&
+      (!returnDateEl.value || (returnDisplay && returnDisplay.classList.contains('placeholder')));
+
+    if (departMissing || returnMissing) {
       showToast(d.toast_missing_dates || d.toast_missing_fields);
       return;
     }

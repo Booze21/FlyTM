@@ -1905,14 +1905,10 @@
     // 2. Disable autocomplete dropdown suggestions when field is empty (no typed input)
     document.addEventListener('DOMContentLoaded', function () {
 
-      // --- Fix 1: Clear the FROM input if it was pre-filled (e.g. Istanbul) ---
-      var fromInput = document.getElementById('fromInput');
-      if (fromInput) {
-        fromInput.value = '';
-        // Also clear any hidden IATA code stored in data attributes
-        fromInput.removeAttribute('data-iata');
-        fromInput.removeAttribute('data-code');
-      }
+      // --- Note: FROM field default (Istanbul/IST) is set in app.js ---
+      // Do not clear data-code here — it breaks the search validation.
+      // If you want the field to start empty on page load, remove the
+      // defaultFrom block in app.js instead.
 
       // --- Fix 2: Prevent autocomplete list from opening when field is empty ---
       // We intercept the focus event on both FROM and TO inputs and close the
