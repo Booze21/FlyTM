@@ -174,60 +174,10 @@
     setTimeout(() => { swapBtn.classList.remove('spin'); }, 250);
   });
 
-  // ---------- Airport autocomplete (shared AIRPORTS dataset) ----------
-  function pinIcon() {
-    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
-  }
-
-  function searchAirports(query) {
-    const q = query.trim().toLowerCase();
-    if (!q) return AIRPORTS.filter((a) => a.popular).slice(0, 6);
-    return AIRPORTS.filter((a) =>
-      a.city.toLowerCase().includes(q) ||
-      a.country.toLowerCase().includes(q) ||
-      a.code.toLowerCase().includes(q)
-    ).slice(0, 8);
-  }
-
-  function setupAutocomplete(input, listEl) {
-    function renderMatches(list) {
-      listEl.innerHTML = '';
-      if (!list.length) {
-        listEl.classList.remove('open');
-        return;
-      }
-      list.forEach((a) => {
-        const item = document.createElement('div');
-        item.className = 'autocomplete-item';
-        item.innerHTML = pinIcon() +
-          '<span class="flag">' + a.flag + '</span>' +
-          '<span class="city">' + a.city + ', ' + a.country + '</span>' +
-          '<span class="code">' + a.code + '</span>';
-        item.addEventListener('click', () => {
-          input.value = a.city;
-          input.dataset.code = a.code;
-          listEl.classList.remove('open');
-        });
-        listEl.appendChild(item);
-      });
-      listEl.classList.add('open');
-    }
-
-    input.addEventListener('focus', () => {
-      renderMatches(searchAirports(input.value));
-    });
-    input.addEventListener('input', () => {
-      input.dataset.code = '';
-      renderMatches(searchAirports(input.value));
-    });
-    document.addEventListener('click', (e) => {
-      if (!listEl.contains(e.target) && e.target !== input) {
-        listEl.classList.remove('open');
-      }
-    });
-  }
-  setupAutocomplete(fromInput, document.getElementById('fromList'));
-  setupAutocomplete(toInput, document.getElementById('toList'));
+  // ---------- Airport autocomplete ----------
+  // Handled entirely by airports-search.js (AirportSearch / AirportAutocomplete).
+  // That engine supports Russian, Turkish, Arabic and other multilingual aliases
+  // via its ALIAS_MAP. No duplicate listeners needed here.
 
   // Default "from" city, matching the pre-redesign experience
   const defaultFrom = AIRPORTS.find((a) => a.code === 'IST');

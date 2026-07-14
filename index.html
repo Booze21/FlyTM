@@ -1898,49 +1898,8 @@
   </script>
   <script data-cfasync="false" src="i18n.js"></script>
   <script data-cfasync="false" src="airports.js"></script>
+  <script data-cfasync="false" src="airports-search.js"></script>
   <script data-cfasync="false" src="app.js"></script>
-
-  <script>
-    // 1. Clear FROM field default value (Istanbul) on page load
-    // 2. Disable autocomplete dropdown suggestions when field is empty (no typed input)
-    document.addEventListener('DOMContentLoaded', function () {
-
-      // --- Note: FROM field default (Istanbul/IST) is set in app.js ---
-      // Do not clear data-code here — it breaks the search validation.
-      // If you want the field to start empty on page load, remove the
-      // defaultFrom block in app.js instead.
-
-      // --- Fix 2: Prevent autocomplete list from opening when field is empty ---
-      // We intercept the focus event on both FROM and TO inputs and close the
-      // dropdown if the user hasn't typed anything yet.
-      function suppressEmptyDropdown(inputEl, listEl) {
-        if (!inputEl || !listEl) return;
-
-        // On focus: if field is empty, make sure list stays hidden
-        inputEl.addEventListener('focus', function () {
-          if (inputEl.value.trim() === '') {
-            listEl.classList.remove('open');
-          }
-        });
-
-        // On input: only allow list to open when user has actually typed
-        inputEl.addEventListener('input', function () {
-          if (inputEl.value.trim() === '') {
-            listEl.classList.remove('open');
-          }
-        });
-      }
-
-      suppressEmptyDropdown(
-        document.getElementById('fromInput'),
-        document.getElementById('fromList')
-      );
-      suppressEmptyDropdown(
-        document.getElementById('toInput'),
-        document.getElementById('toList')
-      );
-    });
-  </script>
 
   <!-- ═══════════════════════════════════════════════════════════
        CUSTOM DATE PICKER
