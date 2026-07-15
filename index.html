@@ -6,7 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TMbilet — Fly smarter. Book better.</title>
   <meta name="description" content="Compare and book flights across hundreds of airlines with TMbilet.">
-  <link rel="icon" type="image/png" href="flylogo.png">
+  <link rel="icon" type="image/png" href="tmbilet-logo.png">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -163,10 +167,12 @@
         width: 110px;
         height: 50px;
       }
+
       .brand-icon {
         width: 30px;
         height: 30px;
       }
+
       .logo-brand {
         gap: 8px;
       }
@@ -607,7 +613,9 @@
       cursor: pointer;
     }
 
-    .date-trigger:focus { outline: none; }
+    .date-trigger:focus {
+      outline: none;
+    }
 
     .date-display {
       flex: 1;
@@ -629,7 +637,9 @@
       transition: stroke var(--dur) var(--ease);
     }
 
-    .field:focus-within .cal-icon { stroke: var(--accent-darker); }
+    .field:focus-within .cal-icon {
+      stroke: var(--accent-darker);
+    }
 
     /* Calendar popup */
     .cal-popup {
@@ -647,7 +657,9 @@
       user-select: none;
     }
 
-    .cal-popup.open { display: block; }
+    .cal-popup.open {
+      display: block;
+    }
 
     .cal-header {
       display: flex;
@@ -674,7 +686,11 @@
       border-color: var(--text-muted);
     }
 
-    .cal-nav svg { width: 14px; height: 14px; stroke: var(--text); }
+    .cal-nav svg {
+      width: 14px;
+      height: 14px;
+      stroke: var(--text);
+    }
 
     .cal-month-label {
       font-size: 14px;
@@ -1394,7 +1410,10 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      #scroll-indicator { transition: none; box-shadow: none; }
+      #scroll-indicator {
+        transition: none;
+        box-shadow: none;
+      }
     }
 
     /* ---------- Reduced motion ---------- */
@@ -1594,7 +1613,8 @@
             </div>
             <div class="lang-dropdown-col">
               <h4 data-i18n="dd_language">Language</h4>
-              <button type="button" class="lang-opt active" data-lang="EN" aria-label="Switch to English">English</button>
+              <button type="button" class="lang-opt active" data-lang="EN"
+                aria-label="Switch to English">English</button>
               <button type="button" class="lang-opt" data-lang="TR" aria-label="Türkçe diline geç">Türkçe</button>
               <button type="button" class="lang-opt" data-lang="RU" aria-label="Переключить на русский">Русский</button>
               <button type="button" class="lang-opt" data-lang="AR" aria-label="التبديل إلى العربية">العربية</button>
@@ -1660,16 +1680,30 @@
               <label data-i18n="label_departure">Departure</label>
               <button type="button" class="date-trigger" id="departTrigger" aria-haspopup="true" aria-expanded="false">
                 <span class="date-display placeholder" id="departDisplay">Select date</span>
-                <svg class="cal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <svg class="cal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                  <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
               </button>
               <input type="hidden" id="departDate">
               <div class="cal-popup" id="departCal">
                 <div class="cal-header">
-                  <button type="button" class="cal-nav" id="departPrev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+                  <button type="button" class="cal-nav" id="departPrev"><svg viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="15 18 9 12 15 6" />
+                    </svg></button>
                   <span class="cal-month-label" id="departMonthLabel"></span>
-                  <button type="button" class="cal-nav" id="departNext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+                  <button type="button" class="cal-nav" id="departNext"><svg viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="9 18 15 12 9 6" />
+                    </svg></button>
                 </div>
-                <div class="cal-weekdays"><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span></div>
+                <div class="cal-weekdays">
+                  <span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
+                </div>
                 <div class="cal-days" id="departDays"></div>
               </div>
             </div>
@@ -1678,16 +1712,30 @@
               <label data-i18n="label_return">Return</label>
               <button type="button" class="date-trigger" id="returnTrigger" aria-haspopup="true" aria-expanded="false">
                 <span class="date-display placeholder" id="returnDisplay">Select date</span>
-                <svg class="cal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <svg class="cal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                  <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
               </button>
               <input type="hidden" id="returnDate">
               <div class="cal-popup" id="returnCal">
                 <div class="cal-header">
-                  <button type="button" class="cal-nav" id="returnPrev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+                  <button type="button" class="cal-nav" id="returnPrev"><svg viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="15 18 9 12 15 6" />
+                    </svg></button>
                   <span class="cal-month-label" id="returnMonthLabel"></span>
-                  <button type="button" class="cal-nav" id="returnNext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+                  <button type="button" class="cal-nav" id="returnNext"><svg viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="9 18 15 12 9 6" />
+                    </svg></button>
                 </div>
-                <div class="cal-weekdays"><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span></div>
+                <div class="cal-weekdays">
+                  <span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
+                </div>
                 <div class="cal-days" id="returnDays"></div>
               </div>
             </div>
@@ -1890,6 +1938,16 @@
 
   <div class="toast" id="toast"></div>
 
+
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"TMbilet",
+    "url":"https://tmbilet.com",
+    "logo":"https://tmbilet.com/tmbilet-logo.png"
+  }
+  </script>
   <script data-cfasync="false">
     window.TMBILET_CONFIG = {
       searchHost: 'https://avia.TMbilet.com',
@@ -1908,37 +1966,37 @@
     (function () {
       'use strict';
 
-      var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
       function makePicker(opts) {
-        var trigger   = document.getElementById(opts.triggerId);
-        var display   = document.getElementById(opts.displayId);
-        var hidden    = document.getElementById(opts.hiddenId);
-        var popup     = document.getElementById(opts.popupId);
-        var daysEl    = document.getElementById(opts.daysId);
-        var monthLbl  = document.getElementById(opts.monthLabelId);
-        var prevBtn   = document.getElementById(opts.prevId);
-        var nextBtn   = document.getElementById(opts.nextId);
+        var trigger = document.getElementById(opts.triggerId);
+        var display = document.getElementById(opts.displayId);
+        var hidden = document.getElementById(opts.hiddenId);
+        var popup = document.getElementById(opts.popupId);
+        var daysEl = document.getElementById(opts.daysId);
+        var monthLbl = document.getElementById(opts.monthLabelId);
+        var prevBtn = document.getElementById(opts.prevId);
+        var nextBtn = document.getElementById(opts.nextId);
 
         if (!trigger || !popup) return;
 
-        var today     = new Date();
-        today.setHours(0,0,0,0);
-        var minDate   = opts.getMin ? opts.getMin() : today;
+        var today = new Date();
+        today.setHours(0, 0, 0, 0);
+        var minDate = opts.getMin ? opts.getMin() : today;
 
         var cur = new Date(today.getFullYear(), today.getMonth(), 1);
         var selected = null;
 
         function fmt(d) {
-          var dd = String(d.getDate()).padStart(2,'0');
-          var mm = String(d.getMonth()+1).padStart(2,'0');
+          var dd = String(d.getDate()).padStart(2, '0');
+          var mm = String(d.getMonth() + 1).padStart(2, '0');
           var yy = d.getFullYear();
           return dd + '/' + mm + '/' + yy;
         }
 
         function isoFmt(d) {
-          var dd = String(d.getDate()).padStart(2,'0');
-          var mm = String(d.getMonth()+1).padStart(2,'0');
+          var dd = String(d.getDate()).padStart(2, '0');
+          var mm = String(d.getMonth() + 1).padStart(2, '0');
           return d.getFullYear() + '-' + mm + '-' + dd;
         }
 
@@ -1950,7 +2008,7 @@
           var firstDay = new Date(cur.getFullYear(), cur.getMonth(), 1);
           // Monday = 0
           var startOffset = (firstDay.getDay() + 6) % 7;
-          var daysInMonth = new Date(cur.getFullYear(), cur.getMonth()+1, 0).getDate();
+          var daysInMonth = new Date(cur.getFullYear(), cur.getMonth() + 1, 0).getDate();
 
           // Empty cells before first
           for (var i = 0; i < startOffset; i++) {
@@ -1961,22 +2019,22 @@
 
           for (var d = 1; d <= daysInMonth; d++) {
             var date = new Date(cur.getFullYear(), cur.getMonth(), d);
-            var btn  = document.createElement('button');
+            var btn = document.createElement('button');
             btn.type = 'button';
             btn.className = 'cal-day';
             btn.textContent = d;
 
             var isPast = date < minDate;
             var isToday = date.getTime() === today.getTime();
-            var isSel   = selected && date.getTime() === selected.getTime();
+            var isSel = selected && date.getTime() === selected.getTime();
 
-            if (isPast)  btn.classList.add('disabled');
+            if (isPast) btn.classList.add('disabled');
             if (isToday) btn.classList.add('today');
-            if (isSel)   btn.classList.add('selected');
+            if (isSel) btn.classList.add('selected');
 
             if (!isPast) {
-              (function(dt) {
-                btn.addEventListener('click', function() {
+              (function (dt) {
+                btn.addEventListener('click', function () {
                   selected = dt;
                   hidden.value = isoFmt(dt);
                   display.textContent = fmt(dt);
@@ -1998,59 +2056,59 @@
           if (cur < minMonth) cur = new Date(minMonth);
           renderCal();
           popup.classList.add('open');
-          trigger.setAttribute('aria-expanded','true');
+          trigger.setAttribute('aria-expanded', 'true');
         }
 
         function closePopup() {
           popup.classList.remove('open');
-          trigger.setAttribute('aria-expanded','false');
+          trigger.setAttribute('aria-expanded', 'false');
         }
 
-        trigger.addEventListener('click', function(e) {
+        trigger.addEventListener('click', function (e) {
           e.stopPropagation();
           var isOpen = popup.classList.contains('open');
           // Close all other popups
-          document.querySelectorAll('.cal-popup.open').forEach(function(p){ p.classList.remove('open'); });
-          document.querySelectorAll('.date-trigger').forEach(function(t){ t.setAttribute('aria-expanded','false'); });
+          document.querySelectorAll('.cal-popup.open').forEach(function (p) { p.classList.remove('open'); });
+          document.querySelectorAll('.date-trigger').forEach(function (t) { t.setAttribute('aria-expanded', 'false'); });
           if (!isOpen) openPopup();
         });
 
-        prevBtn.addEventListener('click', function(e) {
+        prevBtn.addEventListener('click', function (e) {
           e.stopPropagation();
-          cur = new Date(cur.getFullYear(), cur.getMonth()-1, 1);
+          cur = new Date(cur.getFullYear(), cur.getMonth() - 1, 1);
           renderCal();
         });
 
-        nextBtn.addEventListener('click', function(e) {
+        nextBtn.addEventListener('click', function (e) {
           e.stopPropagation();
-          cur = new Date(cur.getFullYear(), cur.getMonth()+1, 1);
+          cur = new Date(cur.getFullYear(), cur.getMonth() + 1, 1);
           renderCal();
         });
 
-        popup.addEventListener('click', function(e){ e.stopPropagation(); });
+        popup.addEventListener('click', function (e) { e.stopPropagation(); });
 
         return {
-          getSelected: function(){ return selected; }
+          getSelected: function () { return selected; }
         };
       }
 
-      document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener('DOMContentLoaded', function () {
         var departPicker = makePicker({
-          triggerId:    'departTrigger',
-          displayId:    'departDisplay',
-          hiddenId:     'departDate',
-          popupId:      'departCal',
-          daysId:       'departDays',
+          triggerId: 'departTrigger',
+          displayId: 'departDisplay',
+          hiddenId: 'departDate',
+          popupId: 'departCal',
+          daysId: 'departDays',
           monthLabelId: 'departMonthLabel',
-          prevId:       'departPrev',
-          nextId:       'departNext',
-          onSelect: function() {
+          prevId: 'departPrev',
+          nextId: 'departNext',
+          onSelect: function () {
             // After picking depart, open return if in round-trip mode
             var returnField = document.getElementById('returnField');
             if (returnField && !returnField.classList.contains('collapsed')) {
               var retPicker = document.getElementById('returnCal');
               if (retPicker) {
-                setTimeout(function(){
+                setTimeout(function () {
                   document.getElementById('returnTrigger').click();
                 }, 120);
               }
@@ -2059,32 +2117,32 @@
         });
 
         makePicker({
-          triggerId:    'returnTrigger',
-          displayId:    'returnDisplay',
-          hiddenId:     'returnDate',
-          popupId:      'returnCal',
-          daysId:       'returnDays',
+          triggerId: 'returnTrigger',
+          displayId: 'returnDisplay',
+          hiddenId: 'returnDate',
+          popupId: 'returnCal',
+          daysId: 'returnDays',
           monthLabelId: 'returnMonthLabel',
-          prevId:       'returnPrev',
-          nextId:       'returnNext',
-          getMin: function() {
+          prevId: 'returnPrev',
+          nextId: 'returnNext',
+          getMin: function () {
             var dv = document.getElementById('departDate').value;
             if (dv) {
               var d = new Date(dv);
-              d.setHours(0,0,0,0);
+              d.setHours(0, 0, 0, 0);
               // Return must be at least next day
-              d.setDate(d.getDate()+1);
+              d.setDate(d.getDate() + 1);
               return d;
             }
-            var t = new Date(); t.setHours(0,0,0,0);
+            var t = new Date(); t.setHours(0, 0, 0, 0);
             return t;
           }
         });
 
         // Close calendars when clicking outside
-        document.addEventListener('click', function() {
-          document.querySelectorAll('.cal-popup.open').forEach(function(p){ p.classList.remove('open'); });
-          document.querySelectorAll('[aria-expanded="true"].date-trigger').forEach(function(t){ t.setAttribute('aria-expanded','false'); });
+        document.addEventListener('click', function () {
+          document.querySelectorAll('.cal-popup.open').forEach(function (p) { p.classList.remove('open'); });
+          document.querySelectorAll('[aria-expanded="true"].date-trigger').forEach(function (t) { t.setAttribute('aria-expanded', 'false'); });
         });
       });
 
