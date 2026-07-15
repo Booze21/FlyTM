@@ -139,7 +139,12 @@
     btn.addEventListener('click', () => {
       langDropdown.querySelectorAll('.lang-opt[data-lang]').forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
-      applyLanguage(btn.dataset.lang.toLowerCase());
+      const chosenLang = btn.dataset.lang.toLowerCase();
+      applyLanguage(chosenLang);
+      // Zapominaem ruchnoy vibor — pri sleduyushchem zahode ne budet menyatsya
+      try {
+        localStorage.setItem('tmbilet_locale', JSON.stringify({ lang: chosenLang, currency: currentCurrency }));
+      } catch (e) {}
       langDropdown.classList.remove('open');
       langTrigger.setAttribute('aria-expanded', 'false');
     });
@@ -327,7 +332,47 @@
       destinationGrid.appendChild(card);
     });
   }
-  renderDestinations();
+  // ---------- Auto-detect language & currency by browser ----------
+  function autoDetectLocale() {
+    // Esli polzovatel uzhe vybral yazik vruchnuyu — ne menyaem
+    try {
+      const saved = localStorage.getItem('tmbilet_locale');
+      if (saved) {
+        const { lang, currency } = JSON.parse(saved);
+        applyLanguage(lang);
+        currentCurrency = currency;
+        langLabelEl.textContent = currentCurrency + ' · ' + langCode.toUpperCase();
+        langDropdown.querySelectorAll('.lang-opt[data-currency]').forEach((b) =>
+          b.classList.toggle('active', b.dataset.currency === currency));
+        langDropdown.querySelectorAll('.lang-opt[data-lang]').forEach((b) =>
+          b.classList.toggle('active', b.dataset.lang.toLowerCase() === lang));
+        renderDestinations(true);
+        return;
+      }
+    } catch (e) {}
+
+    // Opredelyaem po yaziku brauzera
+    const lang = (navigator.language || navigator.userLanguage || 'en').toLowerCase().slice(0, 2);
+    const MAP = {
+      tr: ['tr', 'TRY'],
+      ru: ['ru', 'USD'], az: ['ru', 'USD'], kk: ['ru', 'USD'],
+      uz: ['ru', 'USD'], be: ['ru', 'USD'], uk: ['ru', 'USD'],
+      ar: ['ar', 'AED'],
+      de: ['en', 'EUR'], fr: ['en', 'EUR'], es: ['en', 'EUR'],
+      it: ['en', 'EUR'], nl: ['en', 'EUR'], pl: ['en', 'EUR'],
+      ja: ['en', 'JPY'],
+    };
+    const [detectedLang, detectedCurrency] = MAP[lang] || ['en', 'USD'];
+    applyLanguage(detectedLang);
+    currentCurrency = detectedCurrency;
+    langLabelEl.textContent = currentCurrency + ' · ' + langCode.toUpperCase();
+    langDropdown.querySelectorAll('.lang-opt[data-currency]').forEach((b) =>
+      b.classList.toggle('active', b.dataset.currency === detectedCurrency));
+    langDropdown.querySelectorAll('.lang-opt[data-lang]').forEach((b) =>
+      b.classList.toggle('active', b.dataset.lang.toLowerCase() === detectedLang));
+    renderDestinations(true);
+  }
+  autoDetectLocale();
 
   // ---------- Scroll reveal ----------
   const revealTargets = document.querySelectorAll('.destination-card, .feature');
