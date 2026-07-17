@@ -184,13 +184,6 @@
   // That engine supports Russian, Turkish, Arabic and other multilingual aliases
   // via its ALIAS_MAP. No duplicate listeners needed here.
 
-  // Default "from" city, matching the pre-redesign experience
-  const defaultFrom = AIRPORTS.find((a) => a.code === 'IST');
-  if (defaultFrom && !fromInput.value) {
-    fromInput.value = defaultFrom.city;
-    fromInput.dataset.code = defaultFrom.code;
-  }
-
   // ---------- Passengers & class dropdown ----------
   const passengerTrigger = document.getElementById('passengerTrigger');
   const passengerDropdown = document.getElementById('passengerDropdown');
