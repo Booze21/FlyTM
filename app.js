@@ -404,7 +404,7 @@
     const returnDate = searchState.tripType === 'round' ? returnDateEl.value : '';
     if (searchState.tripType === 'round' && !returnDate) return null;
 
-    const cfg = window.TMBILET_CONFIG || { searchHost: 'https://flights.TMbilet.com', searchPath: '/flights/' };
+    const cfg = window.TMBILET_CONFIG || { searchHost: 'https://avia.TMbilet.com', searchPath: '/' };
     const base = cfg.searchHost.replace(/\/$/, '') + cfg.searchPath;
 
     const params = new URLSearchParams();
