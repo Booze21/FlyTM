@@ -500,7 +500,8 @@
       position: relative;
       z-index: 1;
       margin: 44px auto 0;
-      max-width: 980px;
+      width: 980px;
+      max-width: min(980px, 92vw);
       background: var(--white);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
@@ -536,7 +537,7 @@
 
     .search-fields {
       display: grid;
-      grid-template-columns: 1.3fr auto 1.3fr 1fr 1fr 1.2fr;
+      grid-template-columns: 1.25fr auto 1.25fr 1.05fr 1.05fr 1.15fr;
       align-items: stretch;
       background: var(--gray);
       border-radius: var(--radius-md);
@@ -763,7 +764,6 @@
 
     .field-return {
       transition: max-width var(--dur) var(--ease), opacity var(--dur) var(--ease), padding var(--dur) var(--ease), margin var(--dur) var(--ease);
-      overflow: hidden;
     }
 
     .field-return.collapsed {
@@ -772,6 +772,7 @@
       padding-left: 0;
       padding-right: 0;
       pointer-events: none;
+      overflow: hidden;
     }
 
     .swap-btn {
@@ -1508,6 +1509,7 @@
         max-height: 0;
         opacity: 0;
         padding: 0 14px;
+        overflow: hidden;
       }
 
       .search-btn {
