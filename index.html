@@ -499,9 +499,12 @@
     .search-widget {
       position: relative;
       z-index: 1;
-      margin: 44px auto 0;
-      width: 980px;
-      max-width: min(980px, 92vw);
+      width: min(980px, 92vw);
+      margin-top: 44px;
+      /* hero-inner is only 760px wide and centered; break out and
+         re-center on the true page center so the card isn't pushed left */
+      margin-left: 50%;
+      transform: translateX(-50%);
       background: var(--white);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
