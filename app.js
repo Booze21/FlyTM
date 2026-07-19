@@ -344,25 +344,6 @@
       }
     } catch (e) {}
 
-    // SEO: if this page declares a fixed locale (see /ru/, /tr/ landing
-    // pages), honor it so the visible content matches the localized
-    // <title>/<meta description> Google indexes for that URL. Has no
-    // effect on the main "/" page, where this global is never set, so
-    // browser-based auto-detection below is unchanged.
-    if (window.TMBILET_FORCE_LANG && I18N[window.TMBILET_FORCE_LANG]) {
-      const forced = window.TMBILET_FORCE_LANG;
-      const FORCED_CURRENCY = { tr: 'TRY', ru: 'USD', ar: 'AED' }[forced] || 'USD';
-      applyLanguage(forced);
-      currentCurrency = FORCED_CURRENCY;
-      langLabelEl.textContent = currentCurrency + ' · ' + langCode.toUpperCase();
-      langDropdown.querySelectorAll('.lang-opt[data-currency]').forEach((b) =>
-        b.classList.toggle('active', b.dataset.currency === currentCurrency));
-      langDropdown.querySelectorAll('.lang-opt[data-lang]').forEach((b) =>
-        b.classList.toggle('active', b.dataset.lang.toLowerCase() === forced));
-      renderDestinations(true);
-      return;
-    }
-
     // Opredelyaem po yaziku brauzera
     const lang = (navigator.language || navigator.userLanguage || 'en').toLowerCase().slice(0, 2);
     const MAP = {
