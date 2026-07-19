@@ -1,407 +1,1970 @@
 <!DOCTYPE html>
+<html lang="en">
 
-<html dir="ltr" lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>TMbilet — Fly smarter. Book better.</title>
-<meta content="Compare and book flights across hundreds of airlines with TMbilet." name="description"/>
-<link href="/tmbilet-logo.png" rel="icon" type="image/png"/>
-<link href="/favicon.ico" rel="icon" sizes="any"/>
-<link href="/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"/>
-<link href="/android-chrome-192x192.png" rel="icon" sizes="192x192" type="image/png"/>
-<link href="/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="/assets/site.css" rel="stylesheet"/>
-<meta content="index, follow" name="robots"/><link href="https://tmbilet.com/" rel="canonical"/><link href="https://tmbilet.com/" hreflang="en" rel="alternate"/><link href="https://tmbilet.com/tr/" hreflang="tr" rel="alternate"/><link href="https://tmbilet.com/ru/" hreflang="ru" rel="alternate"/><link href="https://tmbilet.com/" hreflang="x-default" rel="alternate"/><meta content="website" property="og:type"/><meta content="TMbilet" property="og:site_name"/><meta content="TMbilet — Fly smarter. Book better." property="og:title"/><meta content="Compare and book flights across hundreds of airlines with TMbilet." property="og:description"/><meta content="https://tmbilet.com/" property="og:url"/><meta content="https://tmbilet.com/tmbilet-logo-search.png" property="og:image"/><meta content="summary_large_image" name="twitter:card"/><meta content="TMbilet — Fly smarter. Book better." name="twitter:title"/><meta content="Compare and book flights across hundreds of airlines with TMbilet." name="twitter:description"/><meta content="https://tmbilet.com/tmbilet-logo-search.png" name="twitter:image"/><link href="/site.webmanifest" rel="manifest"/><script type="application/ld+json">{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "TMbilet",
-  "url": "https://tmbilet.com/",
-  "logo": "https://tmbilet.com/tmbilet-logo-search.png"
-}</script><script type="application/ld+json">{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position": 1,
-      "name": "Home",
-      "item": "https://tmbilet.com/"
-    }
-  ]
-}</script><script type="application/ld+json">{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "How does TMbilet find the best flight price?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "TMbilet compares fares across hundreds of airlines so you always see the option that fits your budget."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Is it safe to pay for flights on TMbilet?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes — every booking is encrypted end to end, so your details stay protected."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "When do I get my e-ticket after booking?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Your e-ticket is issued the moment your booking is confirmed — no waiting, no follow-up emails."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Is support available if something goes wrong?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes, real people are on hand any time, before and after you fly."
-      }
-    }
-  ]
-}</script></head>
-<body>
-<!-- Scroll progress indicator — controlled by inline script at bottom of body -->
-<div aria-hidden="true" id="scroll-indicator" role="progressbar"></div>
-<header>
-<div class="wrap header-inner">
-<div class="logo-brand">
-<a aria-label="TMbilet home" class="logo-link" href="#">
-<img alt="TMbilet" class="logo-img" src="/tmbilet-logo.png"/>
-</a>
-</div>
-<nav class="main-nav" id="mainNav">
-<a data-i18n="nav_flights" href="#search">Flights</a>
-<a data-i18n="nav_hotels" href="#destinations">Hotels</a>
-<a data-i18n="nav_deals" href="#destinations">Deals</a>
-<a data-i18n="nav_support" href="#features">Support</a>
-</nav>
-<div class="header-actions">
-<div class="lang-wrap">
-<button aria-expanded="false" aria-haspopup="true" class="lang-select" id="langTrigger" type="button">
-<span id="langLabel">USD · EN</span>
-<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
-<polyline points="6 9 12 15 18 9"></polyline>
-</svg>
-</button>
-<div class="lang-dropdown" id="langDropdown">
-<div class="lang-dropdown-col">
-<h4 data-i18n="dd_currency">Currency</h4>
-<button class="lang-opt active" data-currency="USD" data-i18n="cur_usd" type="button">USD — US Dollar</button>
-<button class="lang-opt" data-currency="EUR" data-i18n="cur_eur" type="button">EUR — Euro</button>
-<button class="lang-opt" data-currency="GBP" data-i18n="cur_gbp" type="button">GBP — British Pound</button>
-<button class="lang-opt" data-currency="TRY" data-i18n="cur_try" type="button">TRY — Turkish Lira</button>
-<button class="lang-opt" data-currency="AED" data-i18n="cur_aed" type="button">AED — UAE Dirham</button>
-<button class="lang-opt" data-currency="JPY" data-i18n="cur_jpy" type="button">JPY — Japanese Yen</button>
-<button class="lang-opt" data-currency="KZT" data-i18n="cur_kzt" type="button">KZT — Kazakh Tenge</button>
-</div>
-<div class="lang-dropdown-col">
-<h4 data-i18n="dd_language">Language</h4>
-<button aria-label="Switch to English" class="lang-opt active" data-lang="EN" type="button">English</button>
-<button aria-label="Türkçe diline geç" class="lang-opt" data-lang="TR" type="button">Türkçe</button>
-<button aria-label="Переключить на русский" class="lang-opt" data-lang="RU" type="button">Русский</button>
-<button aria-label="التبديل إلى العربية" class="lang-opt" data-lang="AR" type="button">العربية</button>
-<button aria-label="Auf Deutsch wechseln" class="lang-opt" data-lang="DE" type="button">Deutsch</button>
-<button aria-label="Cambiar a español" class="lang-opt" data-lang="ES" type="button">Español</button>
-<button aria-label="Passer au français" class="lang-opt" data-lang="FR" type="button">Français</button>
-</div>
-</div>
-</div>
-<button aria-expanded="false" aria-label="Toggle menu" class="menu-toggle" id="menuToggle" type="button">
-<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2" viewbox="0 0 24 24">
-<line x1="3" x2="21" y1="6" y2="6"></line>
-<line x1="3" x2="21" y1="12" y2="12"></line>
-<line x1="3" x2="21" y1="18" y2="18"></line>
-</svg>
-</button>
-</div>
-</div>
-</header>
-<main>
-<section class="hero" id="search">
-<div aria-hidden="true" class="hero-glow-clip"></div>
-<div aria-hidden="true" class="hero-spotlight"></div>
-<div aria-hidden="true" class="hero-trail-layer"></div>
-<div class="wrap hero-inner">
-<h1 data-i18n-html="hero_title">Fly smarter.<br/>Book better.</h1>
-<p class="hero-sub" data-i18n="hero_sub">Compare flights across hundreds of airlines and lock in the best fare in seconds — no clutter, no guesswork.</p>
-<form class="search-widget" id="searchForm">
-<div aria-label="Trip type" class="trip-toggle" role="group">
-<button class="trip-option active" data-i18n="trip_one" data-trip="one" type="button">One way</button>
-<button class="trip-option" data-i18n="trip_round" data-trip="round" type="button">Round trip</button>
-</div>
-<div class="search-fields">
-<div class="field field-from">
-<label data-i18n="label_from" for="fromInput">From</label>
-<input autocomplete="off" data-i18n-placeholder="placeholder_from" id="fromInput" placeholder="Departure city" type="text"/>
-<div class="autocomplete-list" id="fromList"></div>
-</div>
-<button aria-label="Swap origin and destination" class="swap-btn" id="swapBtn" type="button">
-<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
-<path d="M7 10l-4 4 4 4"></path>
-<path d="M3 14h14a4 4 0 0 0 4-4"></path>
-<path d="M17 14l4-4-4-4"></path>
-<path d="M21 10H7a4 4 0 0 0-4 4"></path>
-</svg>
-</button>
-<div class="field field-to">
-<label data-i18n="label_to" for="toInput">To</label>
-<input autocomplete="off" data-i18n-placeholder="placeholder_to" id="toInput" placeholder="Destination city" type="text"/>
-<div class="autocomplete-list" id="toList"></div>
-</div>
-<div class="field field-date" id="departField">
-<label data-i18n="label_departure">Departure</label>
-<button aria-expanded="false" aria-haspopup="true" class="date-trigger" id="departTrigger" type="button">
-<span class="date-display placeholder" id="departDisplay">Select date</span>
-<svg class="cal-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
-<rect height="18" rx="2" width="18" x="3" y="4"></rect>
-<line x1="16" x2="16" y1="2" y2="6"></line>
-<line x1="8" x2="8" y1="2" y2="6"></line>
-<line x1="3" x2="21" y1="10" y2="10"></line>
-</svg>
-</button>
-<input id="departDate" type="hidden"/>
-<div class="cal-popup" id="departCal">
-<div class="cal-header">
-<button class="cal-nav" id="departPrev" type="button"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewbox="0 0 24 24">
-<polyline points="15 18 9 12 15 6"></polyline>
-</svg></button>
-<span class="cal-month-label" id="departMonthLabel"></span>
-<button class="cal-nav" id="departNext" type="button"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewbox="0 0 24 24">
-<polyline points="9 18 15 12 9 6"></polyline>
-</svg></button>
-</div>
-<div class="cal-weekdays">
-<span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
-</div>
-<div class="cal-days" id="departDays"></div>
-</div>
-</div>
-<div class="field field-date field-return collapsed" id="returnField">
-<label data-i18n="label_return">Return</label>
-<button aria-expanded="false" aria-haspopup="true" class="date-trigger" id="returnTrigger" type="button">
-<span class="date-display placeholder" id="returnDisplay">Select date</span>
-<svg class="cal-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
-<rect height="18" rx="2" width="18" x="3" y="4"></rect>
-<line x1="16" x2="16" y1="2" y2="6"></line>
-<line x1="8" x2="8" y1="2" y2="6"></line>
-<line x1="3" x2="21" y1="10" y2="10"></line>
-</svg>
-</button>
-<input id="returnDate" type="hidden"/>
-<div class="cal-popup" id="returnCal">
-<div class="cal-header">
-<button class="cal-nav" id="returnPrev" type="button"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewbox="0 0 24 24">
-<polyline points="15 18 9 12 15 6"></polyline>
-</svg></button>
-<span class="cal-month-label" id="returnMonthLabel"></span>
-<button class="cal-nav" id="returnNext" type="button"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewbox="0 0 24 24">
-<polyline points="9 18 15 12 9 6"></polyline>
-</svg></button>
-</div>
-<div class="cal-weekdays">
-<span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
-</div>
-<div class="cal-days" id="returnDays"></div>
-</div>
-</div>
-<div class="field field-passengers passenger-wrap">
-<label data-i18n="label_passengers_class">Passengers &amp; Class</label>
-<button aria-expanded="false" aria-haspopup="true" class="passenger-trigger" id="passengerTrigger" type="button">1 adult, Economy</button>
-<div class="passenger-dropdown" id="passengerDropdown">
-<div class="counter-row">
-<div>
-<div class="ct-label" data-i18n="ct_adults">Adults</div>
-<div class="ct-sub" data-i18n="ct_adults_sub">Age 12+</div>
-</div>
-<div class="stepper">
-<button aria-label="Decrease adults" data-op="dec" data-target="adults" type="button">−</button>
-<span id="adultsCount">1</span>
-<button aria-label="Increase adults" data-op="inc" data-target="adults" type="button">+</button>
-</div>
-</div>
-<div class="counter-row">
-<div>
-<div class="ct-label" data-i18n="ct_children">Children</div>
-<div class="ct-sub" data-i18n="ct_children_sub">Age 2–11</div>
-</div>
-<div class="stepper">
-<button aria-label="Decrease children" data-op="dec" data-target="children" type="button">−</button>
-<span id="childrenCount">0</span>
-<button aria-label="Increase children" data-op="inc" data-target="children" type="button">+</button>
-</div>
-</div>
-<div class="counter-row">
-<div>
-<div class="ct-label" data-i18n="ct_infants">Infants</div>
-<div class="ct-sub" data-i18n="ct_infants_sub">Under 2</div>
-</div>
-<div class="stepper">
-<button aria-label="Decrease infants" data-op="dec" data-target="infants" type="button">−</button>
-<span id="infantsCount">0</span>
-<button aria-label="Increase infants" data-op="inc" data-target="infants" type="button">+</button>
-</div>
-</div>
-<div class="class-select" id="classSelect">
-<button class="class-opt active" data-class="Economy" data-i18n="class_economy" type="button">Economy</button>
-<button class="class-opt" data-class="Business" data-i18n="class_business" type="button">Business</button>
-</div>
-<button class="passenger-done" data-i18n="passenger_done" id="passengerDone" type="button">Done</button>
-</div>
-</div>
-</div>
-<div class="search-submit-row">
-<button class="search-btn" id="searchBtn" type="submit">
-<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
-<circle cx="11" cy="11" r="7"></circle>
-<line x1="21" x2="16.65" y1="21" y2="16.65"></line>
-</svg>
-<span class="btn-label" data-i18n="search_btn_label">Search flights</span>
-<span class="spinner"></span>
-</button>
-</div>
-</form>
-</div>
-</section>
-<section id="destinations">
-<div class="wrap">
-<div class="section-header">
-<div>
-<h2 data-i18n="destinations_title">Popular destinations</h2>
-<p data-i18n="destinations_sub">Handpicked routes with great prices right now</p>
-</div>
-<a class="see-all" href="#"><span data-i18n="see_all">See all destinations</span>
-<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
-<line x1="5" x2="19" y1="12" y2="12"></line>
-<polyline points="12 5 19 12 12 19"></polyline>
-</svg>
-</a>
-</div>
-<div class="destination-grid" id="destinationGrid">
-<!-- cards injected by JS -->
-</div>
-</div>
-</section>
-<section class="features" id="features">
-<div class="wrap">
-<div class="section-header">
-<div>
-<h2 data-i18n="features_title">Why book with TMbilet</h2>
-<p data-i18n="features_sub">Everything you expect from a modern booking platform</p>
-</div>
-</div>
-<div class="feature-grid" id="featureGrid">
-<div class="feature">
-<div class="icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
-<path d="M12 2l8 4v6c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V6l8-4z"></path>
-</svg></div>
-<h3 data-i18n="feature1_title">Best price guarantee</h3>
-<p data-i18n="feature1_desc">We compare hundreds of airlines so you always see the fare that fits your budget.</p>
-</div>
-<div class="feature">
-<div class="icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
-<rect height="10" rx="2" width="18" x="3" y="11"></rect>
-<path d="M7 11V8a5 5 0 0 1 10 0v3"></path>
-</svg></div>
-<h3 data-i18n="feature2_title">Secure payments</h3>
-<p data-i18n="feature2_desc">Every booking is encrypted end to end, so your details stay protected.</p>
-</div>
-<div class="feature">
-<div class="icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
-<path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
-<path d="M21 19a2 2 0 0 1-2 2h-1v-6h1a2 2 0 0 1 2 2v2z"></path>
-<path d="M3 19a2 2 0 0 0 2 2h1v-6H5a2 2 0 0 0-2 2v2z"></path>
-</svg></div>
-<h3 data-i18n="feature3_title">24/7 support</h3>
-<p data-i18n="feature3_desc">Real people are on hand any time, before and after you fly.</p>
-</div>
-<div class="feature">
-<div class="icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
-<path d="M9 12l2 2 4-4"></path>
-<circle cx="12" cy="12" r="9"></circle>
-</svg></div>
-<h3 data-i18n="feature4_title">Instant confirmation</h3>
-<p data-i18n="feature4_desc">Get your e-ticket the moment you book — no waiting, no follow-up emails.</p>
-</div>
-</div>
-</div>
-</section>
-<section>
-<div class="wrap">
-<div class="cta-band">
-<div>
-<h2 data-i18n="cta_title">Fares change fast. Set a price alert and we'll watch them for you.</h2>
-<p data-i18n="cta_sub">Free to use — cancel anytime.</p>
-</div>
-<button class="btn btn-primary" data-i18n="cta_btn" type="button">Create a price alert</button>
-</div>
-</div>
-</section>
-</main>
-<footer>
-<div class="wrap">
-<div class="footer-top">
-<div class="footer-brand">
-<a aria-label="TMbilet home" class="logo-link" href="#">
-<img alt="TMbilet" class="logo-img" src="/tmbilet-logo.png"/>
-</a>
-<p data-i18n="footer_brand_desc">A cleaner way to search, compare, and book flights — built for people who fly often.</p>
-</div>
-<div class="footer-col">
-<h4 data-i18n="footer_company">Company</h4>
-<a data-i18n="footer_about" href="#">About</a>
-<a data-i18n="footer_careers" href="#">Careers</a>
-<a data-i18n="footer_press" href="#">Press</a>
-</div>
-<div class="footer-col">
-<h4 data-i18n="footer_support">Support</h4>
-<a data-i18n="footer_help" href="#">Help center</a>
-<a data-i18n="footer_manage" href="#">Manage booking</a>
-<a data-i18n="footer_contact" href="#">Contact us</a>
-</div>
-<div class="footer-col">
-<h4 data-i18n="footer_legal">Legal</h4>
-<a data-i18n="footer_terms" href="#">Terms of service</a>
-<a data-i18n="footer_privacy" href="#">Privacy policy</a>
-<a data-i18n="footer_cookies" href="#">Cookie settings</a>
-</div>
-</div>
-<div class="footer-bottom">
-<p data-i18n="footer_copyright">© 2026 TMbilet. All rights reserved.</p>
-<div class="socials">
-<a data-i18n="social_instagram" href="#">Instagram</a>
-<a data-i18n="social_x" href="#">X</a>
-<a data-i18n="social_facebook" href="#">Facebook</a>
-</div>
-</div>
-</div>
-</footer>
-<div class="toast" id="toast"></div>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TMbilet — Fly smarter. Book better.</title>
+  <meta name="description" content="Compare and book flights across hundreds of airlines with TMbilet.">
+  <link rel="icon" type="image/png" href="tmbilet-logo.png">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
 
-<script data-cfasync="false">
+  <style>
+    :root {
+      --white: #FFFFFF;
+      --gray: #F5F5F5;
+      --gray-200: #ECECEC;
+      --border: #E4E4E4;
+      --text: #1A1A1A;
+      --text-muted: #6B6F76;
+      --accent: #32CD32;
+      --accent-dark: #28A428;
+      --accent-darker: #1F8A1F;
+      --accent-tint: #EAF8EA;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --shadow-sm: 0 2px 10px rgba(26, 26, 26, .06);
+      --shadow-md: 0 16px 40px rgba(26, 26, 26, .10);
+      --shadow-lg: 0 24px 60px rgba(26, 26, 26, .14);
+      --ease: cubic-bezier(.4, 0, .2, 1);
+      --dur: 250ms;
+      --font-display: 'Manrope', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--white);
+      color: var(--text);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      font-family: var(--font-display);
+      margin: 0;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--accent-dark);
+      outline-offset: 2px;
+      border-radius: 6px;
+    }
+
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    /* ---------- Header ---------- */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 76px;
+    }
+
+    .logo-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-link {
+      display: inline-flex;
+      border-radius: 12px;
+      overflow: hidden;
+      line-height: 0;
+      transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+    }
+
+    .logo-link:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(50, 205, 50, .28);
+    }
+
+    .logo-img {
+      display: block;
+      width: 140px;
+      height: 64px;
+      object-fit: cover;
+    }
+
+    .brand-icon {
+      display: block;
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    .footer-brand .logo-img {
+      width: 110px;
+      height: 110px;
+    }
+
+    @media (max-width: 860px) {
+      .logo-img {
+        width: 110px;
+        height: 50px;
+      }
+
+      .brand-icon {
+        width: 30px;
+        height: 30px;
+      }
+
+      .logo-brand {
+        gap: 8px;
+      }
+    }
+
+    nav.main-nav {
+      display: flex;
+      gap: 36px;
+    }
+
+    nav.main-nav a {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-muted);
+      padding: 8px 2px;
+      position: relative;
+      transition: color var(--dur) var(--ease);
+    }
+
+    nav.main-nav a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 2px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform var(--dur) var(--ease);
+    }
+
+    nav.main-nav a:hover {
+      color: var(--text);
+    }
+
+    nav.main-nav a:hover::after {
+      transform: scaleX(1);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .lang-wrap {
+      position: relative;
+    }
+
+    .lang-select {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: none;
+      background: transparent;
+      transition: background var(--dur) var(--ease);
+    }
+
+    .lang-select:hover {
+      background: var(--gray);
+    }
+
+    .lang-select svg {
+      width: 14px;
+      height: 14px;
+      transition: transform var(--dur) var(--ease);
+    }
+
+    .lang-select[aria-expanded="true"] svg {
+      transform: rotate(180deg);
+    }
+
+    .lang-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      width: 340px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      padding: 16px;
+      display: none;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      z-index: 20;
+    }
+
+    .lang-dropdown.open {
+      display: grid;
+    }
+
+    .lang-dropdown-col h4 {
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      padding: 0 6px;
+    }
+
+    .lang-opt {
+      display: block;
+      width: 100%;
+      text-align: left;
+      border: none;
+      background: transparent;
+      padding: 8px 6px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text);
+      transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+    }
+
+    .lang-opt:hover {
+      background: var(--gray);
+    }
+
+    .lang-opt.active {
+      background: var(--accent-tint);
+      color: var(--accent-darker);
+    }
+
+    .btn {
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 14.5px;
+      padding: 11px 20px;
+      transition: transform var(--dur) var(--ease), background var(--dur) var(--ease), box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1.5px solid var(--border);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--text);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--white);
+      box-shadow: 0 6px 16px rgba(50, 205, 50, .28);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(50, 205, 50, .34);
+    }
+
+    .btn-primary:active {
+      background: var(--accent-darker);
+      transform: translateY(0);
+    }
+
+    .menu-toggle {
+      display: none;
+      width: 40px;
+      height: 40px;
+      align-items: center;
+      justify-content: center;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: var(--white);
+    }
+
+    .menu-toggle svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      position: relative;
+      padding: 76px 0 120px;
+      isolation: isolate;
+      z-index: 1;
+      background: linear-gradient(160deg, #1F9C4E 0%, #26AC58 42%, #2FBB63 70%, #22A452 100%);
+    }
+
+    /* clips only the blurred glow blobs to the hero's bounds, so the hero itself
+     no longer needs overflow:hidden — letting dropdowns escape below it */
+    .hero-glow-clip {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    /* soft blurred glass "blobs" sitting behind the frosted surface — one continuous layer, no tiling */
+    .hero-glow-clip::before {
+      content: '';
+      position: absolute;
+      inset: -18%;
+      pointer-events: none;
+      background:
+        radial-gradient(38% 34% at 16% 14%, rgba(255, 255, 255, .22), transparent 70%),
+        radial-gradient(32% 30% at 86% 8%, rgba(0, 0, 0, .16), transparent 72%),
+        radial-gradient(42% 38% at 78% 74%, rgba(255, 255, 255, .13), transparent 72%),
+        radial-gradient(36% 34% at 10% 84%, rgba(0, 0, 0, .20), transparent 72%),
+        radial-gradient(46% 42% at 50% 46%, rgba(160, 255, 195, .10), transparent 76%);
+      filter: blur(64px);
+    }
+
+    /* frosted glass sheen + fine grain — a single stretched, non-repeating texture (no seams) */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(122deg, transparent 28%, rgba(255, 255, 255, .09) 44%, rgba(255, 255, 255, .16) 50%, rgba(255, 255, 255, .09) 56%, transparent 72%),
+        url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc0MDAnIGhlaWdodD0nNDAwJyB2aWV3Qm94PScwIDAgNDAwIDQwMCcgcHJlc2VydmVBc3BlY3RSYXRpbz0nbm9uZSc+PGZpbHRlciBpZD0nbic+PGZlVHVyYnVsZW5jZSB0eXBlPSdmcmFjdGFsTm9pc2UnIGJhc2VGcmVxdWVuY3k9JzAuODUnIG51bU9jdGF2ZXM9JzMnIHN0aXRjaFRpbGVzPSdzdGl0Y2gnLz48ZmVDb2xvck1hdHJpeCB0eXBlPSdtYXRyaXgnIHZhbHVlcz0nMCAwIDAgMCAxICAwIDAgMCAwIDEgIDAgMCAwIDAgMSAgMCAwIDAgMSAwJy8+PGZlQ29tcG9uZW50VHJhbnNmZXI+PGZlRnVuY0EgdHlwZT0nbGluZWFyJyBzbG9wZT0nMC40NScgaW50ZXJjZXB0PScwJy8+PC9mZUNvbXBvbmVudFRyYW5zZmVyPjwvZmlsdGVyPjxyZWN0IHdpZHRoPScxMDAlJyBoZWlnaHQ9JzEwMCUnIGZpbHRlcj0ndXJsKCUyM24pJy8+PC9zdmc+Cg==");
+      background-repeat: no-repeat, no-repeat;
+      background-size: 100% 100%, 100% 100%;
+      mix-blend-mode: overlay;
+      opacity: .9;
+    }
+
+    /* thin bright line along the top edge, like light catching the edge of a glass pane */
+    .hero {
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .18);
+    }
+
+    /* cursor spotlight — lights up the glass surface as the pointer moves over it */
+    .hero-spotlight {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .35s var(--ease);
+      background: radial-gradient(260px circle at var(--sx, 50%) var(--sy, 50%), rgba(255, 255, 255, .30), rgba(255, 255, 255, .10) 38%, transparent 66%);
+      mix-blend-mode: overlay;
+    }
+
+    .hero.glow-active .hero-spotlight {
+      opacity: 1;
+    }
+
+    /* cursor trail — small glowing dots left behind while the pointer moves */
+    .hero-trail-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .trail-dot {
+      position: absolute;
+      left: 0;
+      top: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, .95), rgba(255, 255, 255, .28) 55%, transparent 75%);
+      transform: translate(-50%, -50%) scale(1);
+      opacity: .8;
+      transition: transform .65s ease-out, opacity .65s ease-out;
+      will-change: transform, opacity;
+    }
+
+    .trail-dot.fade {
+      transform: translate(-50%, -50%) scale(2.4);
+      opacity: 0;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-tint);
+      color: var(--accent-darker);
+      font-weight: 700;
+      font-size: 13px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      margin-bottom: 22px;
+    }
+
+    .eyebrow .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .hero h1 {
+      font-size: 52px;
+      font-weight: 800;
+      line-height: 1.08;
+      color: var(--white);
+    }
+
+    .hero-sub {
+      margin: 20px auto 0;
+      max-width: 520px;
+      font-size: 17px;
+      color: rgba(255, 255, 255, .82);
+    }
+
+    /* ---------- Search widget ---------- */
+    .search-widget {
+      position: relative;
+      z-index: 1;
+      width: min(980px, 92vw);
+      margin-top: 44px;
+      /* hero-inner is only 760px wide and centered; break out and
+         re-center on the true page center so the card isn't pushed left */
+      margin-left: 50%;
+      transform: translateX(-50%);
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: 22px;
+      text-align: left;
+    }
+
+    .trip-toggle {
+      display: inline-flex;
+      background: var(--gray);
+      border-radius: 999px;
+      padding: 4px;
+      margin-bottom: 18px;
+    }
+
+    .trip-option {
+      border: none;
+      background: transparent;
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-muted);
+      transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+    }
+
+    .trip-option.active {
+      background: var(--white);
+      color: var(--text);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .search-fields {
+      display: grid;
+      grid-template-columns: 1.25fr auto 1.25fr 1.05fr 1.05fr 1.15fr;
+      align-items: stretch;
+      background: var(--gray);
+      border-radius: var(--radius-md);
+      padding: 6px;
+      gap: 2px;
+      position: relative;
+    }
+
+    .field {
+      background: var(--white);
+      padding: 11px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      justify-content: center;
+      position: relative;
+      transition: background var(--dur) var(--ease);
+    }
+
+    .search-fields .field:first-child {
+      border-radius: 10px 0 0 10px;
+    }
+
+    .field label {
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: var(--text-muted);
+    }
+
+    .field input,
+    .field .passenger-trigger {
+      border: none;
+      background: transparent;
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      padding: 0;
+      width: 100%;
+      text-align: left;
+    }
+
+    .field input::placeholder {
+      color: #B4B7BC;
+      font-weight: 500;
+    }
+
+    .field input:focus,
+    .passenger-trigger:focus {
+      outline: none;
+    }
+
+    .field:focus-within {
+      background: var(--accent-tint);
+    }
+
+    /* ---------- Custom Date Picker ---------- */
+    .date-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      border: none;
+      background: transparent;
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      padding: 0;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .date-trigger:focus {
+      outline: none;
+    }
+
+    .date-display {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .date-display.placeholder {
+      color: #B4B7BC;
+      font-weight: 500;
+    }
+
+    .cal-icon {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+      stroke: var(--text-muted);
+      transition: stroke var(--dur) var(--ease);
+    }
+
+    .field:focus-within .cal-icon {
+      stroke: var(--accent-darker);
+    }
+
+    /* Calendar popup */
+    .cal-popup {
+      position: absolute;
+      top: calc(100% + 10px);
+      left: 0;
+      z-index: 30;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      padding: 16px;
+      width: 280px;
+      display: none;
+      user-select: none;
+    }
+
+    .cal-popup.open {
+      display: block;
+    }
+
+    .cal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .cal-nav {
+      width: 30px;
+      height: 30px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease);
+    }
+
+    .cal-nav:hover {
+      background: var(--gray);
+      border-color: var(--text-muted);
+    }
+
+    .cal-nav svg {
+      width: 14px;
+      height: 14px;
+      stroke: var(--text);
+    }
+
+    .cal-month-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      font-family: var(--font-display);
+    }
+
+    .cal-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      margin-bottom: 4px;
+    }
+
+    .cal-weekdays span {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      padding: 4px 0;
+    }
+
+    .cal-days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+    }
+
+    .cal-day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+    }
+
+    .cal-day:hover:not(.disabled):not(.selected) {
+      background: var(--accent-tint);
+      color: var(--accent-darker);
+    }
+
+    .cal-day.today:not(.selected) {
+      border: 1.5px solid var(--accent);
+      color: var(--accent-darker);
+    }
+
+    .cal-day.selected {
+      background: var(--accent);
+      color: var(--white);
+      box-shadow: 0 3px 8px rgba(50, 205, 50, .35);
+    }
+
+    .cal-day.disabled {
+      color: #ccc;
+      cursor: not-allowed;
+    }
+
+    .cal-day.empty {
+      cursor: default;
+    }
+
+    .field-return {
+      transition: max-width var(--dur) var(--ease), opacity var(--dur) var(--ease), padding var(--dur) var(--ease), margin var(--dur) var(--ease);
+    }
+
+    .field-return.collapsed {
+      max-width: 0;
+      opacity: 0;
+      padding-left: 0;
+      padding-right: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .swap-btn {
+      width: 36px;
+      height: 36px;
+      align-self: center;
+      justify-self: center;
+      border: 1px solid var(--border);
+      background: var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-sm);
+      transition: transform var(--dur) var(--ease), border-color var(--dur) var(--ease), background var(--dur) var(--ease);
+      z-index: 2;
+    }
+
+    .swap-btn:hover {
+      border-color: var(--accent);
+      background: var(--accent-tint);
+    }
+
+    .swap-btn svg {
+      width: 16px;
+      height: 16px;
+      transition: transform var(--dur) var(--ease);
+      stroke: var(--text);
+    }
+
+    .swap-btn.spin svg {
+      transform: rotate(180deg);
+    }
+
+    .search-fields .field:last-of-type {
+      border-radius: 0 10px 10px 0;
+    }
+
+    .autocomplete-list {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      width: max-content;
+      min-width: 100%;
+      max-width: min(360px, 90vw);
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow-md);
+      max-height: 260px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      z-index: 20;
+      display: none;
+    }
+
+    .autocomplete-list.open {
+      display: block;
+    }
+
+    .autocomplete-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      font-size: 14px;
+      white-space: nowrap;
+      transition: background var(--dur) var(--ease);
+    }
+
+    .autocomplete-item:hover,
+    .autocomplete-item.hi {
+      background: var(--gray);
+    }
+
+    .autocomplete-item svg {
+      width: 15px;
+      height: 15px;
+      flex: none;
+      stroke: var(--text-muted);
+    }
+
+    .autocomplete-item .city {
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .autocomplete-item .code {
+      margin-left: auto;
+      flex: none;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-darker);
+      background: var(--accent-tint);
+      padding: 2px 7px;
+      border-radius: 6px;
+    }
+
+    .passenger-wrap {
+      position: relative;
+    }
+
+    .passenger-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      width: 300px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      padding: 18px;
+      display: none;
+      z-index: 20;
+    }
+
+    .passenger-dropdown.open {
+      display: block;
+    }
+
+    .counter-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--gray);
+    }
+
+    .counter-row:last-of-type {
+      border-bottom: none;
+    }
+
+    .counter-row .ct-label {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .counter-row .ct-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .stepper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .stepper button {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease), opacity var(--dur) var(--ease);
+    }
+
+    .stepper button:hover:not(:disabled) {
+      border-color: var(--accent);
+      color: var(--accent-darker);
+    }
+
+    .stepper button:disabled {
+      opacity: .35;
+      cursor: not-allowed;
+    }
+
+    .stepper span {
+      width: 16px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .class-select {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .class-opt {
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      text-align: center;
+      background: var(--white);
+      transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease), color var(--dur) var(--ease);
+    }
+
+    .class-opt.active {
+      border-color: var(--accent);
+      background: var(--accent-tint);
+      color: var(--accent-darker);
+    }
+
+    .passenger-done {
+      margin-top: 14px;
+      width: 100%;
+      background: var(--accent);
+      color: var(--white);
+      border: none;
+      border-radius: 10px;
+      padding: 10px;
+      font-weight: 700;
+      font-size: 14px;
+      transition: background var(--dur) var(--ease);
+    }
+
+    .passenger-done:hover {
+      background: var(--accent-dark);
+    }
+
+    .search-submit-row {
+      margin-top: 14px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .search-btn {
+      background: var(--accent);
+      color: var(--white);
+      border: none;
+      border-radius: 14px;
+      padding: 16px 56px;
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: .01em;
+      box-shadow: 0 10px 24px rgba(50, 205, 50, .30);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: background var(--dur) var(--ease), transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+    }
+
+    .search-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .search-btn:hover {
+      background: var(--accent-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(50, 205, 50, .36);
+    }
+
+    .search-btn:active {
+      transform: translateY(0);
+    }
+
+    .search-btn.loading {
+      pointer-events: none;
+      opacity: .85;
+    }
+
+    .search-btn .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, .4);
+      border-top-color: var(--white);
+      border-radius: 50%;
+      display: none;
+      animation: spin .7s linear infinite;
+    }
+
+    .search-btn.loading .spinner {
+      display: inline-block;
+    }
+
+    .search-btn.loading .btn-label {
+      display: none;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      transform: translate(-50%, 12px);
+      background: var(--text);
+      color: var(--white);
+      padding: 14px 22px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: var(--shadow-lg);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+      z-index: 200;
+      max-width: 90vw;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    /* ---------- Section shared ---------- */
+    section {
+      padding: 76px 0;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 36px;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .section-header h2 {
+      font-size: 30px;
+      font-weight: 800;
+    }
+
+    .section-header p {
+      color: var(--text-muted);
+      font-size: 15px;
+      margin-top: 6px;
+    }
+
+    .see-all {
+      font-weight: 700;
+      font-size: 14.5px;
+      color: var(--accent-darker);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 4px;
+      transition: gap var(--dur) var(--ease);
+    }
+
+    .see-all:hover {
+      gap: 10px;
+    }
+
+    .see-all svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    /* ---------- Destinations ---------- */
+    .destination-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .destination-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
+      opacity: 0;
+      transform: translateY(14px);
+    }
+
+    .destination-card.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .destination-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-md);
+      border-color: transparent;
+    }
+
+    .card-visual {
+      height: 150px;
+      background: var(--gray);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-visual .code {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 40px;
+      color: var(--white);
+      background: var(--accent);
+      padding: 10px 18px;
+      border-radius: 12px;
+      letter-spacing: .04em;
+    }
+
+    .card-visual .route-dots {
+      position: absolute;
+      bottom: 14px;
+      left: 18px;
+      right: 18px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .route-dots .d {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-darker);
+      flex: none;
+    }
+
+    .route-dots .line {
+      flex: 1;
+      height: 1px;
+      background: repeating-linear-gradient(90deg, var(--accent-darker) 0 4px, transparent 4px 8px);
+      opacity: .5;
+    }
+
+    .card-body {
+      padding: 18px 20px 20px;
+    }
+
+    .card-body h3 {
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .card-body .price {
+      margin-top: 6px;
+      font-size: 14.5px;
+      color: var(--text-muted);
+    }
+
+    .card-body .price strong {
+      color: var(--accent-darker);
+      font-weight: 800;
+    }
+
+    /* ---------- Features ---------- */
+    .features {
+      background: var(--gray);
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .feature {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      padding: 26px 22px;
+      box-shadow: var(--shadow-sm);
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+    }
+
+    .feature.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .feature:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    .feature .icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--accent-tint);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .feature .icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: var(--accent-darker);
+    }
+
+    .feature h3 {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .feature p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      line-height: 1.55;
+    }
+
+    /* ---------- CTA band ---------- */
+    .cta-band {
+      background: var(--text);
+      border-radius: var(--radius-lg);
+      padding: 52px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .cta-band h2 {
+      color: var(--white);
+      font-size: 27px;
+      max-width: 420px;
+    }
+
+    .cta-band p {
+      color: #B8BCC2;
+      margin-top: 8px;
+      font-size: 14.5px;
+    }
+
+    /* ---------- Footer ---------- */
+    footer {
+      background: var(--white);
+      border-top: 1px solid var(--border);
+      padding: 56px 0 28px;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+      gap: 32px;
+      padding-bottom: 40px;
+    }
+
+    .footer-brand p {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 14px;
+      max-width: 230px;
+    }
+
+    .footer-col h4 {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .footer-col a {
+      display: block;
+      font-size: 14.5px;
+      font-weight: 500;
+      color: var(--text);
+      padding: 6px 0;
+      transition: color var(--dur) var(--ease);
+    }
+
+    .footer-col a:hover {
+      color: var(--accent-darker);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-bottom p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .socials {
+      display: flex;
+      gap: 16px;
+    }
+
+    .socials a {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      transition: color var(--dur) var(--ease);
+    }
+
+    .socials a:hover {
+      color: var(--accent-darker);
+    }
+
+    /* ============================================================
+       SCROLL INDICATOR
+       3px bar pinned to top of viewport. Colour auto-switches:
+       white over green hero section, brand-green over white sections.
+       Width is driven by JS rAF loop (no CSS transition on width —
+       that's intentional for 60fps smoothness). Only background
+       colour transitions via CSS.
+       ============================================================ */
+    #scroll-indicator {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 3px;
+      z-index: 9999;
+      pointer-events: none;
+      --si-color: var(--accent);
+      background: var(--si-color);
+      /* Colour-only transition — width is rAF-driven, never transitioned */
+      transition: background 380ms var(--ease), box-shadow 380ms var(--ease);
+      box-shadow: 0 0 8px 1px rgba(50, 205, 50, .55);
+    }
+
+    /* Hero section is green → indicator switches to white */
+    html.si-on-green #scroll-indicator {
+      --si-color: #FFFFFF;
+      box-shadow: 0 0 8px 1px rgba(255, 255, 255, .45);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #scroll-indicator {
+        transition: none;
+        box-shadow: none;
+      }
+    }
+
+    /* ---------- Reduced motion ---------- */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width:980px) {
+      .destination-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .feature-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .footer-top {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width:860px) {
+      nav.main-nav {
+        position: absolute;
+        top: 76px;
+        left: 0;
+        right: 0;
+        background: var(--white);
+        border-bottom: 1px solid var(--border);
+        flex-direction: column;
+        gap: 0;
+        padding: 8px 24px 16px;
+        display: none;
+        box-shadow: var(--shadow-md);
+      }
+
+      nav.main-nav.open {
+        display: flex;
+      }
+
+      nav.main-nav a {
+        padding: 12px 0;
+        border-bottom: 1px solid var(--gray);
+      }
+
+      .header-actions .btn-ghost {
+        display: none;
+      }
+
+      .menu-toggle {
+        display: flex;
+      }
+
+      .hero h1 {
+        font-size: 36px;
+      }
+
+      .wrap {
+        padding: 0 20px;
+      }
+
+      .search-fields {
+        grid-template-columns: 1fr;
+        background: transparent;
+        padding: 0;
+        gap: 10px;
+      }
+
+      .field {
+        background: var(--gray);
+        border-radius: var(--radius-sm) !important;
+        padding: 12px 14px;
+      }
+
+      .swap-btn {
+        justify-self: flex-end;
+        margin: -6px 0;
+        transform: rotate(90deg);
+      }
+
+      .swap-btn.spin svg {
+        transform: rotate(180deg);
+      }
+
+      .field-return.collapsed {
+        max-width: none;
+        max-height: 0;
+        opacity: 0;
+        padding: 0 14px;
+        overflow: hidden;
+      }
+
+      .search-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 16px;
+      }
+
+      .passenger-dropdown {
+        left: 0;
+        right: 0;
+        width: auto;
+      }
+
+      .cta-band {
+        padding: 36px 24px;
+        text-align: center;
+        justify-content: center;
+      }
+
+      .cta-band .btn {
+        width: 100%;
+      }
+    }
+
+    @media (max-width:520px) {
+      .destination-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-top {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: 44px 0 72px;
+      }
+
+      .search-widget {
+        padding: 16px;
+        border-radius: 16px;
+      }
+
+      /* Language/currency dropdown — center on mobile so it never clips off screen */
+      .lang-dropdown {
+        position: fixed;
+        top: 72px;
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+        width: calc(100vw - 32px);
+        max-width: 360px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Scroll progress indicator — controlled by inline script at bottom of body -->
+  <div id="scroll-indicator" role="progressbar" aria-hidden="true"></div>
+
+  <header>
+    <div class="wrap header-inner">
+      <div class="logo-brand">
+        <a href="#" class="logo-link" aria-label="TMbilet home">
+          <img src="tmbilet-logo.png" alt="TMbilet" class="logo-img">
+        </a>
+      </div>
+
+      <nav class="main-nav" id="mainNav">
+        <a href="#search" data-i18n="nav_flights">Flights</a>
+        <a href="#destinations" data-i18n="nav_hotels">Hotels</a>
+        <a href="#destinations" data-i18n="nav_deals">Deals</a>
+        <a href="#features" data-i18n="nav_support">Support</a>
+      </nav>
+
+      <div class="header-actions">
+        <div class="lang-wrap">
+          <button type="button" class="lang-select" id="langTrigger" aria-haspopup="true" aria-expanded="false">
+            <span id="langLabel">USD · EN</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </button>
+          <div class="lang-dropdown" id="langDropdown">
+            <div class="lang-dropdown-col">
+              <h4 data-i18n="dd_currency">Currency</h4>
+              <button type="button" class="lang-opt active" data-currency="USD" data-i18n="cur_usd">USD — US
+                Dollar</button>
+              <button type="button" class="lang-opt" data-currency="EUR" data-i18n="cur_eur">EUR — Euro</button>
+              <button type="button" class="lang-opt" data-currency="GBP" data-i18n="cur_gbp">GBP — British
+                Pound</button>
+              <button type="button" class="lang-opt" data-currency="TRY" data-i18n="cur_try">TRY — Turkish Lira</button>
+              <button type="button" class="lang-opt" data-currency="AED" data-i18n="cur_aed">AED — UAE Dirham</button>
+              <button type="button" class="lang-opt" data-currency="JPY" data-i18n="cur_jpy">JPY — Japanese Yen</button>
+              <button type="button" class="lang-opt" data-currency="KZT" data-i18n="cur_kzt">KZT — Kazakh Tenge</button>
+            </div>
+            <div class="lang-dropdown-col">
+              <h4 data-i18n="dd_language">Language</h4>
+              <button type="button" class="lang-opt active" data-lang="EN"
+                aria-label="Switch to English">English</button>
+              <button type="button" class="lang-opt" data-lang="TR" aria-label="Türkçe diline geç">Türkçe</button>
+              <button type="button" class="lang-opt" data-lang="RU" aria-label="Переключить на русский">Русский</button>
+              <button type="button" class="lang-opt" data-lang="AR" aria-label="التبديل إلى العربية">العربية</button>
+              <button type="button" class="lang-opt" data-lang="DE" aria-label="Auf Deutsch wechseln">Deutsch</button>
+              <button type="button" class="lang-opt" data-lang="ES" aria-label="Cambiar a español">Español</button>
+              <button type="button" class="lang-opt" data-lang="FR" aria-label="Passer au français">Français</button>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="search">
+      <div class="hero-glow-clip" aria-hidden="true"></div>
+      <div class="hero-spotlight" aria-hidden="true"></div>
+      <div class="hero-trail-layer" aria-hidden="true"></div>
+      <div class="wrap hero-inner">
+        <h1 data-i18n-html="hero_title">Fly smarter.<br>Book better.</h1>
+        <p class="hero-sub" data-i18n="hero_sub">Compare flights across hundreds of airlines and lock in the best fare
+          in seconds — no clutter, no guesswork.</p>
+
+        <form class="search-widget" id="searchForm">
+          <div class="trip-toggle" role="group" aria-label="Trip type">
+            <button type="button" class="trip-option active" data-trip="one" data-i18n="trip_one">One way</button>
+            <button type="button" class="trip-option" data-trip="round" data-i18n="trip_round">Round trip</button>
+          </div>
+
+          <div class="search-fields">
+            <div class="field field-from">
+              <label for="fromInput" data-i18n="label_from">From</label>
+              <input type="text" id="fromInput" placeholder="Departure city" data-i18n-placeholder="placeholder_from"
+                autocomplete="off">
+              <div class="autocomplete-list" id="fromList"></div>
+            </div>
+
+            <button type="button" class="swap-btn" id="swapBtn" aria-label="Swap origin and destination">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M7 10l-4 4 4 4" />
+                <path d="M3 14h14a4 4 0 0 0 4-4" />
+                <path d="M17 14l4-4-4-4" />
+                <path d="M21 10H7a4 4 0 0 0-4 4" />
+              </svg>
+            </button>
+
+            <div class="field field-to">
+              <label for="toInput" data-i18n="label_to">To</label>
+              <input type="text" id="toInput" placeholder="Destination city" data-i18n-placeholder="placeholder_to"
+                autocomplete="off">
+              <div class="autocomplete-list" id="toList"></div>
+            </div>
+
+            <div class="field field-date" id="departField">
+              <label data-i18n="label_departure">Departure</label>
+              <button type="button" class="date-trigger" id="departTrigger" aria-haspopup="true" aria-expanded="false">
+                <span class="date-display placeholder" id="departDisplay">Select date</span>
+                <svg class="cal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                  <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
+              </button>
+              <input type="hidden" id="departDate">
+              <div class="cal-popup" id="departCal">
+                <div class="cal-header">
+                  <button type="button" class="cal-nav" id="departPrev"><svg viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="15 18 9 12 15 6" />
+                    </svg></button>
+                  <span class="cal-month-label" id="departMonthLabel"></span>
+                  <button type="button" class="cal-nav" id="departNext"><svg viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="9 18 15 12 9 6" />
+                    </svg></button>
+                </div>
+                <div class="cal-weekdays">
+                  <span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
+                </div>
+                <div class="cal-days" id="departDays"></div>
+              </div>
+            </div>
+
+            <div class="field field-date field-return collapsed" id="returnField">
+              <label data-i18n="label_return">Return</label>
+              <button type="button" class="date-trigger" id="returnTrigger" aria-haspopup="true" aria-expanded="false">
+                <span class="date-display placeholder" id="returnDisplay">Select date</span>
+                <svg class="cal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                  <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
+              </button>
+              <input type="hidden" id="returnDate">
+              <div class="cal-popup" id="returnCal">
+                <div class="cal-header">
+                  <button type="button" class="cal-nav" id="returnPrev"><svg viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="15 18 9 12 15 6" />
+                    </svg></button>
+                  <span class="cal-month-label" id="returnMonthLabel"></span>
+                  <button type="button" class="cal-nav" id="returnNext"><svg viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="9 18 15 12 9 6" />
+                    </svg></button>
+                </div>
+                <div class="cal-weekdays">
+                  <span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
+                </div>
+                <div class="cal-days" id="returnDays"></div>
+              </div>
+            </div>
+
+            <div class="field field-passengers passenger-wrap">
+              <label data-i18n="label_passengers_class">Passengers &amp; Class</label>
+              <button type="button" class="passenger-trigger" id="passengerTrigger" aria-haspopup="true"
+                aria-expanded="false">1 adult, Economy</button>
+
+              <div class="passenger-dropdown" id="passengerDropdown">
+                <div class="counter-row">
+                  <div>
+                    <div class="ct-label" data-i18n="ct_adults">Adults</div>
+                    <div class="ct-sub" data-i18n="ct_adults_sub">Age 12+</div>
+                  </div>
+                  <div class="stepper">
+                    <button type="button" data-target="adults" data-op="dec" aria-label="Decrease adults">−</button>
+                    <span id="adultsCount">1</span>
+                    <button type="button" data-target="adults" data-op="inc" aria-label="Increase adults">+</button>
+                  </div>
+                </div>
+                <div class="counter-row">
+                  <div>
+                    <div class="ct-label" data-i18n="ct_children">Children</div>
+                    <div class="ct-sub" data-i18n="ct_children_sub">Age 2–11</div>
+                  </div>
+                  <div class="stepper">
+                    <button type="button" data-target="children" data-op="dec" aria-label="Decrease children">−</button>
+                    <span id="childrenCount">0</span>
+                    <button type="button" data-target="children" data-op="inc" aria-label="Increase children">+</button>
+                  </div>
+                </div>
+                <div class="counter-row">
+                  <div>
+                    <div class="ct-label" data-i18n="ct_infants">Infants</div>
+                    <div class="ct-sub" data-i18n="ct_infants_sub">Under 2</div>
+                  </div>
+                  <div class="stepper">
+                    <button type="button" data-target="infants" data-op="dec" aria-label="Decrease infants">−</button>
+                    <span id="infantsCount">0</span>
+                    <button type="button" data-target="infants" data-op="inc" aria-label="Increase infants">+</button>
+                  </div>
+                </div>
+
+                <div class="class-select" id="classSelect">
+                  <button type="button" class="class-opt active" data-class="Economy"
+                    data-i18n="class_economy">Economy</button>
+                  <button type="button" class="class-opt" data-class="Business"
+                    data-i18n="class_business">Business</button>
+                </div>
+
+                <button type="button" class="passenger-done" id="passengerDone" data-i18n="passenger_done">Done</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="search-submit-row">
+            <button type="submit" class="search-btn" id="searchBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <circle cx="11" cy="11" r="7" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <span class="btn-label" data-i18n="search_btn_label">Search flights</span>
+              <span class="spinner"></span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section id="destinations">
+      <div class="wrap">
+        <div class="section-header">
+          <div>
+            <h2 data-i18n="destinations_title">Popular destinations</h2>
+            <p data-i18n="destinations_sub">Handpicked routes with great prices right now</p>
+          </div>
+          <a href="#" class="see-all"><span data-i18n="see_all">See all destinations</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </a>
+        </div>
+
+        <div class="destination-grid" id="destinationGrid">
+          <!-- cards injected by JS -->
+        </div>
+      </div>
+    </section>
+
+    <section class="features" id="features">
+      <div class="wrap">
+        <div class="section-header">
+          <div>
+            <h2 data-i18n="features_title">Why book with TMbilet</h2>
+            <p data-i18n="features_sub">Everything you expect from a modern booking platform</p>
+          </div>
+        </div>
+
+        <div class="feature-grid" id="featureGrid">
+          <div class="feature">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2l8 4v6c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V6l8-4z" />
+              </svg></div>
+            <h3 data-i18n="feature1_title">Best price guarantee</h3>
+            <p data-i18n="feature1_desc">We compare hundreds of airlines so you always see the fare that fits your
+              budget.</p>
+          </div>
+          <div class="feature">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="10" rx="2" />
+                <path d="M7 11V8a5 5 0 0 1 10 0v3" />
+              </svg></div>
+            <h3 data-i18n="feature2_title">Secure payments</h3>
+            <p data-i18n="feature2_desc">Every booking is encrypted end to end, so your details stay protected.</p>
+          </div>
+          <div class="feature">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
+                <path d="M21 19a2 2 0 0 1-2 2h-1v-6h1a2 2 0 0 1 2 2v2z" />
+                <path d="M3 19a2 2 0 0 0 2 2h1v-6H5a2 2 0 0 0-2 2v2z" />
+              </svg></div>
+            <h3 data-i18n="feature3_title">24/7 support</h3>
+            <p data-i18n="feature3_desc">Real people are on hand any time, before and after you fly.</p>
+          </div>
+          <div class="feature">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 12l2 2 4-4" />
+                <circle cx="12" cy="12" r="9" />
+              </svg></div>
+            <h3 data-i18n="feature4_title">Instant confirmation</h3>
+            <p data-i18n="feature4_desc">Get your e-ticket the moment you book — no waiting, no follow-up emails.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="cta-band">
+          <div>
+            <h2 data-i18n="cta_title">Fares change fast. Set a price alert and we'll watch them for you.</h2>
+            <p data-i18n="cta_sub">Free to use — cancel anytime.</p>
+          </div>
+          <button type="button" class="btn btn-primary" data-i18n="cta_btn">Create a price alert</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="#" class="logo-link" aria-label="TMbilet home">
+            <img src="tmbilet-logo.png" alt="TMbilet" class="logo-img">
+          </a>
+          <p data-i18n="footer_brand_desc">A cleaner way to search, compare, and book flights — built for people who fly
+            often.</p>
+        </div>
+        <div class="footer-col">
+          <h4 data-i18n="footer_company">Company</h4>
+          <a href="#" data-i18n="footer_about">About</a>
+          <a href="#" data-i18n="footer_careers">Careers</a>
+          <a href="#" data-i18n="footer_press">Press</a>
+        </div>
+        <div class="footer-col">
+          <h4 data-i18n="footer_support">Support</h4>
+          <a href="#" data-i18n="footer_help">Help center</a>
+          <a href="#" data-i18n="footer_manage">Manage booking</a>
+          <a href="#" data-i18n="footer_contact">Contact us</a>
+        </div>
+        <div class="footer-col">
+          <h4 data-i18n="footer_legal">Legal</h4>
+          <a href="#" data-i18n="footer_terms">Terms of service</a>
+          <a href="#" data-i18n="footer_privacy">Privacy policy</a>
+          <a href="#" data-i18n="footer_cookies">Cookie settings</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p data-i18n="footer_copyright">© 2026 TMbilet. All rights reserved.</p>
+        <div class="socials">
+          <a href="#" data-i18n="social_instagram">Instagram</a>
+          <a href="#" data-i18n="social_x">X</a>
+          <a href="#" data-i18n="social_facebook">Facebook</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"TMbilet",
+    "url":"https://tmbilet.com",
+    "logo":"https://tmbilet.com/tmbilet-logo-search.png"
+  }
+  </script>
+  <script data-cfasync="false">
     window.TMBILET_CONFIG = {
       searchHost: 'https://avia.TMbilet.com',
       searchPath: '/'
     };
   </script>
-<script data-cfasync="false" src="/i18n.js"></script>
-<script data-cfasync="false" src="/airports.js"></script>
-<script data-cfasync="false" src="/airports-search.js"></script>
-<script data-cfasync="false" src="/app.js"></script>
-<!-- ═══════════════════════════════════════════════════════════
+  <script data-cfasync="false" src="i18n.js"></script>
+  <script data-cfasync="false" src="airports.js"></script>
+  <script data-cfasync="false" src="airports-search.js"></script>
+  <script data-cfasync="false" src="app.js"></script>
+
+  <!-- ═══════════════════════════════════════════════════════════
        CUSTOM DATE PICKER
        ═══════════════════════════════════════════════════════════ -->
-<script>
+  <script>
     (function () {
       'use strict';
 
@@ -587,7 +2150,8 @@
 
     }());
   </script>
-<!-- ═══════════════════════════════════════════════════════════
+
+  <!-- ═══════════════════════════════════════════════════════════
        SCROLL INDICATOR — zero dependencies, self-contained IIFE.
 
        Architecture:
@@ -599,7 +2163,7 @@
          When hero exits → class removed → bar returns to accent green.
        • No scroll event listener (avoids non-passive listener warnings).
        ═══════════════════════════════════════════════════════════ -->
-<script>
+  <script>
     (function () {
       'use strict';
 
@@ -655,5 +2219,7 @@
 
     }());
   </script>
+
 </body>
+
 </html>

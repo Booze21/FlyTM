@@ -1,54 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
-
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://tmbilet.com/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://tmbilet.com/" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://tmbilet.com/tr/" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://tmbilet.com/ru/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://tmbilet.com/" />
+    <lastmod>2026-07-12</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
-
-  <url>
-    <loc>https://tmbilet.com/tr/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://tmbilet.com/" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://tmbilet.com/tr/" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://tmbilet.com/ru/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://tmbilet.com/" />
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
-
-  <url>
-    <loc>https://tmbilet.com/ru/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://tmbilet.com/" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://tmbilet.com/tr/" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://tmbilet.com/ru/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://tmbilet.com/" />
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
-
-  <url>
-    <loc>https://tmbilet.com/flights/istanbul-to-ashgabat</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://tmbilet.com/flights/ashgabat-to-istanbul</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!--
-    Add one <url> block per new /flights/<slug> page as
-    generate_routes.py's ROUTES list grows. Route pages don't carry
-    hreflang alternates yet since they're currently EN-only — add
-    those once TR/RU route-page copy exists.
-  -->
-
 </urlset>
