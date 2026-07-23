@@ -1140,8 +1140,8 @@
       border-radius: var(--radius-md);
       padding: 26px 22px;
       box-shadow: var(--shadow-sm);
-      opacity: 0;
-      transform: translateY(14px);
+      opacity: 1;
+      transform: translateY(0);
       transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
     }
 
@@ -1607,6 +1607,18 @@
 
 <body>
 
+  <!-- Compatibility shim, not a UI element: app.js's destination-card
+       code (and, we suspect, whatever runs after it in that same script —
+       very possibly the search form's submit handler) expects to find
+       #destinationGrid in the DOM. Since the visible destinations section
+       was removed, that lookup returned null and (if unchecked) app.js
+       likely threw before ever reaching later setup, breaking the
+       search → avia.tmbilet.com redirect and the entered-data reset.
+       This kept-empty, hidden div gives app.js something to find so its
+       later code can still run. Proper fix is a null-check in app.js
+       itself — remove this once that's in place. -->
+  <div class="destination-grid" id="destinationGrid" style="display:none" aria-hidden="true"></div>
+
   <!-- Scroll progress indicator — controlled by inline script at bottom of body -->
   <div id="scroll-indicator" role="progressbar" aria-hidden="true"></div>
 
@@ -1644,7 +1656,7 @@
       <nav class="main-nav" id="mainNav">
         <a href="#search" data-i18n="nav_flights">Flights</a>
         <a href="#" data-i18n="nav_hotels">Hotels</a>
-        <a href="#" data-i18n="nav_deals">Deals</a>
+        <a href="#features" data-i18n="nav_deals">Deals</a>
         <a href="#features" data-i18n="nav_support">Support</a>
       </nav>
 
