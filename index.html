@@ -1321,6 +1321,36 @@
       font-size: 14.5px;
     }
 
+    /* ---------- App download ---------- */
+    .app-download {
+      padding: 20px 0 64px;
+      text-align: center;
+    }
+
+    .app-download h2 {
+      font-size: 26px;
+    }
+
+    .app-download p {
+      color: var(--text-muted);
+      margin-top: 8px;
+      font-size: 15px;
+    }
+
+    .btn-download-apk {
+      margin-top: 24px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 30px;
+      font-size: 15.5px;
+    }
+
+    .btn-download-apk svg {
+      width: 19px;
+      height: 19px;
+    }
+
     /* ---------- Footer ---------- */
     footer {
       background: var(--white);
@@ -1639,6 +1669,11 @@
 
       .cta-band .btn {
         width: 100%;
+      }
+
+      .btn-download-apk {
+        width: 100%;
+        justify-content: center;
       }
     }
 
@@ -2021,6 +2056,22 @@
           </div>
           <button type="button" class="btn btn-primary" data-i18n="cta_btn">Create a price alert</button>
         </div>
+      </div>
+    </section>
+
+    <section class="app-download">
+      <div class="wrap">
+        <h2>Get the TMbilet app</h2>
+        <p>Search, book, and manage your trips faster — right from your phone.</p>
+        <a href="TMbilet.apk" download="TMbilet.apk" class="btn btn-primary btn-download-apk">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          Download for Android
+        </a>
       </div>
     </section>
   </main>
