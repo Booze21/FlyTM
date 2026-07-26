@@ -374,10 +374,23 @@
       height: 20px;
     }
 
+    /* визуально скрыто, но доступно скринридерам и поисковым роботам */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
     /* ---------- Hero ---------- */
     .hero {
       position: relative;
-      padding: 76px 0 120px;
+      padding: 40px 0 88px;
       isolation: isolate;
       z-index: 1;
       background: linear-gradient(135deg, #04361F 0%, #0A7A45 18%, #12B76A 38%, #1FD182 55%, #0E9C59 72%, #076B3D 88%, #04361F 100%);
@@ -509,8 +522,8 @@
     }
 
     .hero-sub {
-      margin: 20px auto 0;
-      max-width: 520px;
+      margin: 0 auto;
+      max-width: 560px;
       font-size: 17px;
       color: rgba(255, 255, 255, .82);
     }
@@ -520,7 +533,7 @@
       position: relative;
       z-index: 1;
       width: min(980px, 92vw);
-      margin-top: 44px;
+      margin-top: 26px;
       /* hero-inner is only 760px wide and centered; break out and
          re-center on the true page center so the card isn't pushed left */
       margin-left: 50%;
@@ -529,7 +542,7 @@
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       box-shadow: var(--shadow-lg);
-      padding: 22px;
+      padding: 16px;
       text-align: left;
     }
 
@@ -537,14 +550,14 @@
       display: inline-flex;
       background: var(--gray);
       border-radius: 999px;
-      padding: 4px;
-      margin-bottom: 18px;
+      padding: 3px;
+      margin-bottom: 12px;
     }
 
     .trip-option {
       border: none;
       background: transparent;
-      padding: 8px 18px;
+      padding: 6px 16px;
       border-radius: 999px;
       font-size: 14px;
       font-weight: 700;
@@ -571,7 +584,7 @@
 
     .field {
       background: var(--white);
-      padding: 11px 16px;
+      padding: 9px 14px;
       display: flex;
       flex-direction: column;
       gap: 3px;
@@ -1579,7 +1592,7 @@
       }
 
       .hero {
-        padding: 44px 0 72px;
+        padding: 24px 0 60px;
         background: var(--accent-darker);
         animation: none;
       }
@@ -1722,7 +1735,9 @@
       <div class="hero-spotlight" aria-hidden="true"></div>
       <div class="hero-trail-layer" aria-hidden="true"></div>
       <div class="wrap hero-inner">
-        <h1 data-i18n-html="hero_title">Fly smarter.<br>Book better.</h1>
+        <!-- Заголовок скрыт визуально, но остаётся в DOM для SEO и скринридеров.
+             Если нужно удалить совсем — просто сотрите эту строку. -->
+        <h1 class="sr-only" data-i18n-html="hero_title">Fly smarter.<br>Book better.</h1>
         <p class="hero-sub" data-i18n="hero_sub">Compare flights across hundreds of airlines and lock in the best fare
           in seconds — no clutter, no guesswork.</p>
 
