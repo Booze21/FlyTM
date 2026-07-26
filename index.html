@@ -3,10 +3,14 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>TMbilet — Fly smarter. Book better.</title>
   <meta name="description" content="Compare and book flights across hundreds of airlines with TMbilet.">
   <link rel="icon" type="image/png" href="tmbilet-logo.png">
+  <link rel="manifest" href="/manifest.json">
+  <!-- theme-color задан белым намеренно: он окрашивает системные полосы
+       Android. Зелёный здесь и давал полосу внизу экрана. -->
+  <meta name="theme-color" content="#FFFFFF">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
@@ -68,6 +72,12 @@
       font-family: var(--font-body);
       -webkit-font-smoothing: antialiased;
       line-height: 1.5;
+    }
+
+    /* html наследовал бы фон body, но задаём явно: именно этот цвет
+       Chrome использует для прозрачной системной панели в edge-to-edge */
+    html {
+      background: var(--white);
     }
 
     h1,
@@ -1623,6 +1633,40 @@
         transform: translateX(-50%);
         width: calc(100vw - 32px);
         max-width: 360px;
+      }
+    }
+    /* ============================================================
+       SAFE AREA — edge-to-edge (Android 15+, iPhone с вырезом)
+       Идёт последним в таблице стилей намеренно: должно
+       переопределять footer/toast/header, объявленные выше.
+       Вместе с viewport-fit=cover страница рисуется под системными
+       панелями, поэтому нижняя навигационная панель становится
+       прозрачной и показывает белый фон страницы, а не зелёный
+       theme_color. Отступы ниже возвращают безопасные зоны, чтобы
+       контент не уезжал под панели.
+       ============================================================ */
+    @supports (padding: env(safe-area-inset-bottom)) {
+
+      header {
+        padding-top: env(safe-area-inset-top);
+      }
+
+      footer {
+        padding-bottom: calc(28px + env(safe-area-inset-bottom));
+      }
+
+      .toast {
+        bottom: calc(28px + env(safe-area-inset-bottom));
+      }
+    }
+
+    /* .lang-dropdown становится position:fixed только на мобильных —
+       здесь же учитываем вырез сверху */
+    @media (max-width: 520px) {
+      @supports (padding: env(safe-area-inset-top)) {
+        .lang-dropdown {
+          top: calc(72px + env(safe-area-inset-top));
+        }
       }
     }
   </style>
