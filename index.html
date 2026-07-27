@@ -1647,16 +1647,29 @@
        ============================================================ */
     @supports (padding: env(safe-area-inset-bottom)) {
 
-      header {
-        padding-top: env(safe-area-inset-top);
-      }
-
       footer {
         padding-bottom: calc(28px + env(safe-area-inset-bottom));
       }
 
       .toast {
         bottom: calc(28px + env(safe-area-inset-bottom));
+      }
+    }
+
+    /* Header's own top inset only belongs here when the page is running
+       with nothing else already reserving the status-bar area — i.e.
+       installed as a standalone PWA, truly edge-to-edge. In a normal
+       mobile browser tab the browser chrome already sits above the page
+       (env() is 0 there anyway), and inside the TMbilet app's WebView the
+       native shell already reserves that exact space before the page
+       ever paints — adding this on top of that doubled the gap above the
+       logo row. Scoped to mobile widths only; desktop is unaffected
+       either way since env(safe-area-inset-top) is 0 there. */
+    @media (max-width: 860px) and (display-mode: standalone) {
+      @supports (padding: env(safe-area-inset-top)) {
+        header {
+          padding-top: env(safe-area-inset-top);
+        }
       }
     }
 
