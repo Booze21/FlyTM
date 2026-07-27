@@ -43,9 +43,6 @@
       --accent-dark: #28A428;
       --accent-darker: #1F8A1F;
       --accent-tint: #EAF8EA;
-      /* ровный зелёный фон hero (как на референсе) + цвет ленты */
-      --hero-green: #3EB955;
-      --hero-ribbon: #FFFFFF;
       --radius-lg: 20px;
       --radius-md: 14px;
       --radius-sm: 10px;
@@ -406,7 +403,9 @@
       padding: 40px 0 88px;
       isolation: isolate;
       z-index: 1;
-      background: var(--hero-green);
+      background: linear-gradient(135deg, #04361F 0%, #0A7A45 18%, #12B76A 38%, #1FD182 55%, #0E9C59 72%, #076B3D 88%, #04361F 100%);
+      background-size: 300% 300%;
+      animation: heroShift 18s ease-in-out infinite;
     }
 
     /* clips only the blurred glow blobs to the hero's bounds, so the hero itself
@@ -448,153 +447,6 @@
       background-size: 100% 100%, 100% 100%;
       mix-blend-mode: overlay;
       opacity: .9;
-    }
-
-    /* ============================================================
-       HERO BACKGROUND — ровная зелёная заливка + живая белая лента.
-       Градиентные пятна и «зерно» отключены: фон должен быть плоским,
-       вся выразительность уходит в ленту.
-       ============================================================ */
-    .hero-glow-clip,
-    .hero::after {
-      display: none;
-    }
-
-    /* ------------------------------------------------------------
-       Многослойные ленты. Общая механика:
-       .par-N — слои параллакса, сдвигаются при скролле страницы
-       (JS пишет --sc = px прокрутки и --sp = прогресс 0…1).
-       Формы живут своей жизнью через SMIL-морфинг в разметке.
-       ------------------------------------------------------------ */
-    .hero-ribbon {
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      overflow: hidden;
-      pointer-events: none;
-    }
-
-    .hero-ribbon svg {
-      position: absolute;
-      top: -16%;
-      left: -12%;
-      width: 124%;
-      height: 132%;
-      animation: ribbonDrift 26s ease-in-out infinite alternate;
-      will-change: transform;
-    }
-
-    .rib {
-      fill: none;
-      stroke-linecap: round;
-    }
-
-    .hero-ribbon .rib {
-      stroke: var(--hero-ribbon);
-    }
-
-    /* толщина / прозрачность слоёв — от главной линии к почти невидимым */
-    .rib-1 {
-      stroke-width: 7;
-      opacity: 1;
-      filter: drop-shadow(0 0 16px rgba(255, 255, 255, .40));
-    }
-
-    .rib-2 {
-      stroke-width: 4;
-      opacity: .60;
-    }
-
-    .rib-3 {
-      stroke-width: 2;
-      opacity: .38;
-    }
-
-    .rib-4 {
-      stroke-width: 11;
-      opacity: .13;
-    }
-
-    .rib-5 {
-      stroke-width: 1.5;
-      opacity: .30;
-    }
-
-    /* параллакс: слои уезжают с разной скоростью — и вверх, и вниз */
-    .par-1 { transform: translateY(calc(var(--sc, 0px) * -0.10)); }
-    .par-2 { transform: translateY(calc(var(--sc, 0px) * -0.22)); }
-    .par-3 { transform: translateY(calc(var(--sc, 0px) *  0.14)); }
-    .par-4 { transform: translateY(calc(var(--sc, 0px) * -0.34)); }
-    .par-5 { transform: translateY(calc(var(--sc, 0px) *  0.26)); }
-
-    @keyframes ribbonDrift {
-      from {
-        transform: translate3d(0, 0, 0) scale(1);
-      }
-
-      to {
-        transform: translate3d(-3.5%, 1.5%, 0) scale(1.05);
-      }
-    }
-
-    /* ------------------------------------------------------------
-       Ленты на светлой части страницы: fixed-слой позади контента,
-       зелёные линии по белому. Ход привязан к прогрессу прокрутки,
-       поэтому движение конечное и разворачивается при скролле вверх.
-       ------------------------------------------------------------ */
-    .page-ribbons {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      overflow: hidden;
-      pointer-events: none;
-    }
-
-    .page-ribbons svg {
-      position: absolute;
-      top: -14%;
-      left: -12%;
-      width: 124%;
-      height: 128%;
-      animation: ribbonDrift 34s ease-in-out infinite alternate;
-      will-change: transform;
-    }
-
-    .page-ribbons .rib {
-      stroke: var(--accent);
-    }
-
-    .page-ribbons .rib-1 {
-      opacity: .26;
-      filter: none;
-    }
-
-    .page-ribbons .rib-2 {
-      opacity: .17;
-    }
-
-    .page-ribbons .rib-3 {
-      opacity: .12;
-    }
-
-    .page-ribbons .rib-4 {
-      opacity: .07;
-    }
-
-    .page-ribbons .rib-5 {
-      opacity: .10;
-    }
-
-    .page-ribbons .pp-1 { transform: translateY(calc(var(--sp, 0) * -240px)); }
-    .page-ribbons .pp-2 { transform: translateY(calc(var(--sp, 0) *  180px)); }
-    .page-ribbons .pp-3 { transform: translateY(calc(var(--sp, 0) * -420px)) rotate(calc(var(--sp, 0) * 3deg)); }
-    .page-ribbons .pp-4 { transform: translateY(calc(var(--sp, 0) *  320px)); }
-    .page-ribbons .pp-5 { transform: translateY(calc(var(--sp, 0) * -560px)); }
-
-    /* старые декоративные «банты» отключены — их место заняли ленты.
-       Вернуть: убрать эти две строки. */
-    .ribbon-layer {
-      display: none;
     }
 
     /* thin bright line along the top edge, like light catching the edge of a glass pane */
@@ -1307,9 +1159,7 @@
 
     /* ---------- Features ---------- */
     .features {
-      /* чуть прозрачнее сплошного --gray: сквозь секцию проступают
-         зелёные ленты фонового слоя, цвет при этом читается прежним */
-      background: rgba(245, 245, 245, .82);
+      background: var(--gray);
     }
 
     .feature-grid {
@@ -1585,17 +1435,6 @@
       .hero {
         animation: none !important;
       }
-
-      .hero-ribbon svg,
-      .page-ribbons svg {
-        animation: none !important;
-      }
-
-      .par-1, .par-2, .par-3, .par-4, .par-5,
-      .page-ribbons .pp-1, .page-ribbons .pp-2, .page-ribbons .pp-3,
-      .page-ribbons .pp-4, .page-ribbons .pp-5 {
-        transform: none !important;
-      }
     }
 
     /* ============================================================
@@ -1764,19 +1603,9 @@
 
       .hero {
         padding: 24px 0 60px;
-        background: var(--hero-green);
+        background: var(--accent-darker);
         animation: none;
       }
-
-      /* на телефоне линии тоньше и слоёв меньше — чтобы не спорили
-         с формой поиска и не грузили GPU */
-      .rib-1 { stroke-width: 5; }
-      .rib-2 { stroke-width: 3; }
-      .rib-3 { stroke-width: 1.5; }
-      .rib-4 { stroke-width: 8; }
-      .rib-5 { display: none; }
-
-      .page-ribbons .rib-4 { display: none; }
 
       /* Battery/perf: on mobile, replace the hero's animated gradient
          blobs, frosted-glass sheen, and cursor-reactive spotlight/trail
@@ -1896,39 +1725,6 @@
     </svg>
   </div>
 
-  <!-- Ленты на светлой части страницы: fixed-слой позади всего контента -->
-  <div class="page-ribbons" aria-hidden="true">
-    <svg id="pageRibbonSvg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <path id="pgA"
-          d="M -140 780 C 220 700, 380 500, 660 470 C 900 444, 1060 300, 1580 210">
-          <animate attributeName="d" dur="27s" repeatCount="indefinite" calcMode="spline"
-            keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
-            values="M -140 780 C 220 700, 380 500, 660 470 C 900 444, 1060 300, 1580 210;
-                    M -140 736 C 230 736, 400 552, 690 500 C 930 458, 1090 244, 1580 264;
-                    M -140 780 C 220 700, 380 500, 660 470 C 900 444, 1060 300, 1580 210" />
-        </path>
-        <path id="pgB"
-          d="M 1580 60 C 1200 140, 1040 340, 760 330 C 520 322, 300 470, -140 420">
-          <animate attributeName="d" dur="33s" repeatCount="indefinite" calcMode="spline"
-            keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
-            values="M 1580 60 C 1200 140, 1040 340, 760 330 C 520 322, 300 470, -140 420;
-                    M 1580 106 C 1210 96, 1010 296, 740 296 C 500 296, 320 414, -140 466;
-                    M 1580 60 C 1200 140, 1040 340, 760 330 C 520 322, 300 470, -140 420" />
-        </path>
-      </defs>
-
-      <g class="pp-4"><g transform="translate(-30,150) scale(1.05,1)"><use href="#pgA" class="rib rib-4" /></g></g>
-      <g class="pp-2"><g transform="translate(0,0)"><use href="#pgB" class="rib rib-2" /></g></g>
-      <g class="pp-5"><g transform="translate(20,-120)"><use href="#pgA" class="rib rib-5" /></g></g>
-      <g class="pp-3"><g transform="translate(0,240)"><use href="#pgB" class="rib rib-3" /></g></g>
-      <g class="pp-1">
-        <use href="#pgA" class="rib rib-1" />
-        <g transform="translate(6,14)"><use href="#pgA" class="rib rib-3" /></g>
-      </g>
-    </svg>
-  </div>
-
   <header>
     <div class="wrap header-inner">
       <div class="logo-brand">
@@ -1993,70 +1789,6 @@
   <main>
     <section class="hero" id="search">
       <div class="hero-glow-clip" aria-hidden="true"></div>
-
-      <!-- ФОН: слои белых лент поверх ровной зелёной заливки -->
-      <div class="hero-ribbon" aria-hidden="true">
-        <svg id="heroRibbonSvg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <!-- Формы-исходники: сами по себе не рисуются, их клонируют <use>.
-                 Каждая плавно перетекает между четырьмя вариантами. -->
-            <path id="rbA"
-              d="M -140 40 C 250 -40, 430 140, 300 300 C 190 445, 560 470, 620 560 C 662 625, 552 662, 600 702 C 700 782, 1150 640, 1580 900">
-              <animate attributeName="d" dur="17s" repeatCount="indefinite" calcMode="spline"
-                keyTimes="0;0.33;0.66;1" keySplines="0.45 0 0.55 1; 0.45 0 0.55 1; 0.45 0 0.55 1"
-                values="M -140 40 C 250 -40, 430 140, 300 300 C 190 445, 560 470, 620 560 C 662 625, 552 662, 600 702 C 700 782, 1150 640, 1580 900;
-                        M -140 70 C 235 -5, 465 120, 322 332 C 208 470, 592 448, 645 540 C 692 612, 574 692, 622 722 C 722 800, 1115 686, 1580 862;
-                        M -140 12 C 282 -62, 408 168, 282 272 C 172 418, 538 496, 604 582 C 646 640, 538 640, 584 686 C 686 764, 1186 606, 1580 924;
-                        M -140 40 C 250 -40, 430 140, 300 300 C 190 445, 560 470, 620 560 C 662 625, 552 662, 600 702 C 700 782, 1150 640, 1580 900" />
-            </path>
-
-            <path id="rbB"
-              d="M -140 660 C 200 560, 420 720, 720 648 C 1000 580, 1200 400, 1580 300">
-              <animate attributeName="d" dur="23s" repeatCount="indefinite" calcMode="spline"
-                keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
-                values="M -140 660 C 200 560, 420 720, 720 648 C 1000 580, 1200 400, 1580 300;
-                        M -140 618 C 210 620, 400 660, 700 604 C 1010 546, 1230 452, 1580 356;
-                        M -140 660 C 200 560, 420 720, 720 648 C 1000 580, 1200 400, 1580 300" />
-            </path>
-
-            <path id="rbC"
-              d="M -140 200 C 260 260, 520 96, 820 176 C 1080 244, 1300 172, 1580 96">
-              <animate attributeName="d" dur="29s" repeatCount="indefinite" calcMode="spline"
-                keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
-                values="M -140 200 C 260 260, 520 96, 820 176 C 1080 244, 1300 172, 1580 96;
-                        M -140 244 C 250 196, 540 176, 840 130 C 1090 92, 1310 128, 1580 148;
-                        M -140 200 C 260 260, 520 96, 820 176 C 1080 244, 1300 172, 1580 96" />
-            </path>
-          </defs>
-
-          <!-- широкая мягкая линия в самой глубине -->
-          <g class="par-4"><g transform="translate(-40,190) scale(1.06,1)"><use href="#rbA" class="rib rib-4" /></g></g>
-          <!-- второстепенные линии -->
-          <g class="par-3"><g transform="translate(0,26)"><use href="#rbC" class="rib rib-3" /></g></g>
-          <g class="par-5"><g transform="translate(30,-40)"><use href="#rbB" class="rib rib-5" /></g></g>
-          <g class="par-2"><g transform="translate(0,0)"><use href="#rbB" class="rib rib-2" /></g></g>
-          <g class="par-3"><g transform="translate(18,132)"><use href="#rbA" class="rib rib-3" /></g></g>
-          <!-- главная линия и её тонкий «двойник» -->
-          <g class="par-1">
-            <use href="#rbA" class="rib rib-1" />
-            <g transform="translate(5,13)"><use href="#rbA" class="rib rib-3" /></g>
-          </g>
-        </svg>
-      </div>
-      <script>
-        // «Уменьшить движение» в системе — останавливаем морфинг лент
-        (function () {
-          try {
-            if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-              ['heroRibbonSvg', 'pageRibbonSvg'].forEach(function (id) {
-                var s = document.getElementById(id);
-                if (s && s.pauseAnimations) s.pauseAnimations();
-              });
-            }
-          } catch (e) {}
-        })();
-      </script>
-
       <div class="hero-spotlight" aria-hidden="true"></div>
       <div class="hero-trail-layer" aria-hidden="true"></div>
       <div class="wrap hero-inner">
@@ -2591,19 +2323,13 @@
         return total <= 0 ? 0 : Math.min(100, Math.max(0, (scrolled / total) * 100));
       }
 
-      // ── Ribbons ──────────────────────────────────────────────
-      // Каждый кадр отдаём в CSS две величины, а раскладку слоёв
-      // считает уже сам CSS:
-      //   --sc  прокрутка в px (для лент в hero, с потолком)
-      //   --sp  прогресс страницы 0…1 (для fixed-слоя на белом)
-      // Значения сглаживаются, поэтому ленты движутся мягко и
-      // разворачиваются сами, когда страницу листают вверх.
-      var root = document.documentElement;
-      var SC_MAX = 1400;
-      var scCurrent = 0;
-      var spCurrent = 0;
-      var lastSc = null;
-      var lastSp = null;
+      // ── Ribbon rotation ──────────────────────────────────────
+      // Driven by absolute scroll position so the spin rate is constant
+      // and reverses naturally when scrolling back up. Eased each frame.
+      var ribbons = document.querySelectorAll('.ribbon-layer');
+      var DEG_PER_PX = 0.22;
+      var rotCurrent = 0;
+      var lastRotWritten = null;
 
       function scrollY() {
         return document.documentElement.scrollTop || document.body.scrollTop || 0;
@@ -2616,19 +2342,16 @@
           lastPct = pct;
         }
 
-        var scTarget = Math.min(scrollY(), SC_MAX);
-        scCurrent += (scTarget - scCurrent) * 0.12;
-        var scRounded = Math.round(scCurrent);
-        if (scRounded !== lastSc) {
-          root.style.setProperty('--sc', scRounded + 'px');
-          lastSc = scRounded;
-        }
-
-        spCurrent += ((pct / 100) - spCurrent) * 0.12;
-        var spRounded = Math.round(spCurrent * 1000) / 1000;
-        if (spRounded !== lastSp) {
-          root.style.setProperty('--sp', spRounded);
-          lastSp = spRounded;
+        if (ribbons.length) {
+          var target = scrollY() * DEG_PER_PX;
+          rotCurrent += (target - rotCurrent) * 0.09;
+          var rounded = Math.round(rotCurrent * 10) / 10;
+          if (rounded !== lastRotWritten) {
+            for (var i = 0; i < ribbons.length; i++) {
+              ribbons[i].style.setProperty('--ribbon-rot', rounded + 'deg');
+            }
+            lastRotWritten = rounded;
+          }
         }
 
         requestAnimationFrame(tick);
