@@ -21,6 +21,16 @@
     href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
     rel="stylesheet">
 
+  <!-- Fetch starts immediately instead of waiting for the parser to reach
+       the app scripts near the bottom of the document — execution
+       order/timing of those tags is unchanged, this only moves the
+       network request earlier. -->
+  <link rel="preload" as="image" href="tmbilet-logo.png" fetchpriority="high">
+  <link rel="preload" as="script" href="i18n.js">
+  <link rel="preload" as="script" href="airports.js">
+  <link rel="preload" as="script" href="airports-search.js">
+  <link rel="preload" as="script" href="app.js">
+
   <script nowprocket data-noptimize="1" data-cfasync="false" data-wpfc-render="false" seraph-accel-crit="1"
     data-no-defer="1">
       (function () {
@@ -484,6 +494,13 @@
       will-change: transform;
     }
 
+    /* toggled by JS once the hero scrolls fully out of view — freezes
+       the drift animation instead of letting it composite forever
+       off-screen; resumes exactly where it paused, no jump */
+    #heroRibbonSvg.anim-paused {
+      animation-play-state: paused;
+    }
+
     .rib {
       fill: none;
       stroke-linecap: round;
@@ -497,7 +514,11 @@
     .rib-1 {
       stroke-width: 7;
       opacity: 1;
-      filter: drop-shadow(0 0 16px rgba(255, 255, 255, .40));
+      /* was 16px — this filter recomputes every frame because the path
+         it's applied to is continuously morphing (SMIL), so blur radius
+         directly drives per-frame GPU cost. 10px keeps a visible glow
+         at a noticeably lower cost; still not "free" (see chat notes). */
+      filter: drop-shadow(0 0 10px rgba(255, 255, 255, .40));
     }
 
     .rib-2 {
@@ -600,48 +621,6 @@
     /* thin bright line along the top edge, like light catching the edge of a glass pane */
     .hero {
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, .18);
-    }
-
-    /* cursor spotlight — lights up the glass surface as the pointer moves over it */
-    .hero-spotlight {
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity .35s var(--ease);
-      background: radial-gradient(260px circle at var(--sx, 50%) var(--sy, 50%), rgba(255, 255, 255, .30), rgba(255, 255, 255, .10) 38%, transparent 66%);
-      mix-blend-mode: overlay;
-    }
-
-    .hero.glow-active .hero-spotlight {
-      opacity: 1;
-    }
-
-    /* cursor trail — small glowing dots left behind while the pointer moves */
-    .hero-trail-layer {
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    .trail-dot {
-      position: absolute;
-      left: 0;
-      top: 0;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(255, 255, 255, .95), rgba(255, 255, 255, .28) 55%, transparent 75%);
-      transform: translate(-50%, -50%) scale(1);
-      opacity: .8;
-      transition: transform .65s ease-out, opacity .65s ease-out;
-      will-change: transform, opacity;
-    }
-
-    .trail-dot.fade {
-      transform: translate(-50%, -50%) scale(2.4);
-      opacity: 0;
     }
 
     .hero-inner {
@@ -1493,20 +1472,6 @@
       color: var(--accent-darker);
     }
 
-    @keyframes heroShift {
-      0% {
-        background-position: 0% 50%;
-      }
-
-      50% {
-        background-position: 100% 50%;
-      }
-
-      100% {
-        background-position: 0% 50%;
-      }
-    }
-
     /* ============================================================
        SCROLL RIBBON — decorative bow that rotates with scroll.
        White while over the green hero, brand-green over white
@@ -1779,14 +1744,12 @@
       .page-ribbons .rib-4 { display: none; }
 
       /* Battery/perf: on mobile, replace the hero's animated gradient
-         blobs, frosted-glass sheen, and cursor-reactive spotlight/trail
-         with the flat brand green above — none of that compositing work
-         is worth it on a phone GPU, and there's no mouse cursor to react
-         to anyway. Desktop is untouched. */
+         blobs and frosted-glass sheen with the flat brand green above —
+         none of that compositing work is worth it on a phone GPU.
+         (Cursor-reactive spotlight/trail rules were removed for good —
+         they had no JS driving them.) Desktop is untouched. */
       .hero-glow-clip,
-      .hero::after,
-      .hero-spotlight,
-      .hero-trail-layer {
+      .hero::after {
         display: none;
       }
 
@@ -1933,7 +1896,7 @@
     <div class="wrap header-inner">
       <div class="logo-brand">
         <a href="#" class="logo-link" aria-label="TMbilet home">
-          <img src="tmbilet-logo.png" alt="TMbilet" class="logo-img">
+          <img src="tmbilet-logo.png" alt="TMbilet" class="logo-img" fetchpriority="high" decoding="async">
         </a>
       </div>
 
@@ -2044,21 +2007,59 @@
         </svg>
       </div>
       <script>
-        // «Уменьшить движение» в системе — останавливаем морфинг лент
         (function () {
           try {
-            if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-              ['heroRibbonSvg', 'pageRibbonSvg'].forEach(function (id) {
-                var s = document.getElementById(id);
-                if (s && s.pauseAnimations) s.pauseAnimations();
+            var heroSvg = document.getElementById('heroRibbonSvg');
+            var pageSvg = document.getElementById('pageRibbonSvg');
+            var svgs = [heroSvg, pageSvg].filter(Boolean);
+            var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            // «Уменьшить движение» в системе — останавливаем морфинг лент насовсем
+            if (reduceMotion) {
+              svgs.forEach(function (s) { if (s.pauseAnimations) s.pauseAnimations(); });
+              return;
+            }
+
+            // Вкладка не активна (свёрнута / другое приложение сверху) —
+            // останавливаем SMIL-морфинг на обоих слоях лент, main thread
+            // не должен пересчитывать геометрию путей, пока их не видно.
+            document.addEventListener('visibilitychange', function () {
+              svgs.forEach(function (s) {
+                if (document.hidden) {
+                  if (s.pauseAnimations) s.pauseAnimations();
+                } else if (s.unpauseAnimations) {
+                  s.unpauseAnimations();
+                }
               });
+            });
+
+            // hero-ribbon только: останавливаем морфинг и CSS-дрейф, как
+            // только hero полностью прокручен за пределы экрана — это
+            // самый дорогой слой на странице (путь пересчитывается каждый
+            // кадр), держать его активным вне видимости смысла нет.
+            // page-ribbons не трогаем — он position:fixed и виден всю
+            // страницу, замораживать его на скролле было бы заметно.
+            if (heroSvg && 'IntersectionObserver' in window) {
+              var heroSection = document.querySelector('.hero');
+              if (heroSection) {
+                var heroIO = new IntersectionObserver(function (entries) {
+                  entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                      heroSvg.classList.remove('anim-paused');
+                      if (heroSvg.unpauseAnimations) heroSvg.unpauseAnimations();
+                    } else {
+                      heroSvg.classList.add('anim-paused');
+                      if (heroSvg.pauseAnimations) heroSvg.pauseAnimations();
+                    }
+                  });
+                }, { threshold: 0 });
+                heroIO.observe(heroSection);
+              }
             }
           } catch (e) {}
         })();
       </script>
 
-      <div class="hero-spotlight" aria-hidden="true"></div>
-      <div class="hero-trail-layer" aria-hidden="true"></div>
       <div class="wrap hero-inner">
         <!-- Заголовок скрыт визуально, но остаётся в DOM для SEO и скринридеров.
              Если нужно удалить совсем — просто сотрите эту строку. -->
@@ -2314,7 +2315,7 @@
       <div class="footer-top">
         <div class="footer-brand">
           <a href="#" class="logo-link" aria-label="TMbilet home">
-            <img src="tmbilet-logo.png" alt="TMbilet" class="logo-img">
+            <img src="tmbilet-logo.png" alt="TMbilet" class="logo-img" loading="lazy" decoding="async">
           </a>
           <p data-i18n="footer_brand_desc">A cleaner way to search, compare, and book flights — built for people who fly
             often.</p>
@@ -2566,13 +2567,20 @@
        SCROLL INDICATOR — zero dependencies, self-contained IIFE.
 
        Architecture:
-       • rAF loop reads scrollTop every frame and writes bar width
-         only when the value actually changed → no wasted reflows.
+       • rAF loop reads scrollTop and writes bar width only when the
+         value actually changed → no wasted reflows.
+       • The loop is event-driven, not an infinite loop: 'scroll' /
+         'resize' / 'load' / a delegated 'click' (covers dropdown,
+         menu, calendar-popup height changes) restart it, and it
+         stops itself once the eased --sc/--sp values have settled
+         and nothing has happened recently. Same math and same
+         change-detection as before while running — this only
+         removes the forever-ticking idle loop, not any visible
+         behaviour.
        • IntersectionObserver tracks .hero (green bg) visibility.
          When hero is in view → html.si-on-green → CSS switches
          bar colour to white (smooth 380ms transition via CSS).
          When hero exits → class removed → bar returns to accent green.
-       • No scroll event listener (avoids non-passive listener warnings).
        ═══════════════════════════════════════════════════════════ -->
   <script>
     (function () {
@@ -2581,7 +2589,7 @@
       var bar = document.getElementById('scroll-indicator');
       if (!bar) return;
 
-      // ── Width: rAF loop ──────────────────────────────────────
+      // ── Width ──────────────────────────────────────────────
       var lastPct = -1;
 
       function getScrollPct() {
@@ -2605,11 +2613,18 @@
       var lastSc = null;
       var lastSp = null;
 
+      // ── Loop lifecycle: run only while values are moving ─────
+      var running = false;
+      var lastActivity = 0;
+      var SETTLE_MS = 300;   // keep ticking this long after the last event
+      var EPS_PX = 0.5;      // "close enough" thresholds — stop chasing
+      var EPS_PCT = 0.05;    // sub-pixel/sub-percent noise forever
+
       function scrollY() {
         return document.documentElement.scrollTop || document.body.scrollTop || 0;
       }
 
-      function tick() {
+      function tick(now) {
         var pct = getScrollPct();
         if (pct !== lastPct) {
           bar.style.width = pct + '%';
@@ -2631,10 +2646,33 @@
           lastSp = spRounded;
         }
 
-        requestAnimationFrame(tick);
+        var settled = Math.abs(scTarget - scCurrent) < EPS_PX && Math.abs(pct - spCurrent * 100) < EPS_PCT;
+        var recentActivity = (now - lastActivity) < SETTLE_MS;
+
+        if (!settled || recentActivity) {
+          requestAnimationFrame(tick);
+        } else {
+          running = false; // idle — next wake() restarts it
+        }
       }
 
-      requestAnimationFrame(tick);
+      function wake() {
+        lastActivity = performance.now();
+        if (!running) {
+          running = true;
+          requestAnimationFrame(tick);
+        }
+      }
+
+      window.addEventListener('scroll', wake, { passive: true });
+      window.addEventListener('resize', wake, { passive: true });
+      window.addEventListener('load', wake);
+      // Delegated click wake: cheap catch-all for UI toggles (nav menu,
+      // language dropdown, calendar popup, round-trip swap) that can
+      // change page height without firing scroll/resize.
+      document.addEventListener('click', wake, { passive: true });
+
+      wake(); // initial pass — covers loads that land mid-scroll (anchors, restore)
 
       // ── Colour: IntersectionObserver on .hero ────────────────
       // Fires when the green hero section enters / exits the viewport.
