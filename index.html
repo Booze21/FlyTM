@@ -416,10 +416,14 @@
       padding: 40px 0 88px;
       isolation: isolate;
       z-index: 1;
-      background: var(--hero-green);
+      background-color: var(--hero-green);
+      background-image: url("hero-bg.jpg");
+      background-size: cover;
+      background-position: center 60%;
+      background-repeat: no-repeat;
     }
 
-    /* clips only the blurred glow blobs to the hero's bounds, so the hero itself
+    /* clips the dark scrim gradient to the hero's bounds, so the hero itself
      no longer needs overflow:hidden — letting dropdowns escape below it */
     .hero-glow-clip {
       position: absolute;
@@ -429,19 +433,19 @@
       pointer-events: none;
     }
 
-    /* soft blurred glass "blobs" sitting behind the frosted surface — one continuous layer, no tiling */
+    /* dark gradient scrim over the hero photo — keeps the eyebrow/subtitle
+       legible near the top, fades out toward the search card at the bottom
+       so the photo itself stays visible there */
     .hero-glow-clip::before {
       content: '';
       position: absolute;
-      inset: -18%;
+      inset: 0;
       pointer-events: none;
-      background:
-        radial-gradient(38% 34% at 16% 14%, rgba(255, 255, 255, .22), transparent 70%),
-        radial-gradient(32% 30% at 86% 8%, rgba(0, 0, 0, .16), transparent 72%),
-        radial-gradient(42% 38% at 78% 74%, rgba(255, 255, 255, .13), transparent 72%),
-        radial-gradient(36% 34% at 10% 84%, rgba(0, 0, 0, .20), transparent 72%),
-        radial-gradient(46% 42% at 50% 46%, rgba(160, 255, 195, .10), transparent 76%);
-      filter: blur(64px);
+      background: linear-gradient(180deg,
+          rgba(6, 30, 20, .55) 0%,
+          rgba(6, 30, 20, .30) 38%,
+          rgba(6, 30, 20, .08) 62%,
+          rgba(6, 30, 20, 0) 78%);
     }
 
     /* frosted glass sheen + fine grain — a single stretched, non-repeating texture (no seams) */
@@ -461,12 +465,19 @@
     }
 
     /* ============================================================
-       HERO BACKGROUND — ровная зелёная заливка + живая белая лента.
-       Градиентные пятна и «зерно» отключены: фон должен быть плоским,
-       вся выразительность уходит в ленту.
+       HERO BACKGROUND — фоновая фотография (hero-bg.jpg) + затемняющий
+       градиент сверху для читаемости текста. hero-glow-clip теперь
+       рисует этот градиент (см. правило выше), поэтому включён обратно.
+       Анимированная белая лента отключена: похожий изгиб уже есть на
+       самом фото, дублировать его поверх — лишний шум.
+       Слой «зерна»/frosted-glass (hero::after) заточен под плоскую
+       заливку и на фото не нужен — остаётся выключенным.
        ============================================================ */
-    .hero-glow-clip,
     .hero::after {
+      display: none;
+    }
+
+    .hero-ribbon {
       display: none;
     }
 
@@ -1729,7 +1740,10 @@
 
       .hero {
         padding: 24px 0 60px;
-        background: var(--hero-green);
+        background-color: var(--hero-green);
+        background-image: url("hero-bg.jpg");
+        background-size: cover;
+        background-position: center 60%;
         animation: none;
       }
 
@@ -1743,12 +1757,11 @@
 
       .page-ribbons .rib-4 { display: none; }
 
-      /* Battery/perf: on mobile, replace the hero's animated gradient
-         blobs and frosted-glass sheen with the flat brand green above —
-         none of that compositing work is worth it on a phone GPU.
-         (Cursor-reactive spotlight/trail rules were removed for good —
-         they had no JS driving them.) Desktop is untouched. */
-      .hero-glow-clip,
+      /* Battery/perf: hero::after (frosted-glass noise texture) stays off
+         on mobile — it's tuned for the old flat-green fill and isn't
+         needed over the photo. hero-glow-clip is now just a plain
+         linear-gradient scrim (no blur filter), cheap enough to keep on
+         so the eyebrow/subtitle text stays legible over the photo. */
       .hero::after {
         display: none;
       }
