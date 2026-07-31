@@ -543,6 +543,16 @@
     .rib-loop-4  { --sway-x: -24px; --sway-y: -16px; --sway-r:  .3deg;  animation-duration: 31s; animation-delay: -11s; }
     .rib-loop-5  { --sway-x:  16px; --sway-y:  10px; --sway-r: -.45deg; animation-duration: 17s; animation-delay: -6s; }
 
+    /* покачивание лент на белом фоне (.page-ribbons) — та же
+       ribbonSway, только свои duration/delay/амплитуда на слой,
+       чтобы не совпадать по фазе с hero и друг с другом */
+    .pg-loop-1  { --sway-x: -12px; --sway-y:  9px;  --sway-r:  .3deg;  animation-duration: 30s; animation-delay: -4s;  }
+    .pg-loop-1b { --sway-x:  10px; --sway-y: -7px;  --sway-r: -.25deg; animation-duration: 23s; animation-delay: -17s; }
+    .pg-loop-2  { --sway-x:  14px; --sway-y: -9px;  --sway-r: -.35deg; animation-duration: 25s; animation-delay: -12s; }
+    .pg-loop-3  { --sway-x: -16px; --sway-y: 11px;  --sway-r:  .4deg;  animation-duration: 33s; animation-delay: -6s;  }
+    .pg-loop-4  { --sway-x:  12px; --sway-y: -8px;  --sway-r: -.2deg;  animation-duration: 21s; animation-delay: -9s;  }
+    .pg-loop-5  { --sway-x:  -9px; --sway-y:  6px;  --sway-r:  .3deg;  animation-duration: 28s; animation-delay: -15s; }
+
     .rib {
       fill: none;
       stroke-linecap: round;
@@ -1908,31 +1918,28 @@
   <div class="page-ribbons" aria-hidden="true">
     <svg id="pageRibbonSvg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
       <defs>
+        <!-- Пути теперь статичны — раньше здесь была SMIL-анимация
+             attributeName="d" (27s/33s, infinite), которая на каждый
+             кадр пересчитывала геометрию Безье и перерисовывала
+             fixed-слой на весь экран. Именно она и давала лаг на
+             мобильных: в отличие от transform, морфинг path не
+             композитится на GPU. Живость слоям теперь даёт лёгкое
+             CSS-покачивание (.rib-loop / .pg-loop-N) — тот же приём,
+             что уже используется в hero-ribbon и там не лагает даже
+             на слабых телефонах. -->
         <path id="pgA"
-          d="M -140 780 C 220 700, 380 500, 660 470 C 900 444, 1060 300, 1580 210">
-          <animate attributeName="d" dur="27s" repeatCount="indefinite" calcMode="spline"
-            keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
-            values="M -140 780 C 220 700, 380 500, 660 470 C 900 444, 1060 300, 1580 210;
-                    M -140 736 C 230 736, 400 552, 690 500 C 930 458, 1090 244, 1580 264;
-                    M -140 780 C 220 700, 380 500, 660 470 C 900 444, 1060 300, 1580 210" />
-        </path>
+          d="M -140 780 C 220 700, 380 500, 660 470 C 900 444, 1060 300, 1580 210" />
         <path id="pgB"
-          d="M 1580 60 C 1200 140, 1040 340, 760 330 C 520 322, 300 470, -140 420">
-          <animate attributeName="d" dur="33s" repeatCount="indefinite" calcMode="spline"
-            keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
-            values="M 1580 60 C 1200 140, 1040 340, 760 330 C 520 322, 300 470, -140 420;
-                    M 1580 106 C 1210 96, 1010 296, 740 296 C 500 296, 320 414, -140 466;
-                    M 1580 60 C 1200 140, 1040 340, 760 330 C 520 322, 300 470, -140 420" />
-        </path>
+          d="M 1580 60 C 1200 140, 1040 340, 760 330 C 520 322, 300 470, -140 420" />
       </defs>
 
-      <g class="pp-4"><g transform="translate(-30,150) scale(1.05,1)"><use href="#pgA" class="rib rib-4" /></g></g>
-      <g class="pp-2"><g transform="translate(0,0)"><use href="#pgB" class="rib rib-2" /></g></g>
-      <g class="pp-5"><g transform="translate(20,-120)"><use href="#pgA" class="rib rib-5" /></g></g>
-      <g class="pp-3"><g transform="translate(0,240)"><use href="#pgB" class="rib rib-3" /></g></g>
+      <g class="pp-4"><g transform="translate(-30,150) scale(1.05,1)"><g class="rib-loop pg-loop-4"><use href="#pgA" class="rib rib-4" /></g></g></g>
+      <g class="pp-2"><g transform="translate(0,0)"><g class="rib-loop pg-loop-2"><use href="#pgB" class="rib rib-2" /></g></g></g>
+      <g class="pp-5"><g transform="translate(20,-120)"><g class="rib-loop pg-loop-5"><use href="#pgA" class="rib rib-5" /></g></g></g>
+      <g class="pp-3"><g transform="translate(0,240)"><g class="rib-loop pg-loop-3"><use href="#pgB" class="rib rib-3" /></g></g></g>
       <g class="pp-1">
-        <use href="#pgA" class="rib rib-1" />
-        <g transform="translate(6,14)"><use href="#pgA" class="rib rib-3" /></g>
+        <g class="rib-loop pg-loop-1"><use href="#pgA" class="rib rib-1" /></g>
+        <g transform="translate(6,14)"><g class="rib-loop pg-loop-1b"><use href="#pgA" class="rib rib-3" /></g></g>
       </g>
     </svg>
   </div>
