@@ -468,8 +468,6 @@
        HERO BACKGROUND — фоновая фотография (hero-bg.jpg) + затемняющий
        градиент сверху для читаемости текста. hero-glow-clip теперь
        рисует этот градиент (см. правило выше), поэтому включён обратно.
-       Анимированная белая лента отключена: похожий изгиб уже есть на
-       самом фото, дублировать его поверх — лишний шум.
        Слой «зерна»/frosted-glass (hero::after) заточен под плоскую
        заливку и на фото не нужен — остаётся выключенным.
        ============================================================ */
@@ -477,15 +475,17 @@
       display: none;
     }
 
-    .hero-ribbon {
-      display: none;
-    }
-
     /* ------------------------------------------------------------
        Многослойные ленты. Общая механика:
        .par-N — слои параллакса, сдвигаются при скролле страницы
        (JS пишет --sc = px прокрутки и --sp = прогресс 0…1).
-       Формы живут своей жизнью через SMIL-морфинг в разметке.
+       Формы теперь СТАТИЧНЫ (без SMIL-морфинга d) — «жизнь» даёт
+       только .rib-loop-N, чистый CSS transform (translate/rotate).
+       Три уровня transform на разных <g> складываются между собой:
+       par-N (скролл) → позиционный translate/scale (разметка) →
+       rib-loop-N (лёгкое покачивание). Всё это — compositor-only,
+       браузер ничего не пересчитывает и не перерисовывает на лету,
+       поэтому не лагает даже на слабых телефонах.
        ------------------------------------------------------------ */
     .hero-ribbon {
       position: absolute;
@@ -507,10 +507,41 @@
 
     /* toggled by JS once the hero scrolls fully out of view — freezes
        the drift animation instead of letting it composite forever
-       off-screen; resumes exactly where it paused, no jump */
-    #heroRibbonSvg.anim-paused {
+       off-screen; resumes exactly where it paused, no jump.
+       Cascades into .rib-loop children so their sway pauses too. */
+    #heroRibbonSvg.anim-paused,
+    #heroRibbonSvg.anim-paused .rib-loop {
       animation-play-state: paused;
     }
+
+    /* лёгкое покачивание каждого слоя — только translate/rotate,
+       без изменения геометрии пути. Разная длительность и фаза
+       (отрицательный delay) у каждого слоя — чтобы не двигались
+       синхронно, как раньше давал SMIL-морфинг с разными dur. */
+    .rib-loop {
+      animation-name: ribbonSway;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+      animation-direction: alternate;
+      will-change: transform;
+    }
+
+    @keyframes ribbonSway {
+      from {
+        transform: translate3d(0, 0, 0) rotate(0deg);
+      }
+
+      to {
+        transform: translate3d(var(--sway-x, -14px), var(--sway-y, 10px), 0) rotate(var(--sway-r, .3deg));
+      }
+    }
+
+    .rib-loop-1  { --sway-x: -14px; --sway-y:  10px; --sway-r:  .25deg; animation-duration: 24s; animation-delay: -3s; }
+    .rib-loop-2  { --sway-x:  18px; --sway-y: -12px; --sway-r: -.4deg;  animation-duration: 19s; animation-delay: -8s; }
+    .rib-loop-3a { --sway-x: -20px; --sway-y:  14px; --sway-r:  .5deg;  animation-duration: 27s; animation-delay: -14s; }
+    .rib-loop-3b { --sway-x:  22px; --sway-y:  12px; --sway-r: -.35deg; animation-duration: 22s; animation-delay: -5s; }
+    .rib-loop-4  { --sway-x: -24px; --sway-y: -16px; --sway-r:  .3deg;  animation-duration: 31s; animation-delay: -11s; }
+    .rib-loop-5  { --sway-x:  16px; --sway-y:  10px; --sway-r: -.45deg; animation-duration: 17s; animation-delay: -6s; }
 
     .rib {
       fill: none;
@@ -1563,7 +1594,8 @@
       }
 
       .hero-ribbon svg,
-      .page-ribbons svg {
+      .page-ribbons svg,
+      .rib-loop {
         animation: none !important;
       }
 
@@ -1975,47 +2007,30 @@
         <svg id="heroRibbonSvg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <!-- Формы-исходники: сами по себе не рисуются, их клонируют <use>.
-                 Каждая плавно перетекает между четырьмя вариантами. -->
+                 Пути теперь статичны — движение даёт transform на .rib-loop-N. -->
             <path id="rbA"
-              d="M -140 40 C 250 -40, 430 140, 300 300 C 190 445, 560 470, 620 560 C 662 625, 552 662, 600 702 C 700 782, 1150 640, 1580 900">
-              <animate attributeName="d" dur="17s" repeatCount="indefinite" calcMode="spline"
-                keyTimes="0;0.33;0.66;1" keySplines="0.45 0 0.55 1; 0.45 0 0.55 1; 0.45 0 0.55 1"
-                values="M -140 40 C 250 -40, 430 140, 300 300 C 190 445, 560 470, 620 560 C 662 625, 552 662, 600 702 C 700 782, 1150 640, 1580 900;
-                        M -140 70 C 235 -5, 465 120, 322 332 C 208 470, 592 448, 645 540 C 692 612, 574 692, 622 722 C 722 800, 1115 686, 1580 862;
-                        M -140 12 C 282 -62, 408 168, 282 272 C 172 418, 538 496, 604 582 C 646 640, 538 640, 584 686 C 686 764, 1186 606, 1580 924;
-                        M -140 40 C 250 -40, 430 140, 300 300 C 190 445, 560 470, 620 560 C 662 625, 552 662, 600 702 C 700 782, 1150 640, 1580 900" />
-            </path>
+              d="M -140 40 C 250 -40, 430 140, 300 300 C 190 445, 560 470, 620 560 C 662 625, 552 662, 600 702 C 700 782, 1150 640, 1580 900" />
 
             <path id="rbB"
-              d="M -140 660 C 200 560, 420 720, 720 648 C 1000 580, 1200 400, 1580 300">
-              <animate attributeName="d" dur="23s" repeatCount="indefinite" calcMode="spline"
-                keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
-                values="M -140 660 C 200 560, 420 720, 720 648 C 1000 580, 1200 400, 1580 300;
-                        M -140 618 C 210 620, 400 660, 700 604 C 1010 546, 1230 452, 1580 356;
-                        M -140 660 C 200 560, 420 720, 720 648 C 1000 580, 1200 400, 1580 300" />
-            </path>
+              d="M -140 660 C 200 560, 420 720, 720 648 C 1000 580, 1200 400, 1580 300" />
 
             <path id="rbC"
-              d="M -140 200 C 260 260, 520 96, 820 176 C 1080 244, 1300 172, 1580 96">
-              <animate attributeName="d" dur="29s" repeatCount="indefinite" calcMode="spline"
-                keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
-                values="M -140 200 C 260 260, 520 96, 820 176 C 1080 244, 1300 172, 1580 96;
-                        M -140 244 C 250 196, 540 176, 840 130 C 1090 92, 1310 128, 1580 148;
-                        M -140 200 C 260 260, 520 96, 820 176 C 1080 244, 1300 172, 1580 96" />
-            </path>
+              d="M -140 200 C 260 260, 520 96, 820 176 C 1080 244, 1300 172, 1580 96" />
           </defs>
 
           <!-- широкая мягкая линия в самой глубине -->
-          <g class="par-4"><g transform="translate(-40,190) scale(1.06,1)"><use href="#rbA" class="rib rib-4" /></g></g>
+          <g class="par-4"><g transform="translate(-40,190) scale(1.06,1)"><g class="rib-loop rib-loop-4"><use href="#rbA" class="rib rib-4" /></g></g></g>
           <!-- второстепенные линии -->
-          <g class="par-3"><g transform="translate(0,26)"><use href="#rbC" class="rib rib-3" /></g></g>
-          <g class="par-5"><g transform="translate(30,-40)"><use href="#rbB" class="rib rib-5" /></g></g>
-          <g class="par-2"><g transform="translate(0,0)"><use href="#rbB" class="rib rib-2" /></g></g>
-          <g class="par-3"><g transform="translate(18,132)"><use href="#rbA" class="rib rib-3" /></g></g>
+          <g class="par-3"><g transform="translate(0,26)"><g class="rib-loop rib-loop-3a"><use href="#rbC" class="rib rib-3" /></g></g></g>
+          <g class="par-5"><g transform="translate(30,-40)"><g class="rib-loop rib-loop-5"><use href="#rbB" class="rib rib-5" /></g></g></g>
+          <g class="par-2"><g transform="translate(0,0)"><g class="rib-loop rib-loop-2"><use href="#rbB" class="rib rib-2" /></g></g></g>
+          <g class="par-3"><g transform="translate(18,132)"><g class="rib-loop rib-loop-3b"><use href="#rbA" class="rib rib-3" /></g></g></g>
           <!-- главная линия и её тонкий «двойник» -->
           <g class="par-1">
-            <use href="#rbA" class="rib rib-1" />
-            <g transform="translate(5,13)"><use href="#rbA" class="rib rib-3" /></g>
+            <g class="rib-loop rib-loop-1">
+              <use href="#rbA" class="rib rib-1" />
+              <g transform="translate(5,13)"><use href="#rbA" class="rib rib-3" /></g>
+            </g>
           </g>
         </svg>
       </div>
