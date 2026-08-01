@@ -536,22 +536,104 @@
       }
     }
 
-    .rib-loop-1  { --sway-x: -14px; --sway-y:  10px; --sway-r:  .25deg; animation-duration: 24s; animation-delay: -3s; }
-    .rib-loop-2  { --sway-x:  18px; --sway-y: -12px; --sway-r: -.4deg;  animation-duration: 19s; animation-delay: -8s; }
-    .rib-loop-3a { --sway-x: -20px; --sway-y:  14px; --sway-r:  .5deg;  animation-duration: 27s; animation-delay: -14s; }
-    .rib-loop-3b { --sway-x:  22px; --sway-y:  12px; --sway-r: -.35deg; animation-duration: 22s; animation-delay: -5s; }
-    .rib-loop-4  { --sway-x: -24px; --sway-y: -16px; --sway-r:  .3deg;  animation-duration: 31s; animation-delay: -11s; }
-    .rib-loop-5  { --sway-x:  16px; --sway-y:  10px; --sway-r: -.45deg; animation-duration: 17s; animation-delay: -6s; }
+    .rib-loop-1 {
+      --sway-x: -14px;
+      --sway-y: 10px;
+      --sway-r: .25deg;
+      animation-duration: 24s;
+      animation-delay: -3s;
+    }
+
+    .rib-loop-2 {
+      --sway-x: 18px;
+      --sway-y: -12px;
+      --sway-r: -.4deg;
+      animation-duration: 19s;
+      animation-delay: -8s;
+    }
+
+    .rib-loop-3a {
+      --sway-x: -20px;
+      --sway-y: 14px;
+      --sway-r: .5deg;
+      animation-duration: 27s;
+      animation-delay: -14s;
+    }
+
+    .rib-loop-3b {
+      --sway-x: 22px;
+      --sway-y: 12px;
+      --sway-r: -.35deg;
+      animation-duration: 22s;
+      animation-delay: -5s;
+    }
+
+    .rib-loop-4 {
+      --sway-x: -24px;
+      --sway-y: -16px;
+      --sway-r: .3deg;
+      animation-duration: 31s;
+      animation-delay: -11s;
+    }
+
+    .rib-loop-5 {
+      --sway-x: 16px;
+      --sway-y: 10px;
+      --sway-r: -.45deg;
+      animation-duration: 17s;
+      animation-delay: -6s;
+    }
 
     /* покачивание лент на белом фоне (.page-ribbons) — та же
        ribbonSway, только свои duration/delay/амплитуда на слой,
        чтобы не совпадать по фазе с hero и друг с другом */
-    .pg-loop-1  { --sway-x: -12px; --sway-y:  9px;  --sway-r:  .3deg;  animation-duration: 30s; animation-delay: -4s;  }
-    .pg-loop-1b { --sway-x:  10px; --sway-y: -7px;  --sway-r: -.25deg; animation-duration: 23s; animation-delay: -17s; }
-    .pg-loop-2  { --sway-x:  14px; --sway-y: -9px;  --sway-r: -.35deg; animation-duration: 25s; animation-delay: -12s; }
-    .pg-loop-3  { --sway-x: -16px; --sway-y: 11px;  --sway-r:  .4deg;  animation-duration: 33s; animation-delay: -6s;  }
-    .pg-loop-4  { --sway-x:  12px; --sway-y: -8px;  --sway-r: -.2deg;  animation-duration: 21s; animation-delay: -9s;  }
-    .pg-loop-5  { --sway-x:  -9px; --sway-y:  6px;  --sway-r:  .3deg;  animation-duration: 28s; animation-delay: -15s; }
+    .pg-loop-1 {
+      --sway-x: -12px;
+      --sway-y: 9px;
+      --sway-r: .3deg;
+      animation-duration: 30s;
+      animation-delay: -4s;
+    }
+
+    .pg-loop-1b {
+      --sway-x: 10px;
+      --sway-y: -7px;
+      --sway-r: -.25deg;
+      animation-duration: 23s;
+      animation-delay: -17s;
+    }
+
+    .pg-loop-2 {
+      --sway-x: 14px;
+      --sway-y: -9px;
+      --sway-r: -.35deg;
+      animation-duration: 25s;
+      animation-delay: -12s;
+    }
+
+    .pg-loop-3 {
+      --sway-x: -16px;
+      --sway-y: 11px;
+      --sway-r: .4deg;
+      animation-duration: 33s;
+      animation-delay: -6s;
+    }
+
+    .pg-loop-4 {
+      --sway-x: 12px;
+      --sway-y: -8px;
+      --sway-r: -.2deg;
+      animation-duration: 21s;
+      animation-delay: -9s;
+    }
+
+    .pg-loop-5 {
+      --sway-x: -9px;
+      --sway-y: 6px;
+      --sway-r: .3deg;
+      animation-duration: 28s;
+      animation-delay: -15s;
+    }
 
     .rib {
       fill: none;
@@ -594,11 +676,25 @@
     }
 
     /* параллакс: слои уезжают с разной скоростью — и вверх, и вниз */
-    .par-1 { transform: translateY(calc(var(--sc, 0px) * -0.10)); }
-    .par-2 { transform: translateY(calc(var(--sc, 0px) * -0.22)); }
-    .par-3 { transform: translateY(calc(var(--sc, 0px) *  0.14)); }
-    .par-4 { transform: translateY(calc(var(--sc, 0px) * -0.34)); }
-    .par-5 { transform: translateY(calc(var(--sc, 0px) *  0.26)); }
+    .par-1 {
+      transform: translateY(calc(var(--sc, 0px) * -0.10));
+    }
+
+    .par-2 {
+      transform: translateY(calc(var(--sc, 0px) * -0.22));
+    }
+
+    .par-3 {
+      transform: translateY(calc(var(--sc, 0px) * 0.14));
+    }
+
+    .par-4 {
+      transform: translateY(calc(var(--sc, 0px) * -0.34));
+    }
+
+    .par-5 {
+      transform: translateY(calc(var(--sc, 0px) * 0.26));
+    }
 
     @keyframes ribbonDrift {
       from {
@@ -658,11 +754,25 @@
       opacity: .10;
     }
 
-    .page-ribbons .pp-1 { transform: translateY(calc(var(--sp, 0) * -240px)); }
-    .page-ribbons .pp-2 { transform: translateY(calc(var(--sp, 0) *  180px)); }
-    .page-ribbons .pp-3 { transform: translateY(calc(var(--sp, 0) * -420px)) rotate(calc(var(--sp, 0) * 3deg)); }
-    .page-ribbons .pp-4 { transform: translateY(calc(var(--sp, 0) *  320px)); }
-    .page-ribbons .pp-5 { transform: translateY(calc(var(--sp, 0) * -560px)); }
+    .page-ribbons .pp-1 {
+      transform: translateY(calc(var(--sp, 0) * -240px));
+    }
+
+    .page-ribbons .pp-2 {
+      transform: translateY(calc(var(--sp, 0) * 180px));
+    }
+
+    .page-ribbons .pp-3 {
+      transform: translateY(calc(var(--sp, 0) * -420px)) rotate(calc(var(--sp, 0) * 3deg));
+    }
+
+    .page-ribbons .pp-4 {
+      transform: translateY(calc(var(--sp, 0) * 320px));
+    }
+
+    .page-ribbons .pp-5 {
+      transform: translateY(calc(var(--sp, 0) * -560px));
+    }
 
     /* старые декоративные «банты» отключены — их место заняли ленты.
        Вернуть: убрать эти две строки. */
@@ -1609,9 +1719,16 @@
         animation: none !important;
       }
 
-      .par-1, .par-2, .par-3, .par-4, .par-5,
-      .page-ribbons .pp-1, .page-ribbons .pp-2, .page-ribbons .pp-3,
-      .page-ribbons .pp-4, .page-ribbons .pp-5 {
+      .par-1,
+      .par-2,
+      .par-3,
+      .par-4,
+      .par-5,
+      .page-ribbons .pp-1,
+      .page-ribbons .pp-2,
+      .page-ribbons .pp-3,
+      .page-ribbons .pp-4,
+      .page-ribbons .pp-5 {
         transform: none !important;
       }
     }
@@ -1791,13 +1908,29 @@
 
       /* на телефоне линии тоньше и слоёв меньше — чтобы не спорили
          с формой поиска и не грузили GPU */
-      .rib-1 { stroke-width: 5; }
-      .rib-2 { stroke-width: 3; }
-      .rib-3 { stroke-width: 1.5; }
-      .rib-4 { stroke-width: 8; }
-      .rib-5 { display: none; }
+      .rib-1 {
+        stroke-width: 5;
+      }
 
-      .page-ribbons .rib-4 { display: none; }
+      .rib-2 {
+        stroke-width: 3;
+      }
+
+      .rib-3 {
+        stroke-width: 1.5;
+      }
+
+      .rib-4 {
+        stroke-width: 8;
+      }
+
+      .rib-5 {
+        display: none;
+      }
+
+      .page-ribbons .rib-4 {
+        display: none;
+      }
 
       /* Battery/perf: hero::after (frosted-glass noise texture) stays off
          on mobile — it's tuned for the old flat-green fill and isn't
@@ -1824,6 +1957,7 @@
         max-width: 360px;
       }
     }
+
     /* ============================================================
        SAFE AREA — edge-to-edge (Android 15+, iPhone с вырезом)
        Идёт последним в таблице стилей намеренно: должно
@@ -1916,7 +2050,8 @@
 
   <!-- Ленты на светлой части страницы: fixed-слой позади всего контента -->
   <div class="page-ribbons" aria-hidden="true">
-    <svg id="pageRibbonSvg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <svg id="pageRibbonSvg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice"
+      xmlns="http://www.w3.org/2000/svg">
       <defs>
         <!-- Пути теперь статичны — раньше здесь была SMIL-анимация
              attributeName="d" (27s/33s, infinite), которая на каждый
@@ -1927,19 +2062,47 @@
              CSS-покачивание (.rib-loop / .pg-loop-N) — тот же приём,
              что уже используется в hero-ribbon и там не лагает даже
              на слабых телефонах. -->
-        <path id="pgA"
-          d="M -140 780 C 220 700, 380 500, 660 470 C 900 444, 1060 300, 1580 210" />
-        <path id="pgB"
-          d="M 1580 60 C 1200 140, 1040 340, 760 330 C 520 322, 300 470, -140 420" />
+        <path id="pgA" d="M -140 780 C 220 700, 380 500, 660 470 C 900 444, 1060 300, 1580 210" />
+        <path id="pgB" d="M 1580 60 C 1200 140, 1040 340, 760 330 C 520 322, 300 470, -140 420" />
       </defs>
 
-      <g class="pp-4"><g transform="translate(-30,150) scale(1.05,1)"><g class="rib-loop pg-loop-4"><use href="#pgA" class="rib rib-4" /></g></g></g>
-      <g class="pp-2"><g transform="translate(0,0)"><g class="rib-loop pg-loop-2"><use href="#pgB" class="rib rib-2" /></g></g></g>
-      <g class="pp-5"><g transform="translate(20,-120)"><g class="rib-loop pg-loop-5"><use href="#pgA" class="rib rib-5" /></g></g></g>
-      <g class="pp-3"><g transform="translate(0,240)"><g class="rib-loop pg-loop-3"><use href="#pgB" class="rib rib-3" /></g></g></g>
+      <g class="pp-4">
+        <g transform="translate(-30,150) scale(1.05,1)">
+          <g class="rib-loop pg-loop-4">
+            <use href="#pgA" class="rib rib-4" />
+          </g>
+        </g>
+      </g>
+      <g class="pp-2">
+        <g transform="translate(0,0)">
+          <g class="rib-loop pg-loop-2">
+            <use href="#pgB" class="rib rib-2" />
+          </g>
+        </g>
+      </g>
+      <g class="pp-5">
+        <g transform="translate(20,-120)">
+          <g class="rib-loop pg-loop-5">
+            <use href="#pgA" class="rib rib-5" />
+          </g>
+        </g>
+      </g>
+      <g class="pp-3">
+        <g transform="translate(0,240)">
+          <g class="rib-loop pg-loop-3">
+            <use href="#pgB" class="rib rib-3" />
+          </g>
+        </g>
+      </g>
       <g class="pp-1">
-        <g class="rib-loop pg-loop-1"><use href="#pgA" class="rib rib-1" /></g>
-        <g transform="translate(6,14)"><g class="rib-loop pg-loop-1b"><use href="#pgA" class="rib rib-3" /></g></g>
+        <g class="rib-loop pg-loop-1">
+          <use href="#pgA" class="rib rib-1" />
+        </g>
+        <g transform="translate(6,14)">
+          <g class="rib-loop pg-loop-1b">
+            <use href="#pgA" class="rib rib-3" />
+          </g>
+        </g>
       </g>
     </svg>
   </div>
@@ -2011,32 +2174,63 @@
 
       <!-- ФОН: слои белых лент поверх ровной зелёной заливки -->
       <div class="hero-ribbon" aria-hidden="true">
-        <svg id="heroRibbonSvg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <svg id="heroRibbonSvg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice"
+          xmlns="http://www.w3.org/2000/svg">
           <defs>
             <!-- Формы-исходники: сами по себе не рисуются, их клонируют <use>.
                  Пути теперь статичны — движение даёт transform на .rib-loop-N. -->
             <path id="rbA"
               d="M -140 40 C 250 -40, 430 140, 300 300 C 190 445, 560 470, 620 560 C 662 625, 552 662, 600 702 C 700 782, 1150 640, 1580 900" />
 
-            <path id="rbB"
-              d="M -140 660 C 200 560, 420 720, 720 648 C 1000 580, 1200 400, 1580 300" />
+            <path id="rbB" d="M -140 660 C 200 560, 420 720, 720 648 C 1000 580, 1200 400, 1580 300" />
 
-            <path id="rbC"
-              d="M -140 200 C 260 260, 520 96, 820 176 C 1080 244, 1300 172, 1580 96" />
+            <path id="rbC" d="M -140 200 C 260 260, 520 96, 820 176 C 1080 244, 1300 172, 1580 96" />
           </defs>
 
           <!-- широкая мягкая линия в самой глубине -->
-          <g class="par-4"><g transform="translate(-40,190) scale(1.06,1)"><g class="rib-loop rib-loop-4"><use href="#rbA" class="rib rib-4" /></g></g></g>
+          <g class="par-4">
+            <g transform="translate(-40,190) scale(1.06,1)">
+              <g class="rib-loop rib-loop-4">
+                <use href="#rbA" class="rib rib-4" />
+              </g>
+            </g>
+          </g>
           <!-- второстепенные линии -->
-          <g class="par-3"><g transform="translate(0,26)"><g class="rib-loop rib-loop-3a"><use href="#rbC" class="rib rib-3" /></g></g></g>
-          <g class="par-5"><g transform="translate(30,-40)"><g class="rib-loop rib-loop-5"><use href="#rbB" class="rib rib-5" /></g></g></g>
-          <g class="par-2"><g transform="translate(0,0)"><g class="rib-loop rib-loop-2"><use href="#rbB" class="rib rib-2" /></g></g></g>
-          <g class="par-3"><g transform="translate(18,132)"><g class="rib-loop rib-loop-3b"><use href="#rbA" class="rib rib-3" /></g></g></g>
+          <g class="par-3">
+            <g transform="translate(0,26)">
+              <g class="rib-loop rib-loop-3a">
+                <use href="#rbC" class="rib rib-3" />
+              </g>
+            </g>
+          </g>
+          <g class="par-5">
+            <g transform="translate(30,-40)">
+              <g class="rib-loop rib-loop-5">
+                <use href="#rbB" class="rib rib-5" />
+              </g>
+            </g>
+          </g>
+          <g class="par-2">
+            <g transform="translate(0,0)">
+              <g class="rib-loop rib-loop-2">
+                <use href="#rbB" class="rib rib-2" />
+              </g>
+            </g>
+          </g>
+          <g class="par-3">
+            <g transform="translate(18,132)">
+              <g class="rib-loop rib-loop-3b">
+                <use href="#rbA" class="rib rib-3" />
+              </g>
+            </g>
+          </g>
           <!-- главная линия и её тонкий «двойник» -->
           <g class="par-1">
             <g class="rib-loop rib-loop-1">
               <use href="#rbA" class="rib rib-1" />
-              <g transform="translate(5,13)"><use href="#rbA" class="rib rib-3" /></g>
+              <g transform="translate(5,13)">
+                <use href="#rbA" class="rib rib-3" />
+              </g>
             </g>
           </g>
         </svg>
@@ -2091,7 +2285,7 @@
                 heroIO.observe(heroSection);
               }
             }
-          } catch (e) {}
+          } catch (e) { }
         })();
       </script>
 
