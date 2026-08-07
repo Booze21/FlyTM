@@ -5,6 +5,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- ═══════════════════════════════════════════════════════════
+       GOOGLE ANALYTICS 4 (gtag.js) — Measurement ID G-DXHH4F4WDJ
+       Loaded as high in <head> as possible, with the loader script
+       marked `async` so it never blocks HTML parsing/rendering.
+       `gtag('config', ...)` fires GA4's automatic `page_view` event
+       on every full page load — no manual page_view call is made
+       anywhere, to avoid double counting. Enhanced Measurement stays
+       enabled (nothing here overrides `send_page_view`). This snippet
+       appears exactly once in this document.
+       ═══════════════════════════════════════════════════════════ -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DXHH4F4WDJ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-DXHH4F4WDJ');
+    // ↑ Fires the automatic `page_view` event for this page load.
+  </script>
+
   <title>TMbilet – Ucuz Uçak Biletleri</title>
   <meta name="description"
     content="Yüzlerce havayolunun fiyatlarını karşılaştırın ve saniyeler içinde en uygun uçak biletlerini bulun.">
@@ -435,7 +454,7 @@
       isolation: isolate;
       z-index: 1;
       background-color: var(--hero-green);
-      background-image: url("/hero-bg.jpg");
+      background-image: url("hero-bg.jpg");
       background-size: cover;
       background-position: center 22%;
       background-repeat: no-repeat;
@@ -855,11 +874,14 @@
          re-center on the true page center so the card isn't pushed left */
       margin-left: 50%;
       transform: translateX(-50%);
-      background: var(--white);
-      border: 1px solid var(--border);
+      /* Outer white card removed: no white fill, no border, no heavy
+         shadow, no padding — the grey field panel inside now reads as
+         the card and the green hero shows through the edges. */
+      background: transparent;
+      border: none;
       border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-lg);
-      padding: 16px;
+      box-shadow: none;
+      padding: 0;
       text-align: left;
     }
 
@@ -894,6 +916,7 @@
       align-items: stretch;
       background: var(--gray);
       border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
       padding: 6px;
       gap: 2px;
       position: relative;
@@ -1860,10 +1883,26 @@
         padding: 12px 14px;
       }
 
+      /* From now hosts the swap control on mobile as well */
+      .field-from {
+        position: relative;
+      }
+
+      .field-from input {
+        padding-right: 34px;
+      }
+
+      /* Swap sits inside From at the right edge — small round tap
+         target, no rotation. */
       .swap-btn {
-        justify-self: flex-end;
-        margin: -6px 0;
-        transform: rotate(90deg);
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        width: 30px;
+        height: 30px;
+        justify-self: auto;
+        margin: 0;
       }
 
       .swap-btn.spin svg {
@@ -1918,7 +1957,7 @@
       .hero {
         padding: 24px 0 60px;
         background-color: var(--hero-green);
-        background-image: url("/hero-bg.jpg");
+        background-image: url("hero-bg.jpg");
         background-size: cover;
         background-position: center 22%;
         animation: none;
@@ -2021,6 +2060,155 @@
         .lang-dropdown {
           top: calc(72px + env(safe-area-inset-top));
         }
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       COMPACT SEARCH BAR (desktop, ≥861px) — one low-height row:
+       From (with the swap arrow inside it) / To / Departure /
+       Passengers, plus the green "Search flights" button on the
+       right. Only sizing + layout; colours, DOM order, JS and other
+       sections stay as-is. Scoped to ≥861px so the stacked mobile
+       layout above is untouched.
+       ═══════════════════════════════════════════════════════════ */
+    @media (min-width: 861px) {
+      /* tighter card padding */
+      .search-widget {
+        padding: 12px;
+      }
+
+      /* pill toggle on its own row, then fields + button side-by-side */
+      #searchForm {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-areas:
+          "toggle toggle"
+          "fields button";
+        column-gap: 10px;
+        row-gap: 8px;
+        align-items: stretch;
+      }
+
+      #searchForm > .trip-toggle {
+        grid-area: toggle;
+        justify-self: start;
+        margin-bottom: 0;
+      }
+
+      #searchForm > .search-fields {
+        grid-area: fields;
+      }
+
+      #searchForm > .search-submit-row {
+        grid-area: button;
+        margin-top: 0;
+        display: flex;
+        align-items: stretch;
+      }
+
+      .trip-option {
+        padding: 5px 14px;
+        font-size: 13px;
+      }
+
+      /* compact fields grid — 5 tracks (swap moved inside From):
+         from, to, departure, return, passengers. The Return track is
+         `auto` so it collapses to ~0 in one-way mode (no empty gap)
+         and grows to fit when round-trip reveals the field. */
+      .search-fields {
+        grid-template-columns: 1.25fr 1.25fr 1fr auto 1.15fr;
+        padding: 5px;
+        gap: 2px;
+      }
+
+      #searchForm .field-return {
+        min-width: 0;
+      }
+
+      #searchForm .field-return.collapsed {
+        padding: 0;
+        border: 0;
+        margin: 0;
+      }
+
+      /* passenger field: keep label + value on one line */
+      #searchForm .field-passengers label,
+      #searchForm .field-passengers .passenger-trigger {
+        white-space: nowrap;
+      }
+
+      /* From field hosts the swap control on its right edge */
+      #searchForm .field-from {
+        position: relative;
+      }
+
+      #searchForm .field-from input {
+        padding-right: 26px;
+      }
+
+      /* compact field height */
+      .field {
+        padding: 7px 13px;
+        gap: 1px;
+      }
+
+      .field label {
+        font-size: 10.5px;
+      }
+
+      .field input,
+      .field .passenger-trigger,
+      .date-trigger {
+        font-size: 14px;
+      }
+
+      /* button fills the row height, sits at the right */
+      .search-btn {
+        height: 100%;
+        padding: 0 30px;
+        border-radius: 12px;
+        font-size: 15px;
+        gap: 8px;
+        box-shadow: 0 6px 16px rgba(50, 205, 50, .28);
+        white-space: nowrap;
+      }
+
+      .search-btn svg {
+        width: 17px;
+        height: 17px;
+      }
+
+      /* Swap control INSIDE the From field: small, borderless arrow
+         pinned to the right — not a separate circle, takes no grid
+         space. Overrides the round-badge base style. */
+      #searchForm .swap-btn {
+        position: absolute;
+        top: 50%;
+        right: 8px;
+        transform: translateY(-50%);
+        width: 22px;
+        height: 22px;
+        border: none;
+        background: transparent;
+        box-shadow: none;
+        border-radius: 6px;
+        align-self: auto;
+        justify-self: auto;
+      }
+
+      #searchForm .swap-btn:hover {
+        background: var(--accent-tint);
+        border-color: transparent;
+      }
+
+      #searchForm .swap-btn svg {
+        width: 15px;
+        height: 15px;
+        stroke: var(--text-muted);
+      }
+
+      #searchForm .swap-btn:hover svg {
+        stroke: var(--accent-darker);
       }
     }
   </style>
@@ -2129,7 +2317,7 @@
     <div class="wrap header-inner">
       <div class="logo-brand">
         <a href="#" class="logo-link" aria-label="TMbilet home">
-          <img src="/tmbilet-logo.png" alt="TMbilet" class="logo-img" fetchpriority="high" decoding="async">
+          <img src="tmbilet-logo.png" alt="TMbilet" class="logo-img" fetchpriority="high" decoding="async">
         </a>
       </div>
 
@@ -2326,17 +2514,19 @@
               <input type="text" id="fromInput" placeholder="Departure city" data-i18n-placeholder="placeholder_from"
                 autocomplete="off">
               <div class="autocomplete-list" id="fromList"></div>
+              <!-- Swap origin/destination — moved INSIDE the From field so
+                   it no longer occupies its own grid column. Same id/class,
+                   so app.js's existing handler is unaffected. -->
+              <button type="button" class="swap-btn" id="swapBtn" aria-label="Swap origin and destination">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path d="M7 10l-4 4 4 4" />
+                  <path d="M3 14h14a4 4 0 0 0 4-4" />
+                  <path d="M17 14l4-4-4-4" />
+                  <path d="M21 10H7a4 4 0 0 0-4 4" />
+                </svg>
+              </button>
             </div>
-
-            <button type="button" class="swap-btn" id="swapBtn" aria-label="Swap origin and destination">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round">
-                <path d="M7 10l-4 4 4 4" />
-                <path d="M3 14h14a4 4 0 0 0 4-4" />
-                <path d="M17 14l4-4-4-4" />
-                <path d="M21 10H7a4 4 0 0 0-4 4" />
-              </svg>
-            </button>
 
             <div class="field field-to">
               <label for="toInput" data-i18n="label_to">To</label>
@@ -2562,7 +2752,7 @@
       <div class="footer-top">
         <div class="footer-brand">
           <a href="#" class="logo-link" aria-label="TMbilet home">
-            <img src="/tmbilet-logo.png" alt="TMbilet" class="logo-img" loading="lazy" decoding="async">
+            <img src="tmbilet-logo.png" alt="TMbilet" class="logo-img" loading="lazy" decoding="async">
           </a>
           <p data-i18n="footer_brand_desc">A cleaner way to search, compare, and book flights — built for people who fly
             often.</p>
@@ -2950,6 +3140,240 @@
         greenSections.forEach(function (s) { io.observe(s); });
       }
 
+    }());
+  </script>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       GA4 CUSTOM EVENT TRACKING — TMbilet
+       Fires the site-specific events on top of GA4's automatic
+       `page_view` and Enhanced Measurement events (see the gtag.js
+       snippet in <head>). Self-contained: reads all search-form
+       state directly from the DOM, so it works regardless of
+       app.js's internals and doesn't need app.js to be modified.
+       Wrapped in a single IIFE + one DOMContentLoaded handler so its
+       listeners only ever attach once.
+       ═══════════════════════════════════════════════════════════ -->
+  <script data-cfasync="false">
+    (function () {
+      'use strict';
+
+      // Safe wrapper: no-ops if gtag isn't ready (e.g. blocked by an
+      // ad/tracking blocker) instead of throwing.
+      function ga(eventName, params) {
+        if (typeof window.gtag === 'function') {
+          window.gtag('event', eventName, params || {});
+        }
+      }
+
+      // Resolve an href to an absolute URL + host (ES5-safe, works in
+      // older Android WebView engines).
+      function resolveLink(href) {
+        var a = document.createElement('a');
+        a.href = href;
+        return { href: a.href, hostname: (a.hostname || '').toLowerCase() };
+      }
+
+      function closestAnchor(el) {
+        while (el && el.nodeType === 1) {
+          if (el.tagName === 'A') return el;
+          el = el.parentNode;
+        }
+        return null;
+      }
+
+      function closestWithAttr(el, attr) {
+        while (el && el.nodeType === 1) {
+          if (el.hasAttribute && el.hasAttribute(attr)) return el;
+          el = el.parentNode;
+        }
+        return null;
+      }
+
+      function fieldValue(id) {
+        var el = document.getElementById(id);
+        return el ? (el.value !== undefined ? el.value : '') : '';
+      }
+
+      function getTripType() {
+        var active = document.querySelector('.trip-option.active');
+        var trip = active ? active.getAttribute('data-trip') : 'one';
+        return trip === 'round' ? 'round_trip' : 'one_way';
+      }
+
+      function getCabinClass() {
+        var active = document.querySelector('.class-opt.active');
+        return active ? active.getAttribute('data-class') : 'Economy';
+      }
+
+      function counterValue(id, fallback) {
+        var el = document.getElementById(id);
+        var n = el ? parseInt(el.textContent, 10) : NaN;
+        return isNaN(n) ? fallback : n;
+      }
+
+      function getPassengerCount() {
+        return counterValue('adultsCount', 1) + counterValue('childrenCount', 0) + counterValue('infantsCount', 0);
+      }
+
+      function getSelectedCurrency() {
+        var active = document.querySelector('.lang-opt.active[data-currency]');
+        return active ? active.getAttribute('data-currency') : 'USD';
+      }
+
+      function getSearchData() {
+        return {
+          trip_type: getTripType(),
+          origin: fieldValue('fromInput'),
+          destination: fieldValue('toInput'),
+          departure_date: fieldValue('departDate'),
+          return_date: fieldValue('returnDate'),
+          passengers: getPassengerCount(),
+          cabin_class: getCabinClass(),
+          currency: getSelectedCurrency()
+        };
+      }
+
+      function isSearchValid(d) {
+        return !!(d.origin && d.destination && d.departure_date);
+      }
+
+      // Travelpayouts-family hosts (this site's avia.* whitelabel
+      // widget + the wider Travelpayouts network).
+      function isTravelpayoutsHost(hostname) {
+        return (/^avia\./.test(hostname)) ||
+          (/(^|\.)travelpayouts\.com$/.test(hostname)) ||
+          (/(^|\.)aviasales\.[a-z.]+$/.test(hostname)) ||
+          (/(^|\.)jetradar\.com$/.test(hostname)) ||
+          (/(^|\.)hotellook\.com$/.test(hostname)) ||
+          (/(^|\.)tp\.media$/.test(hostname));
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+
+        // EVENT: click_search_button — fires when the "Search flights"
+        // submit button is clicked, regardless of validity.
+        var searchBtn = document.getElementById('searchBtn');
+        if (searchBtn) {
+          searchBtn.addEventListener('click', function () {
+            ga('click_search_button', { button_id: 'searchBtn' });
+          });
+        }
+
+        // EVENTS: search + begin_checkout + click_to_travelpayouts —
+        // fire together on a valid search submit (submit redirects to
+        // the Travelpayouts whitelabel widget, i.e. on-site checkout).
+        var searchForm = document.getElementById('searchForm');
+        if (searchForm) {
+          searchForm.addEventListener('submit', function () {
+            var data = getSearchData();
+            if (!isSearchValid(data)) return;
+
+            ga('search', {
+              search_term: data.origin + ' \u2192 ' + data.destination,
+              trip_type: data.trip_type,
+              origin: data.origin,
+              destination: data.destination,
+              departure_date: data.departure_date,
+              return_date: data.return_date || undefined,
+              passengers: data.passengers,
+              cabin_class: data.cabin_class
+            });
+
+            ga('begin_checkout', {
+              currency: data.currency,
+              trip_type: data.trip_type,
+              origin: data.origin,
+              destination: data.destination,
+              departure_date: data.departure_date,
+              return_date: data.return_date || undefined,
+              passengers: data.passengers,
+              cabin_class: data.cabin_class
+            });
+
+            ga('click_to_travelpayouts', {
+              source: 'search_form_redirect',
+              destination_host: (window.TMBILET_CONFIG && window.TMBILET_CONFIG.searchHost) || 'avia.tmbilet.com',
+              origin: data.origin,
+              destination: data.destination
+            });
+          });
+        }
+
+        // EVENTS: outbound_click (+ click_to_travelpayouts +
+        // begin_checkout for TP hosts) and select_flight. One
+        // delegated site-wide click listener. Same-tab navigation is
+        // briefly held so the GA4 hit can flush before unload.
+        document.addEventListener('click', function (e) {
+
+          var flightEl = closestWithAttr(e.target, 'data-ga-select-flight');
+          if (flightEl) {
+            ga('select_flight', {
+              origin: flightEl.getAttribute('data-flight-origin') || undefined,
+              destination: flightEl.getAttribute('data-flight-destination') || undefined,
+              price: flightEl.getAttribute('data-flight-price') || undefined,
+              currency: flightEl.getAttribute('data-flight-currency') || undefined
+            });
+          }
+
+          var link = closestAnchor(e.target);
+          if (!link) return;
+
+          var href = link.getAttribute('href') || '';
+          if (!href || /^(#|mailto:|tel:|javascript:)/i.test(href)) return;
+
+          var resolved = resolveLink(href);
+          if (!resolved.hostname || resolved.hostname === window.location.hostname) return;
+
+          var isTP = isTravelpayoutsHost(resolved.hostname);
+          var eventParams = { link_url: resolved.href, link_domain: resolved.hostname, outbound: true };
+
+          var opensNewTab = link.target === '_blank' || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey;
+
+          if (opensNewTab) {
+            ga('outbound_click', eventParams);
+            if (isTP) {
+              ga('click_to_travelpayouts', eventParams);
+              ga('begin_checkout', eventParams);
+            }
+            return;
+          }
+
+          e.preventDefault();
+          var navigated = false;
+          function go() {
+            if (navigated) return;
+            navigated = true;
+            window.location.href = resolved.href;
+          }
+
+          if (typeof window.gtag === 'function') {
+            window.gtag('event', 'outbound_click', {
+              link_url: eventParams.link_url,
+              link_domain: eventParams.link_domain,
+              outbound: true,
+              event_callback: go,
+              event_timeout: 300
+            });
+          } else {
+            go();
+          }
+
+          if (isTP) {
+            ga('click_to_travelpayouts', eventParams);
+            ga('begin_checkout', eventParams);
+          }
+
+          setTimeout(go, 300);
+        }, false);
+      });
+
+      // EVENT: purchase (placeholder for future integration). No
+      // payment happens on this domain today; exposed globally so a
+      // future confirmation page / postMessage / callback can call it:
+      //   window.TMbiletAnalytics.trackPurchase({ transaction_id, value, currency, items });
+      window.TMbiletAnalytics = window.TMbiletAnalytics || {};
+      window.TMbiletAnalytics.trackPurchase = function (data) { ga('purchase', data || {}); };
+      window.TMbiletAnalytics.trackSelectFlight = function (data) { ga('select_flight', data || {}); };
     }());
   </script>
 
