@@ -867,11 +867,16 @@
          re-center on the true page center so the card isn't pushed left */
       margin-left: 50%;
       transform: translateX(-50%);
-      background: var(--white);
-      border: 1px solid var(--border);
+      /* Outer white card removed: no white fill, no border. Only a
+         light shadow + rounding remain, so the grey field panel
+         inside reads as the card and the green hero shows through the
+         edges. Padding dropped so there's no white ring around the
+         grey panel. */
+      background: transparent;
+      border: none;
       border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-lg);
-      padding: 16px;
+      box-shadow: none;
+      padding: 0;
       text-align: left;
     }
 
@@ -906,6 +911,7 @@
       align-items: stretch;
       background: var(--gray);
       border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
       padding: 6px;
       gap: 2px;
       position: relative;
@@ -1872,10 +1878,27 @@
         padding: 12px 14px;
       }
 
+      /* From now hosts the swap control on mobile as well */
+      .field-from {
+        position: relative;
+      }
+
+      .field-from input {
+        padding-right: 34px;
+      }
+
+      /* Swap sits inside From at the right edge — small round tap
+         target, no rotation (fields are stacked, but the control
+         belongs to From and mustn't overlap its label). */
       .swap-btn {
-        justify-self: flex-end;
-        margin: -6px 0;
-        transform: rotate(90deg);
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        width: 30px;
+        height: 30px;
+        justify-self: auto;
+        margin: 0;
       }
 
       .swap-btn.spin svg {
@@ -2033,6 +2056,161 @@
         .lang-dropdown {
           top: calc(72px + env(safe-area-inset-top));
         }
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       COMPACT SEARCH BAR (desktop, ≥861px) — matches the reference
+       screenshot: a single low-height row of From / To / Departure /
+       Passengers with the green "Search flights" button attached on
+       the right of that same row. Only sizing + layout change here;
+       colours, DOM order, JS and every other section stay as-is, and
+       the button keeps its green --accent fill from .search-btn.
+       Scoped to ≥861px so the existing stacked mobile layout in the
+       max-width:860px block above is untouched.
+       ═══════════════════════════════════════════════════════════ */
+    @media (min-width: 861px) {
+      /* tighter card padding */
+      .search-widget {
+        padding: 12px;
+      }
+
+      /* Lay the form out as: pill toggle on its own row, then the
+         fields grid and the submit button side-by-side on one row. */
+      #searchForm {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-areas:
+          "toggle toggle"
+          "fields button";
+        column-gap: 10px;
+        row-gap: 8px;
+        align-items: stretch;
+      }
+
+      #searchForm > .trip-toggle {
+        grid-area: toggle;
+        justify-self: start;
+        margin-bottom: 0;
+      }
+
+      #searchForm > .search-fields {
+        grid-area: fields;
+      }
+
+      #searchForm > .search-submit-row {
+        grid-area: button;
+        margin-top: 0;
+        display: flex;
+        align-items: stretch;
+      }
+
+      /* smaller trip-type pill toggle */
+      .trip-option {
+        padding: 5px 14px;
+        font-size: 13px;
+      }
+
+      /* compact fields grid — 5 tracks now (swap moved inside From):
+         from, to, departure, return, passengers. The Return track is
+         `auto` so it collapses to ~0 in one-way mode (no empty gap)
+         and grows to fit when round-trip reveals the field. */
+      .search-fields {
+        grid-template-columns: 1.25fr 1.25fr 1fr auto 1.15fr;
+        padding: 5px;
+        gap: 2px;
+      }
+
+      /* let the collapsed Return field shrink its auto track fully */
+      #searchForm .field-return {
+        min-width: 0;
+      }
+
+      #searchForm .field-return.collapsed {
+        padding: 0;
+        border: 0;
+        margin: 0;
+      }
+
+      /* passenger field: keep label + value on one line like the ref */
+      #searchForm .field-passengers label,
+      #searchForm .field-passengers .passenger-trigger {
+        white-space: nowrap;
+      }
+
+      /* From field hosts the swap control on its right edge */
+      #searchForm .field-from {
+        position: relative;
+      }
+
+      /* keep the From input clear of the swap icon */
+      #searchForm .field-from input {
+        padding-right: 26px;
+      }
+
+      /* compact field height */
+      .field {
+        padding: 7px 13px;
+        gap: 1px;
+      }
+
+      .field label {
+        font-size: 10.5px;
+      }
+
+      .field input,
+      .field .passenger-trigger,
+      .date-trigger {
+        font-size: 14px;
+      }
+
+      /* button fills the row height, sits at the right */
+      .search-btn {
+        height: 100%;
+        padding: 0 30px;
+        border-radius: 12px;
+        font-size: 15px;
+        gap: 8px;
+        box-shadow: 0 6px 16px rgba(50, 205, 50, .28);
+        white-space: nowrap;
+      }
+
+      .search-btn svg {
+        width: 17px;
+        height: 17px;
+      }
+
+      /* Swap control INSIDE the From field: small, borderless arrow
+         pinned to the field's right edge — not a separate circle, and
+         it takes no grid space. Overrides the round-badge base style. */
+      #searchForm .swap-btn {
+        position: absolute;
+        top: 50%;
+        right: 8px;
+        transform: translateY(-50%);
+        width: 22px;
+        height: 22px;
+        border: none;
+        background: transparent;
+        box-shadow: none;
+        border-radius: 6px;
+        align-self: auto;
+        justify-self: auto;
+      }
+
+      #searchForm .swap-btn:hover {
+        background: var(--accent-tint);
+        border-color: transparent;
+      }
+
+      #searchForm .swap-btn svg {
+        width: 15px;
+        height: 15px;
+        stroke: var(--text-muted);
+      }
+
+      #searchForm .swap-btn:hover svg {
+        stroke: var(--accent-darker);
       }
     }
   </style>
@@ -2338,17 +2516,19 @@
               <input type="text" id="fromInput" placeholder="Departure city" data-i18n-placeholder="placeholder_from"
                 autocomplete="off">
               <div class="autocomplete-list" id="fromList"></div>
+              <!-- Swap origin/destination — moved INSIDE the From field so
+                   it no longer occupies its own grid column. Same id/class,
+                   so app.js's existing handler is unaffected. -->
+              <button type="button" class="swap-btn" id="swapBtn" aria-label="Swap origin and destination">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path d="M7 10l-4 4 4 4" />
+                  <path d="M3 14h14a4 4 0 0 0 4-4" />
+                  <path d="M17 14l4-4-4-4" />
+                  <path d="M21 10H7a4 4 0 0 0-4 4" />
+                </svg>
+              </button>
             </div>
-
-            <button type="button" class="swap-btn" id="swapBtn" aria-label="Swap origin and destination">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round">
-                <path d="M7 10l-4 4 4 4" />
-                <path d="M3 14h14a4 4 0 0 0 4-4" />
-                <path d="M17 14l4-4-4-4" />
-                <path d="M21 10H7a4 4 0 0 0-4 4" />
-              </svg>
-            </button>
 
             <div class="field field-to">
               <label for="toInput" data-i18n="label_to">To</label>
