@@ -4,6 +4,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <!-- ═══════════════════════════════════════════════════════════
+       GOOGLE ANALYTICS 4 (gtag.js) — Measurement ID G-DXHH4F4WDJ
+       Loaded as high in <head> as possible per Google's guidance,
+       with the loader script marked `async` so it never blocks
+       HTML parsing/rendering (requirement: async loading for
+       speed). `gtag('config', ...)` below fires GA4's automatic
+       `page_view` event on every full page load — no manual
+       page_view call is made anywhere in this file, to avoid
+       double counting.
+       Enhanced Measurement (scroll, outbound clicks as `click`,
+       file_download, view_search_results, form_start/submit,
+       video engagement) is a per-data-stream toggle in GA4 Admin
+       → Data Streams → Web → Enhanced measurement; nothing here
+       disables it or overrides `send_page_view`, so it keeps
+       working side-by-side with the custom events fired later in
+       this file (which use distinct event names, so nothing
+       collides or double-fires).
+       This snippet appears exactly once in this document — do
+       not paste it again elsewhere on this page.
+       ═══════════════════════════════════════════════════════════ -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DXHH4F4WDJ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-DXHH4F4WDJ');
+    // ↑ Fires the automatic `page_view` event for this page load.
+  </script>
+
   <title>TMbilet — Fly smarter. Book better.</title>
   <meta name="description" content="Compare and book flights across hundreds of airlines with TMbilet.">
   <link rel="icon" type="image/png" href="tmbilet-logo.png">
@@ -2929,6 +2959,303 @@
         greenSections.forEach(function (s) { io.observe(s); });
       }
 
+    }());
+  </script>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       GA4 CUSTOM EVENT TRACKING — TMbilet
+       Fires the site-specific events on top of GA4's automatic
+       `page_view` and Enhanced Measurement events (see the gtag.js
+       snippet in <head>). Self-contained: reads all search-form
+       state directly from the DOM, so it works regardless of
+       app.js's own internals and doesn't need app.js to be
+       modified. Wrapped in a single IIFE + one DOMContentLoaded
+       handler so it only ever attaches its listeners once.
+       ═══════════════════════════════════════════════════════════ -->
+  <script data-cfasync="false">
+    (function () {
+      'use strict';
+
+      // Safe wrapper: no-ops if gtag isn't ready yet (e.g. blocked
+      // by an ad/tracking blocker) instead of throwing.
+      function ga(eventName, params) {
+        if (typeof window.gtag === 'function') {
+          window.gtag('event', eventName, params || {});
+        }
+      }
+
+      // ---- ES5-safe "resolve this href" helper -------------------
+      // Uses the classic anchor-element trick instead of `new URL()`
+      // so it also works in older Android WebView engines: setting
+      // .href on a detached <a> and reading back .hostname/.href
+      // gives the fully-resolved absolute URL and host.
+      function resolveLink(href) {
+        var a = document.createElement('a');
+        a.href = href;
+        return { href: a.href, hostname: (a.hostname || '').toLowerCase() };
+      }
+
+      // ---- ES5-safe "closest ancestor <a>" helper -----------------
+      function closestAnchor(el) {
+        while (el && el.nodeType === 1) {
+          if (el.tagName === 'A') return el;
+          el = el.parentNode;
+        }
+        return null;
+      }
+
+      // ---- ES5-safe "closest ancestor with attribute" helper ------
+      function closestWithAttr(el, attr) {
+        while (el && el.nodeType === 1) {
+          if (el.hasAttribute && el.hasAttribute(attr)) return el;
+          el = el.parentNode;
+        }
+        return null;
+      }
+
+      // ---- read current search-form state from the DOM -----------
+      function fieldValue(id) {
+        var el = document.getElementById(id);
+        return el ? (el.value !== undefined ? el.value : '') : '';
+      }
+
+      function getTripType() {
+        var active = document.querySelector('.trip-option.active');
+        var trip = active ? active.getAttribute('data-trip') : 'one';
+        return trip === 'round' ? 'round_trip' : 'one_way';
+      }
+
+      function getCabinClass() {
+        var active = document.querySelector('.class-opt.active');
+        return active ? active.getAttribute('data-class') : 'Economy';
+      }
+
+      function counterValue(id, fallback) {
+        var el = document.getElementById(id);
+        var n = el ? parseInt(el.textContent, 10) : NaN;
+        return isNaN(n) ? fallback : n;
+      }
+
+      function getPassengerCount() {
+        var adults = counterValue('adultsCount', 1);
+        var children = counterValue('childrenCount', 0);
+        var infants = counterValue('infantsCount', 0);
+        return adults + children + infants;
+      }
+
+      function getSelectedCurrency() {
+        var active = document.querySelector('.lang-opt.active[data-currency]');
+        return active ? active.getAttribute('data-currency') : 'USD';
+      }
+
+      function getSearchData() {
+        return {
+          trip_type: getTripType(),
+          origin: fieldValue('fromInput'),
+          destination: fieldValue('toInput'),
+          departure_date: fieldValue('departDate'),
+          return_date: fieldValue('returnDate'),
+          passengers: getPassengerCount(),
+          cabin_class: getCabinClass(),
+          currency: getSelectedCurrency()
+        };
+      }
+
+      function isSearchValid(d) {
+        return !!(d.origin && d.destination && d.departure_date);
+      }
+
+      // Travelpayouts-family hosts: this site's own whitelabel
+      // widget subdomain (avia.tmbilet.com, see window.TMBILET_CONFIG
+      // above) plus the wider Travelpayouts network, in case future
+      // links point straight at Travelpayouts/Aviasales/Jetradar/
+      // Hotellook domains.
+      function isTravelpayoutsHost(hostname) {
+        return (/^avia\./.test(hostname)) ||
+          (/(^|\.)travelpayouts\.com$/.test(hostname)) ||
+          (/(^|\.)aviasales\.[a-z.]+$/.test(hostname)) ||
+          (/(^|\.)jetradar\.com$/.test(hostname)) ||
+          (/(^|\.)hotellook\.com$/.test(hostname)) ||
+          (/(^|\.)tp\.media$/.test(hostname));
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+
+        // -----------------------------------------------------------
+        // EVENT: click_search_button
+        // Fires the instant the "Search flights" submit button is
+        // clicked — independent of whether the submit that follows
+        // turns out to be a valid search.
+        // -----------------------------------------------------------
+        var searchBtn = document.getElementById('searchBtn');
+        if (searchBtn) {
+          searchBtn.addEventListener('click', function () {
+            ga('click_search_button', { button_id: 'searchBtn' });
+          });
+        }
+
+        // -----------------------------------------------------------
+        // EVENTS: search, begin_checkout, click_to_travelpayouts
+        // Fire together on a valid search-form submit: the form has
+        // no server-side action of its own — a successful submit is
+        // what sends the visitor to window.TMBILET_CONFIG.searchHost
+        // (the Travelpayouts whitelabel widget at avia.tmbilet.com),
+        // which is this site's on-site equivalent of "entering
+        // checkout". Guarded by isSearchValid() so an incomplete
+        // form (which won't actually redirect) doesn't log a false
+        // search/checkout event.
+        // -----------------------------------------------------------
+        var searchForm = document.getElementById('searchForm');
+        if (searchForm) {
+          searchForm.addEventListener('submit', function () {
+            var data = getSearchData();
+            if (!isSearchValid(data)) return;
+
+            // GA4 recommended "search" event.
+            ga('search', {
+              search_term: data.origin + ' \u2192 ' + data.destination,
+              trip_type: data.trip_type,
+              origin: data.origin,
+              destination: data.destination,
+              departure_date: data.departure_date,
+              return_date: data.return_date || undefined,
+              passengers: data.passengers,
+              cabin_class: data.cabin_class
+            });
+
+            // GA4 recommended "begin_checkout" event — closest
+            // on-site equivalent, since actual payment happens off
+            // this domain after the Travelpayouts redirect.
+            ga('begin_checkout', {
+              currency: data.currency,
+              trip_type: data.trip_type,
+              origin: data.origin,
+              destination: data.destination,
+              departure_date: data.departure_date,
+              return_date: data.return_date || undefined,
+              passengers: data.passengers,
+              cabin_class: data.cabin_class
+            });
+
+            // Custom event requested for this integration.
+            ga('click_to_travelpayouts', {
+              source: 'search_form_redirect',
+              destination_host: (window.TMBILET_CONFIG && window.TMBILET_CONFIG.searchHost) || 'avia.tmbilet.com',
+              origin: data.origin,
+              destination: data.destination
+            });
+          });
+        }
+
+        // -----------------------------------------------------------
+        // EVENTS: outbound_click, click_to_travelpayouts,
+        // begin_checkout (link variant), select_flight
+        // Single delegated click listener, site-wide:
+        //  • Any <a href> pointing off this hostname → outbound_click.
+        //  • If that host is a Travelpayouts-family domain (including
+        //    this site's own avia.tmbilet.com widget) → additionally
+        //    fires click_to_travelpayouts + begin_checkout.
+        //  • Any element carrying [data-ga-select-flight] → select_flight
+        //    (placeholder hook — no such element exists in the current
+        //    markup; results/deal cards are shown on the Travelpayouts
+        //    widget after redirect, not on this page).
+        // For same-tab navigation, the click is briefly held with
+        // preventDefault() so the GA4 hit has a chance to send before
+        // the browser unloads the page (event_callback fires on
+        // send; a setTimeout is the fallback if it never does —
+        // e.g. blocked by an ad/tracking blocker).
+        // -----------------------------------------------------------
+        document.addEventListener('click', function (e) {
+
+          // -- select_flight placeholder hook --------------------
+          var flightEl = closestWithAttr(e.target, 'data-ga-select-flight');
+          if (flightEl) {
+            ga('select_flight', {
+              origin: flightEl.getAttribute('data-flight-origin') || undefined,
+              destination: flightEl.getAttribute('data-flight-destination') || undefined,
+              price: flightEl.getAttribute('data-flight-price') || undefined,
+              currency: flightEl.getAttribute('data-flight-currency') || undefined
+            });
+          }
+
+          // -- outbound-link detection -----------------------------
+          var link = closestAnchor(e.target);
+          if (!link) return;
+
+          var href = link.getAttribute('href') || '';
+          if (!href || /^(#|mailto:|tel:|javascript:)/i.test(href)) return;
+
+          var resolved = resolveLink(href);
+          if (!resolved.hostname || resolved.hostname === window.location.hostname) return; // internal link
+
+          var isTP = isTravelpayoutsHost(resolved.hostname);
+          var eventParams = { link_url: resolved.href, link_domain: resolved.hostname, outbound: true };
+
+          var opensNewTab = link.target === '_blank' || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey;
+
+          if (opensNewTab) {
+            // Page keeps running in this tab — no need to delay navigation.
+            ga('outbound_click', eventParams);
+            if (isTP) {
+              ga('click_to_travelpayouts', eventParams);
+              ga('begin_checkout', eventParams);
+            }
+            return;
+          }
+
+          // Same-tab navigation: hold it briefly so the beacon can
+          // flush before unload.
+          e.preventDefault();
+          var navigated = false;
+          function go() {
+            if (navigated) return;
+            navigated = true;
+            window.location.href = resolved.href;
+          }
+
+          if (typeof window.gtag === 'function') {
+            var outboundParams = {
+              link_url: eventParams.link_url,
+              link_domain: eventParams.link_domain,
+              outbound: true,
+              event_callback: go,
+              event_timeout: 300
+            };
+            window.gtag('event', 'outbound_click', outboundParams);
+          } else {
+            go();
+          }
+
+          if (isTP) {
+            ga('click_to_travelpayouts', eventParams);
+            ga('begin_checkout', eventParams);
+          }
+
+          setTimeout(go, 300); // fallback if event_callback never fires
+        }, false);
+      });
+
+      // ---------------------------------------------------------------
+      // EVENT: purchase (placeholder for future integration)
+      // No payment happens on this domain today — booking completes
+      // on the airline/OTA side after the Travelpayouts redirect, so
+      // there is no automatic trigger for this yet. Exposed globally
+      // so a future confirmation page, postMessage listener, or
+      // server-to-client callback can call it directly, e.g.:
+      //   window.TMbiletAnalytics.trackPurchase({
+      //     transaction_id: 'T12345',
+      //     value: 249.00,
+      //     currency: 'USD',
+      //     items: [{ item_name: 'Flight IST-JFK', item_category: 'flight' }]
+      //   });
+      // ---------------------------------------------------------------
+      window.TMbiletAnalytics = window.TMbiletAnalytics || {};
+      window.TMbiletAnalytics.trackPurchase = function (data) {
+        ga('purchase', data || {});
+      };
+      window.TMbiletAnalytics.trackSelectFlight = function (data) {
+        ga('select_flight', data || {});
+      };
     }());
   </script>
 
