@@ -25,6 +25,10 @@
   const searchState = {
     tripType: 'oneway',   // 'round' | 'oneway'
     cabinClass: 0,       // 0 = Economy, 1 = Business (Travelpayouts trip_class)
+    // White Label flightSearch class letter: '' = Economy, 'c' = Business,
+    // 'w' = Comfort, 'f' = First. Must be lowercase — an uppercase letter is
+    // parsed as part of the IATA code instead of as a cabin class.
+    cabinCode: '',
     adults: 1,
     children: 0,
     infants: 0,
@@ -277,6 +281,7 @@
       // Premium fares search as Economy, First fares search as Business.
       const cls = btn.dataset.class;
       searchState.cabinClass = (cls === 'Business' || cls === 'First') ? 1 : 0;
+      searchState.cabinCode = CABIN_CODES[cls] || '';
       refreshPaxTrigger();
     });
   });
@@ -394,6 +399,47 @@
   }
 
   // ---------- Search submit: build Travelpayouts deeplink & redirect ----------
+
+  // Cabin class letters used by the White Label "flightSearch" code.
+  // Economy is expressed as an empty string (no letter at all).
+  const CABIN_CODES = { Economy: '', Business: 'c', Comfort: 'w', First: 'f' };
+
+  // 'YYYY-MM-DD' -> 'DDMM' (the format the White Label flightSearch code wants).
+  function ddmm(iso) {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || '');
+    return m ? m[3] + m[2] : '';
+  }
+
+  // Passenger block of the flightSearch code: class letter + adults
+  // [+ children [+ infants]]. Adults are mandatory; trailing zeros are only
+  // written when a later value needs them (e.g. '101' = 1 adult, 0 children,
+  // 1 infant). Each count is a single digit, so clamp to 0-9.
+  function paxCode() {
+    const digit = (n) => String(Math.max(0, Math.min(9, n | 0)));
+    const adults = digit(searchState.adults || 1);
+    const children = searchState.children | 0;
+    const infants = searchState.infants | 0;
+
+    let code = searchState.cabinCode + adults;
+    if (infants > 0) code += digit(children) + digit(infants);
+    else if (children > 0) code += digit(children);
+    return code;
+  }
+
+  // Full White Label flightSearch code, e.g. MOW1607IST2007c321 —
+  // ORIGIN + DDMM [+ DESTINATION + DDMM for the return leg] + pax/class block.
+  function buildFlightSearchCode(fromCode, toCode, departDate, returnDate) {
+    const departDdmm = ddmm(departDate);
+    if (!departDdmm) return '';
+
+    let code = fromCode + departDdmm + toCode;
+    if (returnDate) {
+      const returnDdmm = ddmm(returnDate);
+      if (returnDdmm) code += returnDdmm;
+    }
+    return code + paxCode();
+  }
+
   function buildSearchUrl() {
     const fromCode = (fromInput.dataset.code || '').toUpperCase();
     const toCode = (toInput.dataset.code || '').toUpperCase();
@@ -417,6 +463,11 @@
     params.set('children', String(searchState.children));
     params.set('infants', String(searchState.infants));
     params.set('trip_class', String(searchState.cabinClass));
+    // The White Label ignores trip_class on its own — the cabin class only
+    // survives the redirect inside the flightSearch code below, which is why
+    // a Business selection used to arrive as Economy.
+    const flightSearch = buildFlightSearchCode(fromCode, toCode, departDate, returnDate);
+    if (flightSearch) params.set('flightSearch', flightSearch);
     params.set('currency', currentCurrency.toLowerCase());
     params.set('locale', langCode);
     // auto-trigger the search the instant the destination page loads
